@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Cadastro de Usuário</title>
+</head>
+<body>
+    <!-- Cabeçalho do Sistema -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Sistema de Produtos</div>
+                <div class="user-info">
+                    <div class="user-icon">👤</div>
+                    <span class="user-name">Administrador</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav>
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
+                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Solicitações</a></li>
+                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro</a></li>
+                <li><a href="{{ url_for('listar_produtos') }}">Listar Produtos</a></li>
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Produtos</a></li>
+                <li><a href="{{ url_for('saida_produto') }}">Saída de Produtos</a></li>
+                <li class="active"><a href="{{ url_for('cadastro_usuario') }}">Cadastro de Usuário</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <div class="main-content">
+            <div class="panel active" id="cadastro-usuario-panel">
+                <div class="panel-header">
+                    <h2>Cadastro de Novo Usuário</h2>
+                    <div class="header-actions">
+                        <span class="admin-badge">🔐 Acesso Administrativo</span>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <!-- Mensagens de feedback -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                {% if category == 'success' %}
+                                    <div class="mensagem-sucesso">
+                                        <div class="check-icon">✓</div>
+                                        <p>{{ message }}</p>
+                                    </div>
+                                {% elif category == 'error' %}
+                                    <div class="mensagem-erro">
+                                        <div class="error-icon">⚠</div>
+                                        <p>{{ message }}</p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Formulário de Cadastro -->
+                    <div class="form-container">
+                        <form method="POST" class="cadastro-form" id="cadastroUsuarioForm">
+                            <!-- Informações de Login -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <span class="section-icon">👤</span>
+                                    Informações de Login
+                                </h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="username">Username *</label>
+                                        <input 
+                                            type="text" 
+                                            id="username" 
+                                            name="username" 
+                                            placeholder="Digite o nome de usuário (mín. 3 caracteres)"
+                                            required
+                                            minlength="3"
+                                            maxlength="50"
+                                        >
+                                        <div class="input-help">Username único para acesso ao sistema</div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="password">Senha *</label>
+                                        <input 
+                                            type="password" 
+                                            id="password" 
+                                            name="password" 
+                                            placeholder="Digite a senha (mín. 6 caracteres)"
+                                            required
+                                            minlength="6"
+                                        >
+                                        <div class="input-help">Senha de acesso (mínimo 6 caracteres)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Informações Pessoais -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <span class="section-icon">📋</span>
+                                    Informações Pessoais
+                                </h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group form-group-full">
+                                        <label for="dados">Dados *</label>
+                                        <input 
+                                            type="text" 
+                                            id="dados" 
+                                            name="dados" 
+                                            placeholder="Digite dados identificadores"
+                                            required
+                                            maxlength="100"
+                                        >
+                                        <div class="input-help">Informações que identifique o usuário</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tipo de Usuário -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <span class="section-icon">🏷️</span>
+                                    Tipo de Acesso
+                                </h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group form-group-full">
+                                        <label for="tipo_usuario">Tipo de Usuário *</label>
+                                        <select id="tipo_usuario" name="tipo_usuario" required class="select-styled">
+                                            <option value="">Selecione o tipo de usuário</option>
+                                            <option value="almoxarifado">Almoxarifado</option>
+                                            <option value="usuario_padrao">Padrão</option>
+                                            <option value="usuario_solicitante">Solicitante</option>
+                                            <option value="admin">Administrador</option>
+                                        </select>
+                                        <div class="input-help">Define as permissões de acesso do usuário no sistema</div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <!-- Ações do Formulário -->
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="btnCadastrar">
+                                    <span class="btn-icon">👥</span>
+                                    Cadastrar Usuário
+                                </button>
+                                <a href="{{ url_for('lista_usuarios') }}" class="btn btn-secondary">
+                                    <span class="btn-icon">📋</span>
+                                    Listar Usuários
+                                </a>
+                                <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
+                                    <span class="btn-icon">🏠</span>
+                                    Página Inicial
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Validação adicional do formulário
+        document.getElementById('cadastroUsuarioForm').addEventListener('submit', function(e) {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const dados = document.getElementById('dados').value.trim();
+            const tipoUsuario = document.getElementById('tipo_usuario').value;
+
+            if (username.length < 3) {
+                alert('Username deve ter pelo menos 3 caracteres!');
+                e.preventDefault();
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Senha deve ter pelo menos 6 caracteres!');
+                e.preventDefault();
+                return;
+            }
+
+            if (!dados) {
+                alert('Nome completo é obrigatório!');
+                e.preventDefault();
+                return;
+            }
+
+            if (!tipoUsuario) {
+                alert('Selecione o tipo de usuário!');
+                e.preventDefault();
+                return;
+            }
+
+            // Adicionar efeito de loading no botão
+            const btnCadastrar = document.getElementById('btnCadastrar');
+            btnCadastrar.classList.add('loading');
+            btnCadastrar.disabled = true;
+        });
+    </script>
+</body>
+</html>

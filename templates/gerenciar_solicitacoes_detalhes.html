@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Detalhes da Solicitação</title>
+</head>
+<body>
+    <!-- Cabeçalho do Sistema -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Sistema de Solicitações</div>
+                <div class="user-info">
+                    <div class="user-icon">👤</div>
+                    <span class="user-name">Administrador</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav>
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
+                <li class="active"><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Solicitações</a></li>
+                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro</a></li>
+                <li><a href="{{ url_for('listar_produtos') }}">Listar Produtos</a></li>
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Produtos</a></li>
+                <li><a href="{{ url_for('saida_produto') }}">Saída de Produtos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <div class="main-content">
+            <div class="panel active" id="detalhes-panel">
+                <div class="panel-header">
+                    <h2>Detalhes da Solicitação #{{ solicitacao.id }}</h2>
+                    <div class="header-actions">
+                        <div class="status-badge 
+                            {% if solicitacao.status == 'pendente' %}status-pendente
+                            {% elif solicitacao.status == 'aprovada' %}status-aprovada
+                            {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
+                            {% elif solicitacao.status == 'entregue' %}status-entregue
+                            {% endif %}">
+                            {% if solicitacao.status == 'pendente' %}
+                                🔄 Pendente
+                            {% elif solicitacao.status == 'aprovada' %}
+                                ✅ Aprovada
+                            {% elif solicitacao.status == 'rejeitada' %}
+                                ❌ Rejeitada
+                            {% elif solicitacao.status == 'entregue' %}
+                                📦 Entregue
+                            {% else %}
+                                {{ solicitacao.status }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-content">
+                    <!-- Informações da Solicitação -->
+                    <div class="detalhes-container">
+                        <!-- Seção: Dados do Solicitante -->
+                        <div class="detalhes-section">
+                            <h3 class="section-title">
+                                <span class="section-icon">👤</span>
+                                Dados do Solicitante
+                            </h3>
+                            <div class="detalhes-grid">
+                                <div class="detalhe-item">
+                                    <label class="detalhe-label">Nome do Solicitante:</label>
+                                    <span class="detalhe-valor">{{ solicitacao.nome_solicitante }}</span>
+                                </div>
+                                <div class="detalhe-item">
+                                    <label class="detalhe-label">Setor:</label>
+                                    <span class="detalhe-valor">{{ solicitacao.setor }}</span>
+                                </div>
+                                <div class="detalhe-item">
+                                    <label class="detalhe-label">Data/Hora da Solicitação:</label>
+                                    <span class="detalhe-valor">{{ solicitacao.data_solicitacao.strftime('%d/%m/%Y às %H:%M') }}</span>
+                                </div>
+                                <div class="detalhe-item">
+                                    <label class="detalhe-label">Número da Solicitação:</label>
+                                    <span class="detalhe-valor">#{{ solicitacao.id }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seção: Dados do Item/Equipamento -->
+                        <div class="detalhes-section">
+                            <h3 class="section-title">
+                                <span class="section-icon">📦</span>
+                                Dados do Item/Equipamento
+                            </h3>
+                            <div class="detalhes-grid">
+                                <div class="detalhe-item">
+                                    <label class="detalhe-label">Nome do Item/Equipamento:</label>
+                                    <span class="detalhe-valor">{{ solicitacao.nome_item }}</span>
+                                </div>
+                                <div class="detalhe-item">
+                                    <label class="detalhe-label">Quantidade Solicitada:</label>
+                                    <span class="detalhe-valor">{{ solicitacao.quantidade }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seção: Descrição -->
+                        <div class="detalhes-section">
+                            <h3 class="section-title">
+                                <span class="section-icon">📝</span>
+                                Descrição e Informações Adicionais
+                            </h3>
+                            <div class="descricao-container">
+                                {% if solicitacao.descricao %}
+                                    <p class="descricao-texto">{{ solicitacao.descricao }}</p>
+                                {% else %}
+                                    <p class="descricao-vazia">Nenhuma descrição adicional foi fornecida.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Seção: Histórico de Atualizações -->
+                        {% if solicitacao.data_atualizacao %}
+                        <div class="detalhes-section">
+                            <h3 class="section-title">
+                                <span class="section-icon">🕒</span>
+                                Histórico
+                            </h3>
+                            <div class="detalhes-grid">
+                                <div class="detalhe-item">
+                                    <label class="detalhe-label">Última Atualização:</label>
+                                    <span class="detalhe-valor">{{ solicitacao.data_atualizacao.strftime('%d/%m/%Y às %H:%M') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Ações da Solicitação -->
+                    <div class="acoes-container">
+                        <h3 class="section-title">
+                            <span class="section-icon">⚙️</span>
+                            Ações da Solicitação
+                        </h3>
+                        
+                        {% if solicitacao.status == 'pendente' %}
+                        <div class="acoes-buttons">
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" 
+                                  style="display: inline;" onsubmit="return confirm('Confirma que deseja APROVAR esta solicitação?')">
+                                <input type="hidden" name="status" value="aprovada">
+                                <button type="submit" class="btn btn-atender">
+                                    <span class="btn-icon">✅</span>
+                                    Aprovar Solicitação
+                                </button>
+                            </form>
+                            
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" 
+                                  style="display: inline;" onsubmit="return confirm('Confirma que deseja REJEITAR esta solicitação? Esta ação pode ser revertida.')">
+                                <input type="hidden" name="status" value="rejeitada">
+                                <button type="submit" class="btn btn-rejeitar">
+                                    <span class="btn-icon">❌</span>
+                                    Rejeitar Solicitação
+                                </button>
+                            </form>
+                        </div>
+
+                        {% elif solicitacao.status == 'aprovada' %}
+                        <div class="acoes-buttons">
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" 
+                                  style="display: inline;" onsubmit="return confirm('Confirma que esta solicitação foi ENTREGUE?')">
+                                <input type="hidden" name="status" value="entregue">
+                                <button type="submit" class="btn btn-entregar">
+                                    <span class="btn-icon">📦</span>
+                                    Marcar como Entregue
+                                </button>
+                            </form>
+                            
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" 
+                                  style="display: inline;" onsubmit="return confirm('Deseja voltar esta solicitação para PENDENTE?')">
+                                <input type="hidden" name="status" value="pendente">
+                                <button type="submit" class="btn btn-secondary">
+                                    <span class="btn-icon">🔄</span>
+                                    Voltar para Pendente
+                                </button>
+                            </form>
+                        </div>
+
+                        {% elif solicitacao.status == 'rejeitada' %}
+                        <div class="acoes-buttons">
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" 
+                                  style="display: inline;" onsubmit="return confirm('Deseja voltar esta solicitação para PENDENTE?')">
+                                <input type="hidden" name="status" value="pendente">
+                                <button type="submit" class="btn btn-secondary">
+                                    <span class="btn-icon">🔄</span>
+                                    Voltar para Pendente
+                                </button>
+                            </form>
+                        </div>
+
+                        {% elif solicitacao.status == 'entregue' %}
+                        <div class="acoes-info">
+                            <div class="info-box info-entregue">
+                                <span class="info-icon">✅</span>
+                                <span class="info-text">Esta solicitação foi entregue</span>
+                            </div>
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" 
+                                  style="display: inline; margin-top: 10px;" onsubmit="return confirm('Deseja voltar esta solicitação para APROVADA?')">
+                                <input type="hidden" name="status" value="aprovada">
+                                <button type="submit" class="btn btn-secondary btn-small">
+                                    <span class="btn-icon">↩️</span>
+                                    Reverter para Aprovada
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+
+                        <!-- Ação de Exclusão (sempre disponível para admin) -->
+                        <div class="acoes-danger" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                            <form method="POST" action="{{ url_for('excluir_solicitacao', solicitacao_id=solicitacao.id) }}" 
+                                  style="display: inline;" onsubmit="return confirm('ATENÇÃO: Deseja EXCLUIR permanentemente esta solicitação? Esta ação NÃO pode ser desfeita!')">
+                                <button type="submit" class="btn btn-danger">
+                                    <span class="btn-icon">🗑️</span>
+                                    Excluir Solicitação
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Ações de Navegação -->
+                    <div class="page-actions">
+                        <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn btn-secondary">
+                            ⬅️ Voltar para Lista
+                        </a>
+                        <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
+                            🏠 Página Inicial
+                        </a>
+                        <button onclick="location.reload()" class="btn btn-primary">
+                            🔄 Atualizar Página
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animações de entrada
+        window.addEventListener('load', function() {
+            const sections = document.querySelectorAll('.detalhes-section, .acoes-container');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+
+        // Confirmações adicionais para ações críticas
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const button = this.querySelector('button[type="submit"]');
+                if (button && !button.classList.contains('btn-danger')) {
+                    button.disabled = true;
+                    
+                    // Salvar texto original
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<span class="btn-icon">⏳</span> Processando...';
+                    
+                    // Reabilitar o botão após 3 segundos em caso de erro
+                    setTimeout(() => {
+                        button.disabled = false;
+                        button.innerHTML = originalText;
+                    }, 3000);
+                }
+            });
+        });
+
+        // Auto-hide flash messages após 5 segundos
+        setTimeout(function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(message) {
+                message.style.opacity = '0';
+                message.style.transform = 'translateY(-20px)';
+                setTimeout(() => message.remove(), 300);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

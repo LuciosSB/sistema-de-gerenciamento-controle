@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Cadastro de Produto</title>
+</head>
+<body>
+    <!-- Cabeçalho do Sistema -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Sistema de Cadastro de Produtos</div>
+                <div class="user-info">
+                    <div class="user-icon">👤</div>
+                    <span class="user-name">Administrador</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav>
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
+                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Solicitações</a></li>
+                <li class="active"><a href="{{ url_for('cadastro_produto') }}">Cadastro</a></li>
+                <li><a href="{{ url_for('listar_produtos') }}">Listar Produtos</a></li>
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Produtos</a></li>
+                <li><a href="{{ url_for('saida_produto') }}">Saída de Produtos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="container">
+        <div class="main-content">
+            <div class="panel active" id="cadastro-panel">
+                <div class="panel-header">
+                    <h2>Cadastro de Produto</h2>
+                    <div class="header-actions">
+                        <span class="produto-count">Novo Cadastro</span>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <!-- Mensagens Flash (caso existam) -->
+                    {% if success %}
+                        <div class="flash-message success">
+                            <div class="flash-icon">✅</div>
+                            <div class="flash-text">{{ success }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if error %}
+                        <div class="flash-message error">
+                            <div class="flash-icon">❌</div>
+                            <div class="flash-text">{{ error }}</div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Container do formulário com borda -->
+                    <div class="form-container">
+                        <form method="POST" action="{{ url_for('cadastro_produto') }}" class="cadastro-form">
+                            <!-- Seção de Informações do Produto -->
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <span class="section-icon">📦</span>
+                                    Informações do Produto
+                                </h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="nome" class="cadastro-label">
+                                            <span class="label-icon">🏷️</span>
+                                            Nome do Produto
+                                            <span class="required-indicator">*</span>
+                                        </label>
+                                        <input type="text" id="nome" name="nome" class="cadastro-input" 
+                                               placeholder="Digite o nome do produto" required>
+                                        <div class="input-helper">
+                                            💡 Nome que identificará o produto no sistema
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="codigo_barras" class="cadastro-label">
+                                            <span class="label-icon">📊</span>
+                                            Código de Barras
+                                        </label>
+                                        <input type="number" id="codigo_barras" name="codigo_barras" class="cadastro-input" 
+                                               placeholder="Digite o código de barras (opcional)">
+                                        <div class="input-helper">
+                                            💡 Código de barras para identificação rápida (opcional)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="quantidade" class="cadastro-label">
+                                            <span class="label-icon">📊</span>
+                                            Quantidade Inicial
+                                            <span class="required-indicator">*</span>
+                                        </label>
+                                        <input type="number" id="quantidade" name="quantidade" class="cadastro-input" 
+                                               placeholder="Digite a quantidade inicial" min="0" required>
+                                        <div class="input-helper">
+                                            💡 Quantidade inicial do produto no estoque
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Campo extra para futuras expansões -->
+                                    <div class="form-group form-group-placeholder">
+                                        <div class="placeholder-content">
+                                            <span class="placeholder-icon">💼</span>
+                                            <span class="placeholder-text">Campos adicionais podem ser adicionados aqui</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Seção de Informações Adicionais -->
+                            <div class="info-section">
+                                <div class="info-card">
+                                    <div class="info-header">
+                                        <span class="info-icon">ℹ️</span>
+                                        <h4>Informações sobre o Cadastro</h4>
+                                    </div>
+                                    <div class="info-content">
+                                        <div class="info-item">
+                                            <span class="info-label">📋 Campos Obrigatórios:</span>
+                                            <span class="info-value">Nome e Quantidade são obrigatórios</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">🔢 Código de Barras:</span>
+                                            <span class="info-value">Campo opcional para identificação rápida</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">📊 Quantidade:</span>
+                                            <span class="info-value">Defina a quantidade inicial no estoque</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ações do Formulário -->
+                            <div class="form-actions">
+                                <input type="submit" value="📝 Cadastrar Produto" class="btn btn-primary">
+                                <a href="{{ url_for('listar_produtos') }}" class="btn btn-tertiary">
+                                    📋 Ver Produtos Cadastrados
+                                </a>
+                                <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
+                                    🏠 Página Inicial
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para melhorar a experiência do usuário -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.cadastro-form');
+            const inputs = document.querySelectorAll('.cadastro-input');
+            
+            // Adiciona feedback visual aos campos
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = '#003366';
+                    this.style.backgroundColor = 'white';
+                    this.style.boxShadow = '0 0 10px rgba(0, 51, 102, 0.2)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (this.value) {
+                        this.style.borderColor = '#28a745';
+                        this.style.backgroundColor = '#f8fff9';
+                    } else if (this.required) {
+                        this.style.borderColor = '#dc3545';
+                        this.style.backgroundColor = '#fff5f5';
+                    } else {
+                        this.style.borderColor = '#ddd';
+                        this.style.backgroundColor = '#f7f9fc';
+                    }
+                    this.style.boxShadow = 'none';
+                });
+                
+                // Validação em tempo real
+                input.addEventListener('input', function() {
+                    if (this.required && this.value) {
+                        this.style.borderColor = '#28a745';
+                        this.style.backgroundColor = '#f8fff9';
+                    } else if (this.required && !this.value) {
+                        this.style.borderColor = '#dc3545';
+                        this.style.backgroundColor = '#fff5f5';
+                    }
+                });
+            });
+            
+            // Validação do formulário antes do envio
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (input.required && !input.value.trim()) {
+                        input.style.borderColor = '#dc3545';
+                        input.style.backgroundColor = '#fff5f5';
+                        input.focus();
+                        isValid = false;
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
