@@ -10,7 +10,7 @@ class Usuario(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     dados = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    tipo_usuario = db.Column(db.String(50), nullable=False)  # 'almoxarifado', 'eletrica', 'solicitante'
+    tipo_usuario = db.Column(db.String(50), nullable=False)
     ativo = db.Column(db.Boolean, default=True)
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -40,6 +40,11 @@ class Produto(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
     
+    # NOVO CAMPO para diferenciar itens que voltam dos que não voltam.
+    # 'consumivel' para o que não volta (ex: parafusos, fita isolante).
+    # 'retornavel' para o que deve ser devolvido (ex: furadeira, multímetro).
+    tipo_item = db.Column(db.String(50), nullable=False, default='consumivel')
+    
     def __repr__(self):
         return f'<Produto {self.nome}>'
 
@@ -56,14 +61,20 @@ class Solicitacao(db.Model):
     __tablename__ = 'solicitacoes'
     
     id = db.Column(db.Integer, primary_key=True)
+    
+    # Campos existentes que serão mantidos
     nome_solicitante = db.Column(db.String(255), nullable=False)
     setor = db.Column(db.String(255), nullable=False)
-    nome_item = db.Column(db.String(255), nullable=False)
-    quantidade = db.Column(db.Integer, nullable=False)
     descricao = db.Column(db.Text, nullable=True)
-    status = db.Column(db.String(50), nullable=False, default='pendente')  # pendente, aprovada, rejeitada, entregue
+    status = db.Column(db.String(50), nullable=False, default='pendente')  # Ex: pendente, aprovada, rejeitada, concluida
     data_solicitacao = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     data_atualizacao = db.Column(db.DateTime, nullable=True, onupdate=datetime.utcnow)
+
+    # --- CAMPOS NOVOS PARA O CHAMADO DE MANUTENÇÃO ---
+    titulo = db.Column(db.String(200), nullable=False, default="Título não informado")
+    categoria = db.Column(db.String(100), nullable=False, default="Geral")
+    urgencia = db.Column(db.String(50), nullable=False, default='baixa') # Ex: baixa, media, alta
+    motivo_rejeicao = db.Column(db.Text, nullable=True)
     
     def __repr__(self):
-        return f'<Solicitacao {self.id}: {self.nome_item} - {self.status}>'
+        return f'<Solicitacao {self.id}: {self.titulo} - {self.status}>'
