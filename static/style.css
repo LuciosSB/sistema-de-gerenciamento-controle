@@ -3441,3 +3441,23 @@ select option {
     border-radius: 6px;
     line-height: 1.6;
 }
+/* ===== AJUSTES DE LAYOUT PARA OS BOTÕES DE AÇÃO ===== */
+
+.acoes-buttons {
+    display: flex;
+    gap: 15px; /* Cria um espaço entre os botões */
+    align-items: center;
+    flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas pequenas */
+}
+
+/* Garante que o formulário dentro do flex container se comporte bem */
+.acoes-buttons form {
+    margin: 0;
+}
+
+/* Seção de perigo para o botão de exclusão */
+.acoes-danger {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px dashed #c82333; /* Linha tracejada vermelha para indicar perigo */
+}

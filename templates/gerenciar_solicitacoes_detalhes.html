@@ -24,7 +24,11 @@
             <ul class="nav-list">
                 <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
                 <li class="active"><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
-                </ul>
+                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro de Itens</a></li>
+                <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Itens</a></li>
+                <li><a href="{{ url_for('saida_produto') }}">Saída de Material</a></li>
+            </ul>
         </div>
     </nav>
 
@@ -126,7 +130,7 @@
                         
                         {% if solicitacao.status == 'pendente' %}
                         <div class="acoes-buttons">
-                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" style="display: inline;" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado?')">
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado?')">
                                 <input type="hidden" name="status" value="aprovada">
                                 <button type="submit" class="btn btn-atender">✅ Aprovar Chamado</button>
                             </form>
@@ -155,6 +159,15 @@
                             </form>
                         </div>
                         {% endif %}
+
+                        <div class="acoes-danger">
+                            <form method="POST" action="{{ url_for('excluir_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('ATENÇÃO: Deseja EXCLUIR permanentemente este chamado? Esta ação NÃO pode ser desfeita!')">
+                                <button type="submit" class="btn btn-danger">
+                                    <span class="btn-icon">🗑️</span>
+                                    Excluir Chamado
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="page-actions">
