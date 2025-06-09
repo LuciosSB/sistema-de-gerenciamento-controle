@@ -3251,3 +3251,84 @@ select option {
         font-size: 16px;
     }
 }
+
+/* ===== ESTILOS ADICIONAIS PARA GERENCIAR CHAMADOS ===== */
+
+/* Melhorias na tabela de solicitações/chamados */
+.solicitacoes-table th {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: #f8f9fa; /* Um cinza bem claro para o cabeçalho */
+    color: #343a40;
+}
+
+.solicitacao-row:hover {
+    background-color: #e9ecef; /* Um cinza um pouco mais escuro no hover */
+    transform: scale(1.01);
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.solicitacoes-table td {
+    vertical-align: middle;
+    padding: 12px;
+}
+
+.solicitacao-titulo {
+    font-weight: 600;
+    color: #003366;
+}
+
+.solicitacao-numero {
+    font-weight: 500;
+    font-family: monospace;
+    font-size: 1.1em;
+}
+
+/* Badge de Urgência */
+.urgencia-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 80px;
+    border: 1px solid;
+    text-transform: capitalize;
+}
+
+.urgencia-critica {
+    background-color: #ff4757; /* Vermelho forte */
+    color: white;
+    border-color: #ff4757;
+}
+
+.urgencia-alta {
+    background-color: #ffa502; /* Laranja */
+    color: white;
+    border-color: #ffa502;
+}
+
+.urgencia-media {
+    background-color: #ffd700; /* Amarelo */
+    color: #333;
+    border-color: #ffd700;
+}
+
+.urgencia-baixa {
+    background-color: #54a0ff; /* Azul */
+    color: white;
+    border-color: #54a0ff;
+}
+
+/* Ajustes nas colunas da tabela */
+.col-numero { width: 5%; }
+.col-titulo { width: 30%; }
+.col-solicitante { width: 15%; }
+.col-setor { width: 15%; }
+.col-urgencia { width: 10%; text-align: center; }
+.col-horario { width: 10%; }
+.col-status { width: 10%; text-align: center; }
+.col-acoes { width: 5%; text-align: center; }

@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Gerenciar Solicitações</title>
+    <title>Gerenciar Chamados de Manutenção</title>
 </head>
 <body>
-    <!-- Cabeçalho do Sistema -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">Sistema de Solicitações</div>
+                <div class="logo">Sistema de Manutenção</div>
                 <div class="user-info">
                     <div class="user-icon">👤</div>
                     <span class="user-name">Administrador</span>
@@ -20,43 +19,29 @@
         </div>
     </header>
 
-    <!-- Navegação -->
     <nav>
         <div class="container">
             <ul class="nav-list">
-                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
-                <li class="active"><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Solicitações</a></li>
-                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro</a></li>
-                <li><a href="{{ url_for('listar_produtos') }}">Listar Produtos</a></li>
-                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Produtos</a></li>
-                <li><a href="{{ url_for('saida_produto') }}">Saída de Produtos</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
+                <li class="active"><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
+                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro de Itens</a></li>
+                <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Itens</a></li>
+                <li><a href="{{ url_for('saida_produto') }}">Saída de Material</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Conteúdo Principal -->
     <div class="container">
         <div class="main-content">
             <div class="panel active" id="solicitacoes-panel">
                 <div class="panel-header">
                     <div class="header-row">
-                        <h2>Gerenciar Solicitações</h2>
-                        
-                        <!-- Botão de Auto-Refresh sutil -->
-                        <button id="autoRefreshBtn" class="btn-auto-refresh" onclick="toggleAutoRefresh()" title="Ativar atualização automática a cada minuto">
-                            🔄
-                        </button>
-                        
-                        <span class="solicitacao-count">{{ solicitacoes|length }} solicitação(ões) encontrada(s)</span>
-                    </div>
-                    
-                    <!-- Status do refresh (só aparece quando ativo) -->
-                    <div class="refresh-status" id="refreshStatus" style="display: none;">
-                        <span class="countdown" id="countdown"></span>
+                        <h2>Gerenciar Chamados</h2>
+                        <span class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
                     </div>
                 </div>
                 <div class="panel-content">
-                    <!-- Container da tabela com borda -->
                     <div class="table-container">
                         {% if solicitacoes %}
                         <div class="table-wrapper">
@@ -64,10 +49,10 @@
                                 <thead>
                                     <tr>
                                         <th class="col-numero">ID</th>
-                                        <th class="col-nome">Nome da Pessoa</th>
+                                        <th class="col-titulo">Título do Chamado</th>
+                                        <th class="col-solicitante">Solicitante</th>
                                         <th class="col-setor">Setor</th>
-                                        <th class="col-item">Item</th>
-                                        <th class="col-quantidade">Quantidade</th>
+                                        <th class="col-urgencia">Urgência</th>
                                         <th class="col-horario">Data/Hora</th>
                                         <th class="col-status">Status</th>
                                         <th class="col-acoes">Ações</th>
@@ -76,11 +61,15 @@
                                 <tbody>
                                     {% for solicitacao in solicitacoes %}
                                     <tr class="solicitacao-row">
-                                        <td class="solicitacao-numero">{{ solicitacao.id }}</td>
+                                        <td class="solicitacao-numero">#{{ solicitacao.id }}</td>
+                                        <td class="solicitacao-titulo">{{ solicitacao.titulo }}</td>
                                         <td class="solicitacao-nome">{{ solicitacao.nome_solicitante }}</td>
                                         <td class="solicitacao-setor">{{ solicitacao.setor }}</td>
-                                        <td class="solicitacao-item">{{ solicitacao.nome_item }}</td>
-                                        <td class="solicitacao-quantidade">{{ solicitacao.quantidade }}</td>
+                                        <td class="solicitacao-urgencia">
+                                            <div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">
+                                                {{ solicitacao.urgencia|capitalize }}
+                                            </div>
+                                        </td>
                                         <td class="solicitacao-horario">{{ solicitacao.data_solicitacao.strftime('%d/%m/%Y %H:%M') }}</td>
                                         <td class="solicitacao-status">
                                             <div class="status-badge 
@@ -96,16 +85,16 @@
                                                 {% elif solicitacao.status == 'rejeitada' %}
                                                     ❌ Rejeitada
                                                 {% elif solicitacao.status == 'entregue' %}
-                                                    📦 Entregue
+                                                    📦 Concluído
                                                 {% else %}
-                                                    {{ solicitacao.status }}
+                                                    {{ solicitacao.status|capitalize }}
                                                 {% endif %}
                                             </div>
                                         </td>
                                         <td class="solicitacao-acoes">
                                             <a href="{{ url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id) }}" class="btn-acao btn-visualizar">
-                                                👁️ Visualizar
-                            </a>
+                                                👁️ Detalhes
+                                            </a>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -113,22 +102,20 @@
                             </table>
                         </div>
                         {% else %}
-                        <!-- Mensagem quando não há solicitações -->
                         <div class="empty-state">
                             <div class="empty-icon">📋</div>
-                            <h3>Nenhuma solicitação encontrada</h3>
-                            <p>Não há solicitações registradas no sistema no momento.</p>
-                            <p>Voce pode criar uma solicitação no Portal de Solicitações</p>
+                            <h3>Nenhum chamado encontrado</h3>
+                            <p>Não há chamados de manutenção registrados no sistema no momento.</p>
+                            <p>Você pode abrir um novo chamado no Portal de Chamados.</p>
                         </div>
                         {% endif %}
                     </div>
 
-                    <!-- Ações da página -->
                     <div class="page-actions">
                         <a href="{{ url_for('portal_solicitacoes') }}" class="btn btn-primary">
-                            ➕ Portal de Solicitações
+                            ➕ Abrir Novo Chamado
                         </a>
-                        <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
                             🏠 Página Inicial
                         </a>
                         <button onclick="location.reload()" class="btn btn-primary">
@@ -140,134 +127,5 @@
         </div>
     </div>
 
-    <script>
-        let autoRefreshInterval;
-        let countdownInterval;
-        let isAutoRefreshActive = false;
-        let secondsRemaining = 60;
-
-        // Chave para localStorage
-        const AUTO_REFRESH_KEY = 'autoRefreshActive';
-        const REFRESH_TIME_KEY = 'refreshTimeRemaining';
-
-        // Função para salvar estado no localStorage
-        function saveAutoRefreshState(active, timeRemaining = 60) {
-            localStorage.setItem(AUTO_REFRESH_KEY, active.toString());
-            if (active) {
-                localStorage.setItem(REFRESH_TIME_KEY, timeRemaining.toString());
-            } else {
-                localStorage.removeItem(REFRESH_TIME_KEY);
-            }
-        }
-
-        // Função para carregar estado do localStorage
-        function loadAutoRefreshState() {
-            const savedState = localStorage.getItem(AUTO_REFRESH_KEY);
-            const savedTime = localStorage.getItem(REFRESH_TIME_KEY);
-            
-            if (savedState === 'true') {
-                isAutoRefreshActive = true;
-                // Se há tempo salvo e é válido, usa ele; senão, usa 60 segundos
-                secondsRemaining = (savedTime && parseInt(savedTime) > 0) ? parseInt(savedTime) : 60;
-                
-                // Atualiza a interface
-                const btn = document.getElementById('autoRefreshBtn');
-                const status = document.getElementById('refreshStatus');
-                
-                btn.classList.add('active');
-                btn.title = 'Desativar atualização automática';
-                status.style.display = 'block';
-                
-                // Inicia o auto-refresh
-                startAutoRefresh();
-            }
-        }
-
-        function toggleAutoRefresh() {
-            const btn = document.getElementById('autoRefreshBtn');
-            const status = document.getElementById('refreshStatus');
-
-            if (!isAutoRefreshActive) {
-                // Ativar auto-refresh
-                isAutoRefreshActive = true;
-                btn.classList.add('active');
-                btn.title = 'Desativar atualização automática';
-                status.style.display = 'block';
-                
-                // Salva o estado ativo
-                saveAutoRefreshState(true, 60);
-                
-                startAutoRefresh();
-            } else {
-                // Desativar auto-refresh
-                isAutoRefreshActive = false;
-                btn.classList.remove('active');
-                btn.title = 'Ativar atualização automática a cada minuto';
-                status.style.display = 'none';
-                
-                // Remove o estado do localStorage
-                saveAutoRefreshState(false);
-                
-                // Limpa os intervalos
-                clearInterval(autoRefreshInterval);
-                clearInterval(countdownInterval);
-            }
-        }
-
-        function startAutoRefresh() {
-            // Se não há tempo restante definido, começa com 60 segundos
-            if (!secondsRemaining || secondsRemaining <= 0) {
-                secondsRemaining = 60;
-            }
-            
-            updateCountdown();
-            
-            countdownInterval = setInterval(() => {
-                secondsRemaining--;
-                updateCountdown();
-                
-                // Salva o tempo restante no localStorage
-                saveAutoRefreshState(true, secondsRemaining);
-                
-                if (secondsRemaining <= 0) {
-                    // Quando chegar a 0, recarrega a página
-                    // O tempo será resetado quando a página carregar novamente
-                    saveAutoRefreshState(true, 60);
-                    location.reload();
-                }
-            }, 1000);
-
-            // Remove o autoRefreshInterval de 60 segundos pois agora o reload
-            // acontece quando o countdown chega a 0
-        }
-
-        function updateCountdown() {
-            const countdown = document.getElementById('countdown');
-            countdown.textContent = `Próxima atualização em: ${secondsRemaining}s`;
-        }
-
-        // Carrega o estado quando a página é carregada
-        document.addEventListener('DOMContentLoaded', function() {
-            loadAutoRefreshState();
-        });
-
-        // Limpar intervalos quando a página for fechada
-        window.addEventListener('beforeunload', function() {
-            // Salva o tempo restante antes de sair
-            if (isAutoRefreshActive && secondsRemaining > 0) {
-                saveAutoRefreshState(true, secondsRemaining);
-            }
-            
-            clearInterval(autoRefreshInterval);
-            clearInterval(countdownInterval);
-        });
-
-        // Função para limpar o estado (útil para debug ou reset manual)
-        function resetAutoRefresh() {
-            localStorage.removeItem(AUTO_REFRESH_KEY);
-            localStorage.removeItem(REFRESH_TIME_KEY);
-            location.reload();
-        }
-    </script>
 </body>
 </html>
