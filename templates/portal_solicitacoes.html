@@ -102,10 +102,10 @@
                         <span class="btn-icon">📤</span>
                         Abrir Chamado
                     </button>
-                    <button type="reset" class="btn btn-reset">
-                        <span class="btn-icon">🔄</span>
-                        Limpar Formulário
-                    </button>
+                    <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn btn-view-requests">
+                        <span class="btn-icon">📊</span>
+                        Ver Chamados
+                    </a>
                     <a href="{{ url_for('exibir_login') }}" class="btn btn-back">
                         <span class="btn-icon">🏠</span>
                         Voltar ao Início
