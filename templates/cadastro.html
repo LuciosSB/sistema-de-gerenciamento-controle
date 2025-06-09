@@ -11,13 +11,57 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">Sistema de Cadastro de Itens</div>
-                <div class="user-info">
-                    <div class="user-icon">👤</div>
-                    <span class="user-name">Administrador</span>
+                <div class="header-actions">
+                    <button class="settings-btn" id="settingsBtn">
+                        <span class="settings-icon">⚙️</span>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                <span class="notification-badge">{{ messages|length }}</span>
+                            {% endif %}
+                        {% endwith %}
+                    </button>
                 </div>
             </div>
         </div>
     </header>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu & Opções</h3>
+            <button class="close-btn" id="closeSidebar">×</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="user-section">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    {% if current_user.is_authenticated %}
+                        <span class="user-name">{{ current_user.username|title }}</span>
+                        <span class="user-role">
+                            {% if current_user.tipo_usuario == 'admin' %} Administrador
+                            {% elif current_user.tipo_usuario == 'almoxarifado' %} Equipe de Manutenção
+                            {% else %} Usuário
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item"><span class="menu-icon">👤</span><span>Meu Perfil</span></a>
+                {% if current_user.has_permission('listar_usuarios') %}
+                <a href="{{ url_for('lista_usuarios') }}" class="menu-item"><span class="menu-icon">👥</span><span>Gerenciar Usuários</span></a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="menu-item logout-item" id="logoutBtn"><span class="menu-icon">🚪</span><span>Sair do Sistema</span></a>
+            </div>
+            <div class="notifications-section">
+                <h4>Notificações Recentes</h4>
+                <div id="notificationsList">
+                    <div class="notification-empty"><span class="empty-icon">🔔</span><span class="empty-text">Nenhuma notificação recente</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 
     <nav>
         <div class="container">
@@ -42,12 +86,12 @@
                     </div>
                 </div>
                 <div class="panel-content">
-                    {% with messages = get_flashed_messages(with_categories=true) %}
+                     {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
                             {% for category, message in messages %}
-                                <div class="flash-message {{ category }}">
-                                    <div class="flash-text">{{ message }}</div>
-                                </div>
+                            <div class="flash-message {{ category }}">
+                                <div class="flash-text">{{ message }}</div>
+                            </div>
                             {% endfor %}
                         {% endif %}
                     {% endwith %}
@@ -55,48 +99,25 @@
                     <div class="form-container">
                         <form method="POST" action="{{ url_for('cadastro_produto') }}" class="cadastro-form">
                             <div class="form-section">
-                                <h3 class="section-title">
-                                    <span class="section-icon">📦</span>
-                                    Informações do Item
-                                </h3>
-                                
+                                <h3 class="section-title"><span class="section-icon">📦</span>Informações do Item</h3>
                                 <div class="form-group">
-                                    <label for="nome" class="cadastro-label">
-                                        <span class="label-icon">🏷️</span>
-                                        Nome do Item/Ferramenta
-                                        <span class="required-indicator">*</span>
-                                    </label>
-                                    <input type="text" id="nome" name="nome" class="cadastro-input" 
-                                           placeholder="Ex: Furadeira de Impacto, Rolo de Fita Isolante" required>
+                                    <label for="nome" class="cadastro-label"><span class="label-icon">🏷️</span>Nome do Item/Ferramenta<span class="required-indicator">*</span></label>
+                                    <input type="text" id="nome" name="nome" class="cadastro-input" placeholder="Ex: Furadeira de Impacto, Rolo de Fita Isolante" required>
                                 </div>
-
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="codigo_barras" class="cadastro-label">
-                                            <span class="label-icon">📊</span>
-                                            Código de Barras / Patrimônio
-                                        </label>
-                                        <input type="text" id="codigo_barras" name="codigo_barras" class="cadastro-input" 
-                                               placeholder="Digite o código (opcional)">
+                                        <label for="codigo_barras" class="cadastro-label"><span class="label-icon">📊</span>Código de Barras / Patrimônio</label>
+                                        <input type="text" id="codigo_barras" name="codigo_barras" class="cadastro-input" placeholder="Digite o código (opcional)">
                                     </div>
-                                    
                                     <div class="form-group">
-                                        <label for="quantidade" class="cadastro-label">
-                                            <span class="label-icon">🔢</span>
-                                            Quantidade Inicial
-                                            <span class="required-indicator">*</span>
-                                        </label>
-                                        <input type="number" id="quantidade" name="quantidade" class="cadastro-input" 
-                                               placeholder="Digite a quantidade em estoque" min="0" required>
+                                        <label for="quantidade" class="cadastro-label"><span class="label-icon">🔢</span>Quantidade Inicial<span class="required-indicator">*</span></label>
+                                        <input type="number" id="quantidade" name="quantidade" class="cadastro-input" placeholder="Digite a quantidade em estoque" min="0" required>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-section">
-                                <h3 class="section-title">
-                                    <span class="section-icon">🔄</span>
-                                    Tipo de Item
-                                </h3>
+                                <h3 class="section-title"><span class="section-icon">🔄</span>Tipo de Item</h3>
                                 <div class="radio-group-container">
                                     <div class="radio-options">
                                         <label class="radio-label">
@@ -114,15 +135,9 @@
                             </div>
 
                             <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    📝 Cadastrar Item
-                                </button>
-                                <a href="{{ url_for('listar_produtos') }}" class="btn btn-tertiary">
-                                    📋 Ver Itens Cadastrados
-                                </a>
-                                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
-                                    🏠 Painel Principal
-                                </a>
+                                <button type="submit" class="btn btn-primary">📝 Cadastrar Item</button>
+                                <a href="{{ url_for('listar_produtos') }}" class="btn btn-tertiary">📋 Ver Itens Cadastrados</a>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">🏠 Painel Principal</a>
                             </div>
                         </form>
                     </div>
@@ -130,5 +145,36 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const settingsBtn = document.getElementById('settingsBtn');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            function openSidebar() {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+            }
+
+            function closeSidebarFunc() {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+
+            settingsBtn.addEventListener('click', openSidebar);
+            closeSidebar.addEventListener('click', closeSidebarFunc);
+            sidebarOverlay.addEventListener('click', closeSidebarFunc);
+
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Tem certeza que deseja sair do sistema?')) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
