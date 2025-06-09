@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Solicitações - DMTT</title>
+    <title>Portal de Chamados - Manutenção DMTT</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}">
 </head>
 <body>
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">DMTT - Portal de Solicitações</div>
+                <div class="logo">DMTT - Portal de Chamados</div>
                 <div class="header-info">
-                    <span class="header-text">Sistema de Requisições</span>
+                    <span class="header-text">Sistema de Manutenção</span>
                 </div>
             </div>
         </div>
@@ -21,15 +21,16 @@
     <div class="container">
         <div class="department-section">
             <div class="department-info">
-                <div class="department-icon">📋</div>
+                <div class="department-icon">🔧</div>
                 <div class="department-text">
-                    <h2>Solicitação de Equipamentos e Itens</h2>
-                    <p>Preencha o formulário abaixo para fazer sua solicitação. Todos os campos marcados com (*) são obrigatórios.</p>
+                    <h2>Abertura de Chamado de Manutenção</h2>
+                    <p>Preencha o formulário abaixo para abrir um novo chamado. Campos com <span class="required-indicator">*</span> são obrigatórios.</p>
                 </div>
             </div>
         </div>
         <div class="solicitation-container">
             <form id="solicitationForm" method="POST" action="{{ url_for('portal_solicitacoes') }}">
+                
                 <div class="form-section">
                     <h3 class="section-title">
                         <span class="section-icon">👤</span>
@@ -37,12 +38,12 @@
                     </h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nome_solicitante">Nome do Solicitante *</label>
+                            <label for="nome_solicitante">Seu Nome <span class="required-indicator">*</span></label>
                             <input type="text" id="nome_solicitante" name="nome_solicitante" required 
                                    placeholder="Digite seu nome completo">
                         </div>
                         <div class="form-group">
-                            <label for="setor">Setor *</label>
+                            <label for="setor">Seu Setor <span class="required-indicator">*</span></label>
                             <input type="text" id="setor" name="setor" required 
                                    placeholder="Digite o nome do seu setor">
                         </div>
@@ -51,19 +52,35 @@
 
                 <div class="form-section">
                     <h3 class="section-title">
-                        <span class="section-icon">📦</span>
-                        Dados do Item/Equipamento
+                        <span class="section-icon">📋</span>
+                        Detalhes do Chamado
                     </h3>
+                    <div class="form-group">
+                        <label for="titulo">Título do Problema <span class="required-indicator">*</span></label>
+                        <input type="text" id="titulo" name="titulo" required 
+                               placeholder="Ex: Computador não liga, Lâmpada queimada, Impressora travada">
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nome_item">Nome do Item/Equipamento *</label>
-                            <input type="text" id="nome_item" name="nome_item" required 
-                                   placeholder="Ex: Computador, Mesa, Cadeira, etc.">
+                            <label for="categoria">Categoria <span class="required-indicator">*</span></label>
+                            <select id="categoria" name="categoria" class="form-select" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="Hardware">Hardware (Computadores, Impressoras)</option>
+                                <option value="Software">Software (Sistema, Aplicativos)</option>
+                                <option value="Rede">Rede (Internet, Cabos)</option>
+                                <option value="Elétrica">Elétrica (Tomadas, Iluminação)</option>
+                                <option value="Estrutural">Estrutural (Mobiliário, Portas)</option>
+                                <option value="Outros">Outros</option>
+                            </select>
                         </div>
-                        <div class="form-group quantity-group">
-                            <label for="quantidade">Quantidade *</label>
-                            <input type="number" id="quantidade" name="quantidade" min="1" required 
-                                   placeholder="1">
+                        <div class="form-group">
+                            <label for="urgencia">Urgência <span class="required-indicator">*</span></label>
+                            <select id="urgencia" name="urgencia" class="form-select" required>
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                                <option value="critica">Crítica (Impede o trabalho)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -71,19 +88,19 @@
                 <div class="form-section">
                     <h3 class="section-title">
                         <span class="section-icon">📝</span>
-                        Detalhes da Solicitação
+                        Descrição Detalhada do Problema
                     </h3>
                     <div class="form-group">
-                        <label for="descricao">Descrição e Informações Adicionais</label>
+                        <label for="descricao">Descreva o que está acontecendo</label>
                         <textarea id="descricao" name="descricao" rows="5" 
-                                  placeholder="Descreva detalhes específicos do item, modelo desejado, urgência, justificativa, ou qualquer informação relevante para sua solicitação..."></textarea>
+                                  placeholder="Forneça detalhes que ajudem a equipe de manutenção a entender o problema. Ex: O computador faz um barulho estranho e a tela fica preta..."></textarea>
                     </div>
                 </div>
 
                 <div class="form-actions-container">
                     <button type="submit" class="btn btn-submit">
                         <span class="btn-icon">📤</span>
-                        Enviar Solicitação
+                        Abrir Chamado
                     </button>
                     <button type="reset" class="btn btn-reset">
                         <span class="btn-icon">🔄</span>
@@ -99,47 +116,38 @@
     </div>
 
     <script>
-        // Validação do formulário
         document.getElementById('solicitationForm').addEventListener('submit', function(e) {
-            const nomesolicitante = document.getElementById('nome_solicitante').value.trim();
+            const nomeSolicitante = document.getElementById('nome_solicitante').value.trim();
             const setor = document.getElementById('setor').value.trim();
-            const nomeItem = document.getElementById('nome_item').value.trim();
-            const quantidade = document.getElementById('quantidade').value;
+            const titulo = document.getElementById('titulo').value.trim();
+            const categoria = document.getElementById('categoria').value;
+            const urgencia = document.getElementById('urgencia').value;
 
-            if (!nomesolicitante || !setor || !nomeItem || !quantidade) {
+            if (!nomeSolicitante || !setor || !titulo || !categoria || !urgencia) {
                 e.preventDefault();
-                alert('Por favor, preencha todos os campos obrigatórios.');
+                alert('Por favor, preencha todos os campos obrigatórios (*).');
                 return false;
             }
 
-            if (parseInt(quantidade) < 1) {
-                e.preventDefault();
-                alert('A quantidade deve ser pelo menos 1.');
-                return false;
-            }
-
-            // Confirmação antes de enviar
-            if (!confirm('Deseja realmente enviar esta solicitação?')) {
+            if (!confirm('Deseja realmente abrir este chamado de manutenção?')) {
                 e.preventDefault();
                 return false;
             }
         });
 
-        // Auto-resize do textarea
         const textarea = document.getElementById('descricao');
         textarea.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = this.scrollHeight + 'px';
         });
 
-        // Animação de entrada dos elementos
         window.addEventListener('load', function() {
             const elements = document.querySelectorAll('.form-section, .form-actions-container');
             elements.forEach((element, index) => {
                 setTimeout(() => {
                     element.style.opacity = '1';
                     element.style.transform = 'translateY(0)';
-                }, index * 200);
+                }, index * 150);
             });
         });
     </script>

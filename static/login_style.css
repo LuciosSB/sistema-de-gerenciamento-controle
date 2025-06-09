@@ -836,3 +836,47 @@ header {
     outline: 3px solid #feed00;
     outline-offset: 3px;
 }
+/* ===== ESTILOS ADICIONAIS PARA O PORTAL DE CHAMADOS ===== */
+
+/* Estiliza os novos campos de seleção (select) para combinar com os inputs */
+.form-group select.form-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #f7f9fc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 1em;
+}
+
+.form-group select.form-select:focus {
+    border-color: #003366;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
+    background-color: white;
+}
+
+/* Garante que a primeira opção (placeholder) seja cinza */
+.form-group select.form-select:required:invalid {
+    color: #999;
+}
+
+.form-group option {
+    color: #333;
+}
+
+/* Estilo para o asterisco de campo obrigatório */
+.required-indicator {
+    color: #dc3545; /* Vermelho */
+    font-weight: bold;
+    margin-left: 4px;
+}
