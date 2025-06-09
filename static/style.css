@@ -3809,3 +3809,28 @@ select option {
     border-top: 1px solid #004080;
     margin-top: auto;
 }
+
+/* ===== BADGE PARA TIPO DE ITEM ===== */
+.tipo-item-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 100px;
+    border: 2px solid;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.tipo-consumivel {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    border-color: #6c757d;
+}
+
+.tipo-retornavel {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    border-color: #17a2b8;
+}

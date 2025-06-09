@@ -4,48 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Listar Produtos</title>
+    <title>Listar Itens e Ferramentas</title>
 </head>
 <body>
-    <!-- Cabeçalho do Sistema -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">Sistema de Produtos</div>
-                <div class="user-info">
-                    <div class="user-icon">👤</div>
-                    <span class="user-name">Administrador</span>
+                <div class="logo">Estoque da Manutenção</div>
+                 <div class="header-actions">
+                    <button class="settings-btn" id="settingsBtn">
+                        <span class="settings-icon">⚙️</span>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                <span class="notification-badge">{{ messages|length }}</span>
+                            {% endif %}
+                        {% endwith %}
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Navegação -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu & Opções</h3>
+            <button class="close-btn" id="closeSidebar">×</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="user-section">
+                <div class="user-avatar">👤</div>
+                <div class="user-info">
+                    {% if current_user.is_authenticated %}
+                        <span class="user-name">{{ current_user.username|title }}</span>
+                        <span class="user-role">
+                            {% if current_user.tipo_usuario == 'admin' %} Administrador
+                            {% elif current_user.tipo_usuario == 'almoxarifado' %} Equipe de Manutenção
+                            {% else %} Usuário
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <a href="#" class="menu-item"><span class="menu-icon">👤</span><span>Meu Perfil</span></a>
+                {% if current_user.has_permission('listar_usuarios') %}
+                <a href="{{ url_for('lista_usuarios') }}" class="menu-item"><span class="menu-icon">👥</span><span>Gerenciar Usuários</span></a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="menu-item logout-item" id="logoutBtn"><span class="menu-icon">🚪</span><span>Sair do Sistema</span></a>
+            </div>
+            
+            <div class="notifications-section">
+                <h4>Notificações Recentes</h4>
+                <div id="notificationsList">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="notification-item notification-{{ category }}">
+                                <div class="notification-icon">
+                                    {% if category == 'success' %}✅{% elif category == 'error' %}❌{% else %}🔔{% endif %}
+                                </div>
+                                <div class="notification-content">
+                                    <span class="notification-title">
+                                        {% if category == 'success' %}Operação Realizada{% elif category == 'error' %}Erro no Sistema{% else %}Notificação{% endif %}
+                                    </span>
+                                    <span class="notification-text">{{ message }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="notification-empty"><span class="empty-icon">🔔</span><span class="empty-text">Nenhuma notificação recente</span></div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <nav>
         <div class="container">
             <ul class="nav-list">
-                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
-                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Solicitações</a></li>
-                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro</a></li>
-                <li class="active"><a href="{{ url_for('listar_produtos') }}">Listar Produtos</a></li>
-                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Produtos</a></li>
-                <li><a href="{{ url_for('saida_produto') }}">Saída de Produtos</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
+                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
+                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro de Itens</a></li>
+                <li class="active"><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Itens</a></li>
+                <li><a href="{{ url_for('saida_produto') }}">Requisição de Material</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Conteúdo Principal -->
     <div class="container">
         <div class="main-content">
             <div class="panel active" id="produtos-panel">
                 <div class="panel-header">
-                    <h2>Lista de Produtos Cadastrados</h2>
+                    <h2>Estoque de Itens e Ferramentas</h2>
                     <div class="header-actions">
-                        <span class="produto-count">{{ produtos|length }} produto(s) encontrado(s)</span>
+                        <span class="produto-count">{{ produtos|length }} item(ns) encontrado(s)</span>
                     </div>
                 </div>
                 <div class="panel-content">
-                    <!-- Container da tabela com borda -->
                     <div class="table-container">
                         {% if produtos %}
                         <div class="table-wrapper">
@@ -53,10 +111,10 @@
                                 <thead>
                                     <tr>
                                         <th class="col-id">ID</th>
-                                        <th class="col-codigo">Código de Barras</th>
-                                        <th class="col-nome">Nome do Produto</th>
-                                        <th class="col-quantidade">Quantidade</th>
-                                        <th class="col-acoes">Ações</th>
+                                        <th class="col-codigo">Código</th>
+                                        <th class="col-nome">Nome do Item</th>
+                                        <th class="col-quantidade">Qtd.</th>
+                                        <th>Tipo</th> <th class="col-acoes">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,26 +122,24 @@
                                     <tr class="produto-row">
                                         <td class="produto-id">{{ produto.id }}</td>
                                         <td class="produto-codigo">
-                                            {% if produto.codigo_barras %}
-                                                {{ produto.codigo_barras }}
-                                            {% else %}
-                                                <span class="codigo-vazio">Não informado</span>
-                                            {% endif %}
+                                            {% if produto.codigo_barras %}{{ produto.codigo_barras }}{% else %}<span class="codigo-vazio">N/A</span>{% endif %}
                                         </td>
                                         <td class="produto-nome">{{ produto.nome }}</td>
                                         <td class="produto-quantidade">
                                             <div class="quantidade-badge 
                                                 {% if produto.quantidade == 0 %}quantidade-zero
                                                 {% elif produto.quantidade <= 5 %}quantidade-baixa
-                                                {% elif produto.quantidade <= 20 %}quantidade-media
                                                 {% else %}quantidade-alta{% endif %}">
                                                 {{ produto.quantidade }}
                                             </div>
                                         </td>
+                                        <td>
+                                            <div class="tipo-item-badge tipo-{{ produto.tipo_item }}">
+                                                {{ produto.tipo_item|capitalize }}
+                                            </div>
+                                        </td>
                                         <td class="produto-acoes">
-                                            <a href="{{ url_for('atualizar_produto', produto_id=produto.id) }}" class="btn-acao btn-editar">
-                                                ✏️ Editar
-                                            </a>
+                                            <a href="{{ url_for('atualizar_produto', produto_id=produto.id) }}" class="btn-acao btn-editar">✏️ Editar</a>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -91,30 +147,53 @@
                             </table>
                         </div>
                         {% else %}
-                        <!-- Mensagem quando não há produtos -->
                         <div class="empty-state">
                             <div class="empty-icon">📦</div>
-                            <h3>Nenhum produto cadastrado</h3>
-                            <p>Cadastre o primeiro produto para começar a gerenciar seu estoque.</p>
-                            <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">
-                                ➕ Cadastrar Primeiro Produto
-                            </a>
+                            <h3>Nenhum item cadastrado</h3>
+                            <p>Cadastre o primeiro item para começar a gerenciar seu estoque de manutenção.</p>
+                            <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">➕ Cadastrar Primeiro Item</a>
                         </div>
                         {% endif %}
                     </div>
 
-                    <!-- Ações da página -->
                     <div class="page-actions">
-                        <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">
-                            ➕ Cadastrar Novo Produto
-                        </a>
-                        <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
-                            🏠 Página Inicial
-                        </a>
+                        <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">➕ Cadastrar Novo Item</a>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">🏠 Painel Principal</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const settingsBtn = document.getElementById('settingsBtn');
+            const sidebar = document.getElementById('sidebar');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            function openSidebar() {
+                sidebar.classList.add('active');
+                sidebarOverlay.classList.add('active');
+            }
+
+            function closeSidebarFunc() {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+
+            settingsBtn.addEventListener('click', openSidebar);
+            closeSidebar.addEventListener('click', closeSidebarFunc);
+            sidebarOverlay.addEventListener('click', closeSidebarFunc);
+
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Tem certeza que deseja sair do sistema?')) {
+                    window.location.href = this.href;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
