@@ -3461,3 +3461,85 @@ select option {
     padding-top: 20px;
     border-top: 2px dashed #c82333; /* Linha tracejada vermelha para indicar perigo */
 }
+
+/* CSS para o Botão de Auto-Refresh */
+
+/* Layout horizontal do cabeçalho */
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 15px;
+}
+
+/* Manter as cores originais do painel */
+.panel-header h2 {
+    margin: 0;
+    flex-grow: 1; /* Permite que o título ocupe o espaço restante */
+}
+
+/* Botão de auto-refresh */
+.btn-auto-refresh {
+    background-color: #f0f0f0;
+    color: #666;
+    border: 1px solid #ddd;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Impede que o botão encolha */
+}
+
+/* Hover */
+.btn-auto-refresh:hover {
+    background-color: #e8e8e8;
+    border-color: #ccc;
+    color: #555;
+}
+
+/* Estado ativo - botão "ligado" */
+.btn-auto-refresh.active {
+    background-color: #e8f5e8; /* Verde claro */
+    border-color: #4CAF50; /* Verde */
+    color: #4CAF50; /* Verde */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.btn-auto-refresh.active:hover {
+    background-color: #d4edda;
+    border-color: #45a049;
+}
+
+/* Status do refresh (contador) */
+.countdown {
+    font-size: 11px;
+    color: #888;
+    font-weight: normal;
+    padding: 3px 8px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .header-row {
+        flex-wrap: wrap; /* Permite que os itens quebrem a linha */
+        justify-content: center;
+    }
+    
+    .panel-header h2 {
+       width: 100%;
+       text-align: center;
+       margin-bottom: 10px;
+    }
+}

@@ -38,7 +38,13 @@
                 <div class="panel-header">
                     <div class="header-row">
                         <h2>Gerenciar Chamados</h2>
+                        <button id="autoRefreshBtn" class="btn-auto-refresh" title="Ativar/Desativar atualização automática">
+                            🔄
+                        </button>
                         <span class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
+                    </div>
+                     <div class="refresh-status" style="text-align: right; margin-top: -15px; height: 15px;">
+                        <span id="countdown" class="countdown" style="display: none;"></span>
                     </div>
                 </div>
                 <div class="panel-content">
@@ -127,5 +133,55 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const autoRefreshBtn = document.getElementById('autoRefreshBtn');
+            const countdownSpan = document.getElementById('countdown');
+            const REFRESH_INTERVAL_SECONDS = 60; // 1 minuto
+            
+            let countdownTimer;
+            
+            // Função para iniciar o processo de auto-refresh
+            function startAutoRefresh() {
+                // Marca o botão como ativo
+                autoRefreshBtn.classList.add('active');
+                countdownSpan.style.display = 'inline-block';
+                
+                let secondsRemaining = REFRESH_INTERVAL_SECONDS;
+                
+                // Atualiza o contador visual a cada segundo
+                countdownTimer = setInterval(() => {
+                    secondsRemaining--;
+                    countdownSpan.textContent = `Atualizando em ${secondsRemaining}s...`;
+                    
+                    if (secondsRemaining <= 0) {
+                        clearInterval(countdownTimer);
+                        location.reload();
+                    }
+                }, 1000);
+            }
+            
+            // Verifica o estado no localStorage quando a página carrega
+            if (localStorage.getItem('autoRefreshActive') === 'true') {
+                startAutoRefresh();
+            }
+            
+            // Adiciona o evento de clique ao botão
+            autoRefreshBtn.addEventListener('click', function() {
+                // Limpa qualquer timer existente para evitar duplicação
+                clearInterval(countdownTimer);
+
+                if (localStorage.getItem('autoRefreshActive') === 'true') {
+                    // Se estava ativo, desativa
+                    localStorage.setItem('autoRefreshActive', 'false');
+                } else {
+                    // Se estava inativo, ativa
+                    localStorage.setItem('autoRefreshActive', 'true');
+                }
+                // Recarrega a página para aplicar o novo estado
+                location.reload();
+            });
+        });
+    </script>
 </body>
 </html>

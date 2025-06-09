@@ -11,6 +11,7 @@ import os
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from functools import wraps
 from config import Config
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config.from_object(Config) # Carrega todas as configurações do config.py
@@ -102,7 +103,6 @@ def logout():
 def dashboard():
     return render_template('dashboard.html')
 
-# --- MUDANÇA: Rota para CADASTRO de Produto/Item ---
 @app.route('/cadastro', methods=['GET', 'POST'])
 @login_required
 @permission_required('cadastrar_produto')
@@ -142,7 +142,6 @@ def listar_produtos():
     produtos = Produto.query.all()
     return render_template('produtos.html', produtos=produtos)
 
-# --- MUDANÇA: Rota para ABERTURA DE CHAMADOS (antigo portal_solicitacoes) ---
 @app.route('/portal_solicitacoes', methods=['GET', 'POST'])
 def portal_solicitacoes():
     if request.method == 'POST':
@@ -178,8 +177,15 @@ def portal_solicitacoes():
 @login_required
 @permission_required('gerenciar_solicitacoes')
 def gerenciar_solicitacoes():
-    solicitacoes = Solicitacao.query.order_by(Solicitacao.data_solicitacao.desc()).all()
-    return render_template('gerenciar_solicitacoes.html', solicitacoes=solicitacoes)
+    todas_as_solicitacoes = Solicitacao.query.order_by(Solicitacao.data_solicitacao.desc()).all()
+    limite_de_tempo = datetime.utcnow() - timedelta(days=1)
+    solicitacoes_visiveis = []
+    
+    for solicitacao in todas_as_solicitacoes:
+        if solicitacao.status == 'entregue' and solicitacao.data_atualizacao and solicitacao.data_atualizacao < limite_de_tempo:
+            continue  
+        solicitacoes_visiveis.append(solicitacao)
+    return render_template('gerenciar_solicitacoes.html', solicitacoes=solicitacoes_visiveis)
 
 @app.route('/gerenciar_solicitacoes/<int:solicitacao_id>')
 @login_required
