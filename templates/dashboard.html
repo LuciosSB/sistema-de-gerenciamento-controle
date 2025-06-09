@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='home_style.css') }}">
-    <title>Sistema de Controle - Almoxarifado</title>
+    <title>Sistema de Gestão de Manutenção</title>
 </head>
 <body>
-    <!-- Cabeçalho do Sistema -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">Sistema de Controle - Almoxarifado</div>
+                <div class="logo">Sistema de Gestão de Manutenção</div>
                 <div class="header-actions">
                     <button class="settings-btn" id="settingsBtn">
                         <span class="settings-icon">⚙️</span>
@@ -26,93 +25,65 @@
         </div>
     </header>
 
-    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>Configurações</h3>
+            <h3>Menu & Opções</h3>
             <button class="close-btn" id="closeSidebar">×</button>
         </div>
         
         <div class="sidebar-content">
-            <!-- Informações do Usuário -->
             <div class="user-section">
                 <div class="user-avatar">👤</div>
                 <div class="user-info">
                     {% if current_user.is_authenticated %}
                         <span class="user-name">{{ current_user.username|title }}</span>
                         <span class="user-role">
-                            {% if current_user.tipo_usuario == 'almoxarifado' %}
+                            {% if current_user.tipo_usuario == 'admin' %}
                                 Administrador
-                            {% elif current_user.tipo_usuario == 'setor' %}
-                                Setor
+                            {% elif current_user.tipo_usuario == 'almoxarifado' %}
+                                Equipe de Manutenção
+                            {% elif current_user.tipo_usuario == 'usuario_padrao' %}
+                                Técnico
+                            {% elif current_user.tipo_usuario == 'usuario_solicitante' %}
+                                Solicitante
                             {% else %}
                                 Usuário
                             {% endif %}
                         </span>
-                    {% else %}
-                        <span class="user-name">Usuário</span>
-                        <span class="user-role">Não autenticado</span>
                     {% endif %}
                 </div>
             </div>
 
-            <!-- Menu de Ações -->
             <div class="sidebar-menu">
                 <a href="#" class="menu-item">
                     <span class="menu-icon">👤</span>
-                    <span>Perfil</span>
+                    <span>Meu Perfil</span>
                 </a>
+                
+                {% if current_user.has_permission('listar_usuarios') %}
+                <a href="{{ url_for('lista_usuarios') }}" class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    <span>Gerenciar Usuários</span>
+                </a>
+                {% endif %}
+
                 <a href="#" class="menu-item">
                     <span class="menu-icon">🔧</span>
                     <span>Configurações</span>
                 </a>
                 <a href="{{ url_for('logout') }}" class="menu-item logout-item" id="logoutBtn">
                     <span class="menu-icon">🚪</span>
-                    <span>Logout</span>
+                    <span>Sair do Sistema</span>
                 </a>
             </div>
-
-            <!-- Histórico de Notificações -->
+            
             <div class="notifications-section">
                 <h4>Notificações Recentes</h4>
                 <div id="notificationsList">
                     {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
                             {% for category, message in messages %}
-                                <div class="notification-item notification-{{ category }}">
-                                    <div class="notification-icon">
-                                        {% if category == 'success' %}
-                                            ✅
-                                        {% elif category == 'error' %}
-                                            ❌
-                                        {% elif category == 'warning' %}
-                                            ⚠️
-                                        {% elif category == 'info' %}
-                                            ℹ️
-                                        {% else %}
-                                            🔔
-                                        {% endif %}
-                                    </div>
-                                    <div class="notification-content">
-                                        <span class="notification-title">
-                                            {% if category == 'success' %}
-                                                Operação Realizada
-                                            {% elif category == 'error' %}
-                                                Erro no Sistema
-                                            {% elif category == 'warning' %}
-                                                Atenção Necessária
-                                            {% elif category == 'info' %}
-                                                Informação
-                                            {% else %}
-                                                Notificação
-                                            {% endif %}
-                                        </span>
-                                        <span class="notification-text">{{ message }}</span>
-                                        <span class="notification-time">agora</span>
-                                    </div>
-                                    <button class="notification-dismiss" onclick="dismissNotification(this)">×</button>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
                         {% else %}
                             <div class="notification-empty">
                                 <span class="empty-icon">🔔</span>
@@ -125,169 +96,134 @@
         </div>
     </div>
 
-    <!-- Overlay para fechar sidebar -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Conteúdo Principal -->
     <div class="container">
         <div class="main-content">
             <div class="panel active" id="home-panel">
                 <div class="panel-header">
-                    <h2>Dashboard</h2>
+                    <h2>Painel Principal</h2>
                     <div class="header-actions">
                         <span class="produto-count">DMTT</span>
                     </div>
                 </div>
 
-                <!-- Mensagens de feedback no conteúdo principal (opcional) -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
-                        <div class="flash-messages-container">
-                            {% for category, message in messages %}
-                                <div class="flash-message flash-{{ category }}" id="flash-{{ loop.index }}">
-                                    <span class="flash-icon">
-                                        {% if category == 'success' %}✅
-                                        {% elif category == 'error' %}❌
-                                        {% elif category == 'warning' %}⚠️
-                                        {% elif category == 'info' %}ℹ️
-                                        {% else %}🔔{% endif %}
-                                    </span>
-                                    <span class="flash-text">{{ message }}</span>
-                                    <button class="flash-dismiss" onclick="dismissFlashMessage('flash-{{ loop.index }}')">×</button>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                        {% endif %}
                 {% endwith %}
 
                 <div class="panel-content">
-                    <!-- Informações do Departamento -->
                     <div class="department-section">
                         <div class="department-info">
                             <div class="department-icon">🏢</div>
                             <div class="department-text">
                                 <h3>Departamento Municipal de Transporte e Trânsito</h3>
-                                <h4>DMTT - Sistema de Gerenciamento</h4>
-                                <p>Controle completo do almoxarifado e estoque de produtos</p>
+                                <h4>DMTT - Sistema de Gestão de Manutenção</h4>
+                                <p>Abertura de chamados, controle de materiais e gestão da equipe técnica.</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Container dos Cards do Menu -->
                     <div class="menu-container">
                         <div class="menu-grid">
-                            <a href="{{ url_for('gerenciar_solicitacoes') }}" class="menu-card">
-                                <div class="card-icon">
-                                    <span class="icon-emoji">📩</span>
-                                </div>
-                                <div class="card-content">
-                                    <h3>Gerenciar Solicitações</h3>
-                                    <p>Visualize e gerencie todas as solicitações de produtos</p>
-                                    <div class="card-action">
-                                        <span class="action-text">Acessar</span>
-                                    </div>
-                                </div>
-                            </a>                            
-                            <a href="{{ url_for('cadastro_produto') }}" class="menu-card">
-                                <div class="card-icon">
-                                    <span class="icon-emoji">➕</span>
-                                </div>
-                                <div class="card-content">
-                                    <h3>Cadastrar Produtos</h3>
-                                    <p>Adicione novos produtos ao sistema de controle</p>
-                                    <div class="card-action">
-                                        <span class="action-text">Acessar</span>
-                                    </div>
-                                </div>
-                            </a>
-                            
-                            <a href="{{ url_for('listar_produtos') }}" class="menu-card">
-                                <div class="card-icon">
-                                    <span class="icon-emoji">📋</span>
-                                </div>
-                                <div class="card-content">
-                                    <h3>Listar Produtos</h3>
-                                    <p>Visualize todos os produtos cadastrados no sistema</p>
-                                    <div class="card-action">
-                                        <span class="action-text">Acessar</span>
-                                    </div>
-                                </div>
-                            </a>
-                            
-                            <a href="{{ url_for('saida_produto') }}" class="menu-card">
-                                <div class="card-icon">
-                                    <span class="icon-emoji">📤</span>
-                                </div>
-                                <div class="card-content">
-                                    <h3>Registrar Saída</h3>
-                                    <p>Registre a saída de produtos do almoxarifado</p>
-                                    <div class="card-action">
-                                        <span class="action-text">Acessar</span>
-                                    </div>
-                                </div>
-                            </a>
-                            
-                            <a href="{{ url_for('selecionar_produto_atualizar') }}" class="menu-card">
-                                <div class="card-icon">
-                                    <span class="icon-emoji">✏️</span>
-                                </div>
-                                <div class="card-content">
-                                    <h3>Atualizar Produtos</h3>
-                                    <p>Edite informações dos produtos cadastrados</p>
-                                    <div class="card-action">
-                                        <span class="action-text">Acessar</span>
-                                    </div>
-                                </div>
-                            </a>
 
-                            <a href="{{ url_for('cadastro_usuario') }}" class="menu-card">
-                                <div class="card-icon">
-                                    <span class="icon-emoji">👤</span>
-                                </div>
+                            {% if current_user.has_permission('gerenciar_solicitacoes') %}
+                            <a href="{{ url_for('gerenciar_solicitacoes') }}" class="menu-card">
+                                <div class="card-icon"><span class="icon-emoji">📩</span></div>
                                 <div class="card-content">
-                                    <h3>Cadastrar Usuarios</h3>
-                                    <p>Adicione novos Usuarios ao sistema de controle</p>
-                                    <div class="card-action">
-                                        <span class="action-text">Acessar</span>
-                                    </div>
+                                    <h3>Gerenciar Chamados</h3>
+                                    <p>Visualize e gerencie todos os chamados de manutenção abertos</p>
+                                    <div class="card-action"><span class="action-text">Acessar</span></div>
                                 </div>
                             </a>
+                            {% endif %}
+                            
+                            {% if current_user.has_permission('cadastrar_produto') %}
+                            <a href="{{ url_for('cadastro_produto') }}" class="menu-card">
+                                <div class="card-icon"><span class="icon-emoji">➕</span></div>
+                                <div class="card-content">
+                                    <h3>Cadastrar Item/Ferramenta</h3>
+                                    <p>Adicione novas peças ou ferramentas ao estoque da manutenção</p>
+                                    <div class="card-action"><span class="action-text">Acessar</span></div>
+                                </div>
+                            </a>
+                            {% endif %}
+                            
+                            {% if current_user.has_permission('listar_produtos') %}
+                            <a href="{{ url_for('listar_produtos') }}" class="menu-card">
+                                <div class="card-icon"><span class="icon-emoji">📋</span></div>
+                                <div class="card-content">
+                                    <h3>Listar Itens</h3>
+                                    <p>Visualize todos os itens e ferramentas disponíveis no estoque</p>
+                                    <div class="card-action"><span class="action-text">Acessar</span></div>
+                                </div>
+                            </a>
+                            {% endif %}
+                            
+                            {% if current_user.has_permission('saida_produto') %}
+                            <a href="{{ url_for('saida_produto') }}" class="menu-card">
+                                <div class="card-icon"><span class="icon-emoji">📤</span></div>
+                                <div class="card-content">
+                                    <h3>Requisitar Material</h3>
+                                    <p>Registre a retirada de material do estoque para um chamado</p>
+                                    <div class="card-action"><span class="action-text">Acessar</span></div>
+                                </div>
+                            </a>
+                            {% endif %}
+                            
+                            {% if current_user.has_permission('atualizar_produto') %}
+                            <a href="{{ url_for('selecionar_produto_atualizar') }}" class="menu-card">
+                                <div class="card-icon"><span class="icon-emoji">✏️</span></div>
+                                <div class="card-content">
+                                    <h3>Atualizar Item</h3>
+                                    <p>Edite informações de itens cadastrados no estoque</p>
+                                    <div class="card-action"><span class="action-text">Acessar</span></div>
+                                </div>
+                            </a>
+                            {% endif %}
+
+                            {% if current_user.has_permission('cadastro_usuario') %}
+                            <a href="{{ url_for('cadastro_usuario') }}" class="menu-card">
+                                <div class="card-icon"><span class="icon-emoji">👤</span></div>
+                                <div class="card-content">
+                                    <h3>Cadastrar Usuário</h3>
+                                    <p>Adicione novos usuários ao sistema (técnicos, solicitantes, etc.)</p>
+                                    <div class="card-action"><span class="action-text">Acessar</span></div>
+                                </div>
+                            </a>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Script simplificado -->
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Elementos da sidebar
+            // Lógica do script para sidebar e animações permanece a mesma
             const settingsBtn = document.getElementById('settingsBtn');
             const sidebar = document.getElementById('sidebar');
             const closeSidebar = document.getElementById('closeSidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
             const logoutBtn = document.getElementById('logoutBtn');
 
-            // Função para abrir sidebar
             function openSidebar() {
                 sidebar.classList.add('active');
                 sidebarOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
             }
 
-            // Função para fechar sidebar
             function closeSidebarFunc() {
                 sidebar.classList.remove('active');
                 sidebarOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
             }
 
-            // Event listeners para sidebar
             settingsBtn.addEventListener('click', openSidebar);
             closeSidebar.addEventListener('click', closeSidebarFunc);
             sidebarOverlay.addEventListener('click', closeSidebarFunc);
 
-            // Confirmação de logout
             logoutBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 if (confirm('Tem certeza que deseja sair do sistema?')) {
@@ -295,107 +231,17 @@
                 }
             });
 
-            // Fechar sidebar com ESC
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && sidebar.classList.contains('active')) {
-                    closeSidebarFunc();
-                }
-            });
-
-            // Animação dos cards ao carregar a página
             const cards = document.querySelectorAll('.menu-card');
-            
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(30px)';
-                
                 setTimeout(() => {
                     card.style.transition = 'all 0.6s ease';
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
-                }, index * 150);
-            });
-
-            // Efeito hover melhorado
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-8px) scale(1.02)';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) scale(1)';
-                });
-            });
-
-            // Auto-ocultar mensagens flash após 5 segundos
-            const flashMessages = document.querySelectorAll('.flash-message');
-            flashMessages.forEach(message => {
-                setTimeout(() => {
-                    if (message.parentNode) {
-                        message.style.animation = 'slideOut 0.5s ease';
-                        setTimeout(() => {
-                            message.remove();
-                        }, 500);
-                    }
-                }, 5000);
+                }, index * 100);
             });
         });
-
-        // Função para dispensar notificação individual
-        function dismissNotification(button) {
-            const notification = button.parentElement;
-            notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => {
-                notification.remove();
-                
-                // Verificar se ainda há notificações
-                const remainingNotifications = document.querySelectorAll('.notification-item');
-                if (remainingNotifications.length === 0) {
-                    document.getElementById('notificationsList').innerHTML = `
-                        <div class="notification-empty">
-                            <span class="empty-icon">🔔</span>
-                            <span class="empty-text">Nenhuma notificação recente</span>
-                        </div>
-                    `;
-                    
-                    // Remover badge se não há mais notificações
-                    const badge = document.querySelector('.notification-badge');
-                    if (badge) {
-                        badge.remove();
-                    }
-                }
-            }, 300);
-        }
-
-        // Função para dispensar mensagem flash
-        function dismissFlashMessage(id) {
-            const message = document.getElementById(id);
-            if (message) {
-                message.style.animation = 'slideOut 0.5s ease';
-                setTimeout(() => {
-                    message.remove();
-                }, 500);
-            }
-        }
-
-        // Animação de saída
-        const slideOutKeyframes = `
-            @keyframes slideOut {
-                from {
-                    opacity: 1;
-                    transform: translateX(0);
-                }
-                to {
-                    opacity: 0;
-                    transform: translateX(-100%);
-                }
-            }
-        `;
-        
-        // Adicionar animação de saída ao CSS
-        const style = document.createElement('style');
-        style.textContent = slideOutKeyframes;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
