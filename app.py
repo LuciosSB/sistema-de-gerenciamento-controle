@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, f
 import pdfkit
 from io import BytesIO
 from db_setup import db
-from models import Produto, Setor, Solicitacao, Usuario
+from models import Produto, Setor, Solicitacao, Usuario, SaidaMaterial # <-- ADICIONADO SaidaMaterial
 from sqlalchemy.orm import Session
 import json
 from datetime import datetime
@@ -55,17 +55,14 @@ def convert_logo_to_base64(image_path):
     Converte uma imagem para base64 para incorporar no HTML
     """
     try:
-        # Verificar se o arquivo existe
         if not os.path.exists(image_path):
             return None
-            
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode('utf-8')
-                
     except Exception:
         return None
 
-# --- ROTAS DE AUTENTICAÇÃO E NAVEGAÇÃO BÁSICA (sem alterações) ---
+# --- ROTAS DE AUTENTICAÇÃO E NAVEGAÇÃO BÁSICA ---
 @app.route('/')
 def index():
     return redirect(url_for('login'))
@@ -78,7 +75,6 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
-        
         usuario = Usuario.query.filter_by(username=username).first()
         
         if usuario and usuario.check_password(password) and usuario.ativo:
@@ -111,7 +107,7 @@ def cadastro_produto():
         codigo_barras = request.form['codigo_barras']
         nome = request.form['nome']
         quantidade = request.form['quantidade']
-        tipo_item = request.form['tipo_item']  # NOVO CAMPO
+        tipo_item = request.form['tipo_item']
         
         produto_existente = Produto.query.filter_by(codigo_barras=codigo_barras).first()
         if produto_existente:
@@ -123,7 +119,7 @@ def cadastro_produto():
                 codigo_barras=codigo_barras,
                 nome=nome,
                 quantidade=int(quantidade),
-                tipo_item=tipo_item  # SALVANDO O TIPO
+                tipo_item=tipo_item
             )
             db.session.add(produto)
             db.session.commit()
@@ -187,14 +183,25 @@ def gerenciar_solicitacoes():
         solicitacoes_visiveis.append(solicitacao)
     return render_template('gerenciar_solicitacoes.html', solicitacoes=solicitacoes_visiveis)
 
+
+# ===================================================================
+# ROTA DE DETALHES DO CHAMADO - ADAPTADA
+# ===================================================================
 @app.route('/gerenciar_solicitacoes/<int:solicitacao_id>')
 @login_required
 @permission_required('gerenciar_solicitacoes')
 def gerenciar_solicitacoes_detalhes(solicitacao_id):
     solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
-    return render_template('gerenciar_solicitacoes_detalhes.html', solicitacao=solicitacao)
+    # Agora, também buscamos todos os produtos para popular o formulário de adição de itens.
+    produtos_disponiveis = Produto.query.order_by(Produto.nome).all()
+    
+    # A variável 'solicitacao' já contém os materiais usados através do backref.
+    # Podemos acessá-los no template com 'solicitacao.materiais_usados'.
+    
+    return render_template('gerenciar_solicitacoes_detalhes.html', 
+                           solicitacao=solicitacao,
+                           produtos_disponiveis=produtos_disponiveis) # Enviando a lista de produtos
 
-# --- MUDANÇA: Rota para ATUALIZAR STATUS do chamado ---
 @app.route('/atualizar_status_solicitacao/<int:solicitacao_id>', methods=['POST'])
 @login_required
 @permission_required('gerenciar_solicitacoes')
@@ -204,7 +211,7 @@ def atualizar_status_solicitacao(solicitacao_id):
         novo_status = request.form.get('status')
         motivo_rejeicao = request.form.get('motivo_rejeicao', '').strip()
 
-        status_validos = ['pendente', 'aprovada', 'rejeitada', 'entregue'] # 'entregue' pode virar 'concluido'
+        status_validos = ['pendente', 'aprovada', 'rejeitada', 'entregue']
         if novo_status not in status_validos:
             flash('Status inválido.', 'error')
         else:
@@ -244,7 +251,60 @@ def excluir_solicitacao(solicitacao_id):
     
     return redirect(url_for('gerenciar_solicitacoes'))
 
-# --- MUDANÇA: Rota para SAÍDA DE MATERIAL vinculada a um chamado ---
+
+# ===================================================================
+# NOVA ROTA PARA ADICIONAR ITENS A UM CHAMADO
+# ===================================================================
+@app.route('/solicitacao/<int:solicitacao_id>/adicionar_item', methods=['POST'])
+@login_required
+@permission_required('saida_produto') # Reutilizando a permissão antiga
+def adicionar_item_solicitacao(solicitacao_id):
+    solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
+    
+    if solicitacao.status != 'aprovada':
+        flash('Só é possível adicionar itens a chamados com status "Aprovado".', 'error')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+    try:
+        produto_id = request.form.get('produto_id')
+        quantidade_saida_str = request.form.get('quantidade_saida')
+        
+        if not produto_id or not quantidade_saida_str:
+            flash('Selecione um produto e uma quantidade.', 'error')
+            return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+        quantidade_saida = int(quantidade_saida_str)
+        produto = Produto.query.get(produto_id)
+
+        if not produto:
+            flash('Produto não encontrado.', 'error')
+        elif produto.quantidade < quantidade_saida:
+            flash(f'Estoque insuficiente para "{produto.nome}". Restam: {produto.quantidade}.', 'error')
+        elif quantidade_saida <= 0:
+            flash('A quantidade deve ser maior que zero.', 'error')
+        else:
+            produto.quantidade -= quantidade_saida
+            
+            nova_saida = SaidaMaterial(
+                solicitacao_id=solicitacao_id,
+                produto_id=int(produto_id),
+                quantidade_saida=quantidade_saida
+            )
+            db.session.add(nova_saida)
+            db.session.commit()
+            flash(f'Item "{produto.nome}" adicionado ao chamado com sucesso!', 'success')
+
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao adicionar item: {e}', 'error')
+    
+    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+
+# ===================================================================
+# ROTA DE SAÍDA DE PRODUTOS ANTIGA - COMENTADA/DESATIVADA
+# ===================================================================
+"""
 @app.route('/saida', methods=['GET', 'POST'])
 @login_required
 @permission_required('saida_produto')
@@ -289,9 +349,9 @@ def saida_produto():
             logo_base64 = convert_logo_to_base64('static/logodmtt.png')
             rendered = render_template('saida_pdf.html', 
                                        produtos=produtos_para_pdf,
-                                       setor=chamado.setor, # Pega o setor do chamado
+                                       setor=chamado.setor,
                                        data_pedido=data_hora, logo_base64=logo_base64,
-                                       usuario=current_user.username, chamado=chamado) # Passa o objeto do chamado
+                                       usuario=current_user.username, chamado=chamado)
             
             pdf = pdfkit.from_string(rendered, False, configuration=pdfkit_config, options={'enable-local-file-access': None})
             return send_file(BytesIO(pdf), download_name=f'Requisicao_Chamado_{chamado.id}.pdf', as_attachment=True)
@@ -299,13 +359,13 @@ def saida_produto():
             db.session.rollback()
             return redirect(url_for('saida_produto'))
 
-    # Método GET: Listar produtos e chamados aprovados
     produtos = Produto.query.order_by(Produto.nome).all()
     chamados_aprovados = Solicitacao.query.filter_by(status='aprovada').order_by(Solicitacao.data_solicitacao.desc()).all()
     
     return render_template('saida.html', produtos=produtos, chamados_aprovados=chamados_aprovados)
+"""
 
-# --- NOVA ROTA: Rota para DEVOLUÇÃO de itens ---
+# --- ROTA DE DEVOLUÇÃO DE ITENS (sem alterações) ---
 @app.route('/devolucao_item', methods=['GET', 'POST'])
 @login_required
 def devolucao_item():
@@ -337,7 +397,6 @@ def devolucao_item():
 
         return redirect(url_for('devolucao_item'))
 
-    # Método GET: Listar apenas itens retornáveis
     itens_retornaveis = Produto.query.filter_by(tipo_item='retornavel').order_by(Produto.nome).all()
     return render_template('devolucao.html', itens_retornaveis=itens_retornaveis)
 
@@ -358,7 +417,6 @@ def selecionar_produto_atualizar():
     produtos = Produto.query.all()
     return render_template('selecionar_produto.html', produtos=produtos)
 
-# --- MUDANÇA: Rota para ATUALIZAR produto/item ---
 @app.route('/atualizar/<int:produto_id>', methods=['GET', 'POST'])
 @login_required
 @permission_required('atualizar_produto')
@@ -370,7 +428,7 @@ def atualizar_produto(produto_id):
             produto.codigo_barras = request.form['codigo_barras']
             produto.nome = request.form['nome']
             produto.quantidade = int(request.form['quantidade'])
-            produto.tipo_item = request.form['tipo_item'] # Adicionado o campo tipo_item
+            produto.tipo_item = request.form['tipo_item']
 
             db.session.commit()
             flash('Item/Produto atualizado com sucesso!', 'success')
@@ -382,16 +440,15 @@ def atualizar_produto(produto_id):
     return render_template('atualizar.html', produto=produto)
 
 
-# --- ROTAS DE GERENCIAMENTO DE USUÁRIOS (sem alterações) ---
+# --- ROTAS DE GERENCIAMENTO DE USUÁRIOS ---
 @app.route('/cadastro_usuario', methods=['GET', 'POST'])
 @login_required
 def cadastro_usuario():
-    # ... (código existente sem alterações)
     if current_user.tipo_usuario != 'admin':
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
     if request.method == 'POST':
-        # ...
+        # ... (código existente)
         pass
     return render_template('cadastro_usuario.html')
 
@@ -407,24 +464,22 @@ def lista_usuarios():
 @app.route('/atualizar_cadastro/<int:usuario_id>', methods=['GET', 'POST'])
 @login_required
 def atualizar_cadastro(usuario_id):
-    # ... (código existente sem alterações)
     if current_user.tipo_usuario != 'admin':
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
     usuario = Usuario.query.get_or_404(usuario_id)
     if request.method == 'POST':
-        # ...
+        # ... (código existente)
         pass
     return render_template('atualizar_cadastro.html', usuario=usuario)
 
 @app.route('/excluir_usuario/<int:usuario_id>', methods=['POST'])
 @login_required
 def excluir_usuario(usuario_id):
-    # ... (código existente sem alterações)
     if current_user.tipo_usuario != 'admin':
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
-    # ...
+    # ... (código existente)
     return redirect(url_for('lista_usuarios'))
 
 
