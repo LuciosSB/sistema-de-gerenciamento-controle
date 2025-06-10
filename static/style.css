@@ -3911,3 +3911,60 @@ select option {
 .page-actions form {
     margin: 0;
 }
+/* Em static/style.css */
+
+/* Estiliza cada linha de item no formulário */
+.item-row {
+    display: flex;
+    align-items: flex-end; /* Alinha os itens na base */
+    gap: 15px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e8f0;
+}
+.item-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* Botão de remover item */
+.btn-remove-item {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    flex-shrink: 0; /* Impede que o botão encolha */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+.btn-remove-item:hover {
+    background: #dc3545;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Container para o botão "Adicionar outro item" */
+.add-item-actions {
+    margin-top: 1rem;
+}
+
+/* Botão para adicionar nova linha */
+.btn-add-row {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-add-row:hover {
+    background: #a5d6a7;
+    color: white;
+}

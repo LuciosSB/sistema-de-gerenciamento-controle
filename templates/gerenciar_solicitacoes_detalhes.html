@@ -27,7 +27,7 @@
                 <li><a href="{{ url_for('cadastro_produto') }}">Cadastro de Itens</a></li>
                 <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
                 <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Itens</a></li>
-                </ul>
+            </ul>
         </div>
     </nav>
 
@@ -86,13 +86,12 @@
                     <div class="acoes-container">
                         <h3 class="section-title"><span class="section-icon">⚙️</span> Ações de Atendimento</h3>
                         <div class="acoes-buttons">
-                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado? A próxima etapa será a retirada de materiais.')">
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado?')">
                                 <input type="hidden" name="status" value="aprovada">
                                 <button type="submit" class="btn btn-atender">✅ Aprovar Chamado</button>
                             </form>
                             <button type="button" class="btn btn-rejeitar" onclick="toggleRejeitarForm()">❌ Rejeitar Chamado</button>
                         </div>
-
                         <div id="rejeitarFormContainer" class="rejeitar-form-container" style="display:none;">
                             <h4>Motivo da Rejeição (será visível para o solicitante)</h4>
                             <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}">
@@ -109,7 +108,6 @@
                     {% elif solicitacao.status == 'aprovada' %}
                     <div class="detalhes-section">
                         <h3 class="section-title"><span class="section-icon">📦</span> Saída de Materiais</h3>
-                        
                         <div class="table-container" style="margin-bottom: 2rem;">
                             <h4>Itens já retirados para este chamado:</h4>
                             {% if solicitacao.materiais_usados %}
@@ -127,16 +125,35 @@
                         </div>
 
                         <div class="add-item-form-section">
-                            <h4>Adicionar novo item à requisição:</h4>
+                            <h4>Adicionar novos itens à requisição:</h4>
                             <form method="POST" action="{{ url_for('adicionar_item_solicitacao', solicitacao_id=solicitacao.id) }}">
-                                <div class="form-row">
-                                    <div class="form-group" style="flex-grow: 2;"><label for="produto_id">Produto:</label><select name="produto_id" class="setor-select" required><option value="">Selecione um produto...</option>{% for produto in produtos_disponiveis %}<option value="{{ produto.id }}">{{ produto.nome }} (Estoque: {{ produto.quantidade }})</option>{% endfor %}</select></div>
-                                    <div class="form-group"><label for="quantidade_saida">Quantidade:</label><input type="number" name="quantidade_saida" class="cadastro-input" min="1" required></div>
+                                <div id="itens-container">
+                                    <div class="item-row">
+                                        <div class="form-group" style="flex-grow: 2;">
+                                            <label for="produto_id[]">Produto:</label>
+                                            <select name="produto_id[]" class="setor-select" required>
+                                                <option value="">Selecione um produto...</option>
+                                                {% for produto in produtos_disponiveis %}
+                                                    <option value="{{ produto.id }}">{{ produto.nome }} (Estoque: {{ produto.quantidade }})</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="quantidade_saida[]">Quantidade:</label>
+                                            <input type="number" name="quantidade_saida[]" class="cadastro-input" min="1" required>
+                                        </div>
+                                        <button type="button" class="btn btn-remove-item" onclick="removerItem(this)" style="display: none;">🗑️</button>
+                                    </div>
                                 </div>
-                                <div class="form-actions" style="justify-content: flex-end; border-top: none; padding-top: 0;"><button type="submit" class="btn btn-primary">Adicionar Item</button></div>
+                                <div class="add-item-actions">
+                                    <button type="button" id="add-item-btn" class="btn btn-add-row">➕ Adicionar outro item</button>
+                                </div>
+                                <div class="form-actions" style="justify-content: flex-end; border-top: none; padding-top: 1rem;">
+                                    <button type="submit" class="btn btn-primary">Adicionar Itens ao Chamado</button>
+                                </div>
                             </form>
                         </div>
-
+                        
                         <div class="acoes-buttons" style="margin-top: 2rem; border-top: 1px solid #eee; padding-top: 2rem; justify-content: space-between;">
                             <a href="{{ url_for('gerar_requisicao_pdf', solicitacao_id=solicitacao.id) }}" class="btn btn-tertiary">📄 Gerar PDF de Requisição</a>
                             <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Marcar este chamado como CONCLUÍDO?')">
@@ -187,7 +204,30 @@
             </div>
         </div>
     </div>
+    
     <script>
+        document.getElementById('add-item-btn').addEventListener('click', function() {
+            const container = document.getElementById('itens-container');
+            // Clona a primeira linha de item, que serve como nosso modelo
+            const novoItemRow = container.querySelector('.item-row').cloneNode(true);
+
+            // Limpa os valores do clone para o usuário preencher
+            novoItemRow.querySelector('select').value = '';
+            novoItemRow.querySelector('input').value = '';
+            
+            // Mostra o botão de remover no novo item (o primeiro fica escondido)
+            const removeBtn = novoItemRow.querySelector('.btn-remove-item');
+            removeBtn.style.display = 'flex';
+
+            container.appendChild(novoItemRow);
+        });
+
+        function removerItem(button) {
+            // Encontra a linha-pai do botão que foi clicado
+            const itemRow = button.closest('.item-row');
+            itemRow.remove();
+        }
+
         function toggleRejeitarForm() {
             var formContainer = document.getElementById('rejeitarFormContainer');
             formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
