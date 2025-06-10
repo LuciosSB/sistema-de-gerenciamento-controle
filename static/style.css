@@ -3834,3 +3834,25 @@ select option {
     background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
     border-color: #17a2b8;
 }
+/* Em static/style.css */
+
+/* Mensagem para lista vazia de materiais */
+.empty-list-message {
+    padding: 20px;
+    text-align: center;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    font-style: italic;
+}
+
+/* Seção do formulário de adição de item */
+.add-item-form-section {
+    background-color: #f0f8ff; /* Um azul bem claro para destacar */
+    border: 1px solid #cce5ff;
+}
+
+/* Garante que o input de número não ocupe a linha inteira */
+.form-group input[type="number"].cadastro-input {
+    max-width: 150px;
+}

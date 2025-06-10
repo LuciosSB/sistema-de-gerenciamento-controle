@@ -27,8 +27,7 @@
                 <li><a href="{{ url_for('cadastro_produto') }}">Cadastro de Itens</a></li>
                 <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
                 <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Itens</a></li>
-                <li><a href="{{ url_for('saida_produto') }}">Saída de Material</a></li>
-            </ul>
+                </ul>
         </div>
     </nav>
 
@@ -50,6 +49,16 @@
                 </div>
 
                 <div class="panel-content">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                <div class="flash-text">{{ message }}</div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
                     <div class="detalhes-container">
                         <div class="detalhes-section">
                             <h3 class="section-title">
@@ -108,67 +117,72 @@
                                 {% endif %}
                             </div>
                         </div>
-                        
-                        {% if solicitacao.status == 'rejeitada' and solicitacao.motivo_rejeicao %}
-                        <div class="detalhes-section">
-                            <h3 class="section-title reject-title">
-                                <span class="section-icon">❌</span>
-                                Motivo da Rejeição
-                            </h3>
-                            <div class="rejeicao-motivo-box">
-                                <p>{{ solicitacao.motivo_rejeicao }}</p>
-                            </div>
-                        </div>
-                        {% endif %}
                     </div>
 
-                    <div class="acoes-container">
+                    <div class="detalhes-section">
                         <h3 class="section-title">
-                            <span class="section-icon">⚙️</span>
-                            Ações
+                            <span class="section-icon">📦</span>
+                            Itens Utilizados no Chamado
                         </h3>
-                        
-                        {% if solicitacao.status == 'pendente' %}
-                        <div class="acoes-buttons">
-                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado?')">
-                                <input type="hidden" name="status" value="aprovada">
-                                <button type="submit" class="btn btn-atender">✅ Aprovar Chamado</button>
-                            </form>
-                            
-                            <button type="button" class="btn btn-rejeitar" onclick="toggleRejeitarForm()">❌ Rejeitar Chamado</button>
-                        </div>
-
-                        <div id="rejeitarFormContainer" class="rejeitar-form-container" style="display:none;">
-                            <h4>Motivo da Rejeição (Obrigatório)</h4>
-                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}">
-                                <input type="hidden" name="status" value="rejeitada">
-                                <textarea name="motivo_rejeicao" rows="4" placeholder="Descreva por que este chamado está sendo rejeitado..." required></textarea>
-                                <div class="rejeitar-form-actions">
-                                    <button type="submit" class="btn btn-danger">Confirmar Rejeição</button>
-                                    <button type="button" class="btn btn-secondary" onclick="toggleRejeitarForm()">Cancelar</button>
-                                </div>
-                            </form>
-                        </div>
-
-                        {% elif solicitacao.status == 'aprovada' %}
-                        <div class="acoes-buttons">
-                            <p>Chamado aprovado. Agora você pode dar saída de materiais para este chamado na página "Saída de Material".</p>
-                             <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" style="display: inline;" onsubmit="return confirm('Marcar este chamado como CONCLUÍDO?')">
-                                <input type="hidden" name="status" value="entregue">
-                                <button type="submit" class="btn btn-entregar">📦 Marcar como Concluído</button>
-                            </form>
-                        </div>
-                        {% endif %}
-
-                        <div class="acoes-danger">
-                            <form method="POST" action="{{ url_for('excluir_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('ATENÇÃO: Deseja EXCLUIR permanentemente este chamado? Esta ação NÃO pode ser desfeita!')">
-                                <button type="submit" class="btn btn-danger">
-                                    <span class="btn-icon">🗑️</span>
-                                    Excluir Chamado
-                                </button>
-                            </form>
+                        <div class="table-container">
+                            {% if solicitacao.materiais_usados %}
+                            <table class="solicitacoes-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantidade Retirada</th>
+                                        <th>Data da Retirada</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for saida in solicitacao.materiais_usados %}
+                                    <tr>
+                                        <td>{{ saida.produto.nome }}</td>
+                                        <td>{{ saida.quantidade_saida }}</td>
+                                        <td>{{ saida.data_saida.strftime('%d/%m/%Y %H:%M') }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p class="empty-list-message">Nenhum material foi retirado para este chamado ainda.</p>
+                            {% endif %}
                         </div>
                     </div>
+
+                    {% if solicitacao.status == 'aprovada' %}
+                    <div class="detalhes-section add-item-form-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">➕</span>
+                            Adicionar Item/Material
+                        </h3>
+                        <form method="POST" action="{{ url_for('adicionar_item_solicitacao', solicitacao_id=solicitacao.id) }}">
+                            <div class="form-row">
+                                <div class="form-group" style="flex-grow: 2;">
+                                    <label for="produto_id">Produto:</label>
+                                    <select name="produto_id" class="setor-select" required>
+                                        <option value="">Selecione um produto...</option>
+                                        {% for produto in produtos_disponiveis %}
+                                            <option value="{{ produto.id }}">
+                                                {{ produto.nome }} (Estoque: {{ produto.quantidade }})
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantidade_saida">Quantidade:</label>
+                                    <input type="number" name="quantidade_saida" class="cadastro-input" min="1" required>
+                                </div>
+                            </div>
+                            <div class="form-actions" style="justify-content: flex-end; border-top: none; padding-top: 0;">
+                                <button type="submit" class="btn btn-primary">Adicionar ao Chamado</button>
+                            </div>
+                        </form>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="acoes-container">
+                        </div>
 
                     <div class="page-actions">
                         <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn btn-secondary">⬅️ Voltar para Lista</a>
