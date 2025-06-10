@@ -3856,3 +3856,58 @@ select option {
 .form-group input[type="number"].cadastro-input {
     max-width: 150px;
 }
+/* Em static/style.css */
+
+/* Seção de ações de atendimento */
+.acoes-container {
+    margin-top: 2rem;
+    padding: 25px;
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+/* Caixa para o motivo da rejeição */
+.rejeicao-motivo-box {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 6px;
+    line-height: 1.6;
+}
+.rejeicao-motivo-box strong {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Mensagem para lista vazia */
+.empty-list-message {
+    padding: 20px;
+    text-align: center;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    font-style: italic;
+}
+
+/* Formulário de adição de item */
+.add-item-form-section {
+    padding: 20px;
+    background-color: #f0f8ff;
+    border: 1px solid #cce5ff;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+/* Botões de Ação na mesma linha */
+.page-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+}
+.page-actions form {
+    margin: 0;
+}

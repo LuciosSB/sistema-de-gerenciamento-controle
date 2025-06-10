@@ -13,7 +13,7 @@
                 <div class="logo">Sistema de Manutenção</div>
                 <div class="user-info">
                     <div class="user-icon">👤</div>
-                    <span class="user-name">Administrador</span>
+                    <span class="user-name">{{ current_user.username|title }}</span>
                 </div>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="main-content">
             <div class="panel active" id="detalhes-panel">
                 <div class="panel-header">
-                    <h2>Detalhes do Chamado #{{ solicitacao.id }}</h2>
+                    <h2>Central de Trabalho - Chamado #{{ solicitacao.id }}</h2>
                     <div class="header-actions">
                         <div class="status-badge 
                             {% if solicitacao.status == 'pendente' %}status-pendente
@@ -43,7 +43,7 @@
                             {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
                             {% elif solicitacao.status == 'entregue' %}status-entregue
                             {% endif %}">
-                            {{ solicitacao.status|capitalize }}
+                            {{ solicitacao.status|replace('_', ' ')|capitalize }}
                         </div>
                     </div>
                 </div>
@@ -61,131 +61,127 @@
 
                     <div class="detalhes-container">
                         <div class="detalhes-section">
-                            <h3 class="section-title">
-                                <span class="section-icon">📋</span>
-                                Detalhes do Chamado
-                            </h3>
+                            <h3 class="section-title"><span class="section-icon">📋</span> Detalhes do Chamado</h3>
                             <div class="detalhes-grid">
-                                <div class="detalhe-item detalhe-full">
-                                    <label class="detalhe-label">Título:</label>
-                                    <span class="detalhe-valor titulo-principal">{{ solicitacao.titulo }}</span>
-                                </div>
-                                <div class="detalhe-item">
-                                    <label class="detalhe-label">Categoria:</label>
-                                    <span class="detalhe-valor">{{ solicitacao.categoria }}</span>
-                                </div>
-                                <div class="detalhe-item">
-                                    <label class="detalhe-label">Urgência:</label>
-                                    <div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">
-                                        {{ solicitacao.urgencia|capitalize }}
-                                    </div>
-                                </div>
+                                <div class="detalhe-item detalhe-full"><label class="detalhe-label">Título:</label><span class="detalhe-valor titulo-principal">{{ solicitacao.titulo }}</span></div>
+                                <div class="detalhe-item"><label class="detalhe-label">Categoria:</label><span class="detalhe-valor">{{ solicitacao.categoria }}</span></div>
+                                <div class="detalhe-item"><label class="detalhe-label">Urgência:</label><div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">{{ solicitacao.urgencia|capitalize }}</div></div>
                             </div>
                         </div>
-
                         <div class="detalhes-section">
-                            <h3 class="section-title">
-                                <span class="section-icon">👤</span>
-                                Dados do Solicitante
-                            </h3>
+                            <h3 class="section-title"><span class="section-icon">👤</span> Dados do Solicitante</h3>
                             <div class="detalhes-grid">
-                                <div class="detalhe-item">
-                                    <label class="detalhe-label">Nome:</label>
-                                    <span class="detalhe-valor">{{ solicitacao.nome_solicitante }}</span>
-                                </div>
-                                <div class="detalhe-item">
-                                    <label class="detalhe-label">Setor:</label>
-                                    <span class="detalhe-valor">{{ solicitacao.setor }}</span>
-                                </div>
-                                <div class="detalhe-item">
-                                    <label class="detalhe-label">Data/Hora da Abertura:</label>
-                                    <span class="detalhe-valor">{{ solicitacao.data_solicitacao.strftime('%d/%m/%Y às %H:%M') }}</span>
-                                </div>
+                                <div class="detalhe-item"><label class="detalhe-label">Nome:</label><span class="detalhe-valor">{{ solicitacao.nome_solicitante }}</span></div>
+                                <div class="detalhe-item"><label class="detalhe-label">Setor:</label><span class="detalhe-valor">{{ solicitacao.setor }}</span></div>
+                                <div class="detalhe-item"><label class="detalhe-label">Data/Hora da Abertura:</label><span class="detalhe-valor">{{ solicitacao.data_solicitacao.strftime('%d/%m/%Y às %H:%M') }}</span></div>
                             </div>
                         </div>
-
                         <div class="detalhes-section">
-                            <h3 class="section-title">
-                                <span class="section-icon">📝</span>
-                                Descrição do Problema
-                            </h3>
-                            <div class="descricao-container">
-                                {% if solicitacao.descricao %}
-                                    <p class="descricao-texto">{{ solicitacao.descricao }}</p>
-                                {% else %}
-                                    <p class="descricao-vazia">Nenhuma descrição detalhada foi fornecida.</p>
-                                {% endif %}
-                            </div>
+                            <h3 class="section-title"><span class="section-icon">📝</span> Descrição do Problema</h3>
+                            <div class="descricao-container"><p class="descricao-texto">{{ solicitacao.descricao or 'Nenhuma descrição detalhada foi fornecida.' }}</p></div>
                         </div>
                     </div>
 
+                    {% if solicitacao.status == 'pendente' %}
+                    <div class="acoes-container">
+                        <h3 class="section-title"><span class="section-icon">⚙️</span> Ações de Atendimento</h3>
+                        <div class="acoes-buttons">
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado? A próxima etapa será a retirada de materiais.')">
+                                <input type="hidden" name="status" value="aprovada">
+                                <button type="submit" class="btn btn-atender">✅ Aprovar Chamado</button>
+                            </form>
+                            <button type="button" class="btn btn-rejeitar" onclick="toggleRejeitarForm()">❌ Rejeitar Chamado</button>
+                        </div>
+
+                        <div id="rejeitarFormContainer" class="rejeitar-form-container" style="display:none;">
+                            <h4>Motivo da Rejeição (será visível para o solicitante)</h4>
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}">
+                                <input type="hidden" name="status" value="rejeitada">
+                                <textarea name="motivo_rejeicao" rows="4" placeholder="Descreva por que este chamado está sendo rejeitado..." required></textarea>
+                                <div class="rejeitar-form-actions">
+                                    <button type="submit" class="btn btn-danger">Confirmar Rejeição</button>
+                                    <button type="button" class="btn btn-secondary" onclick="toggleRejeitarForm()">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    {% elif solicitacao.status == 'aprovada' %}
                     <div class="detalhes-section">
-                        <h3 class="section-title">
-                            <span class="section-icon">📦</span>
-                            Itens Utilizados no Chamado
-                        </h3>
-                        <div class="table-container">
+                        <h3 class="section-title"><span class="section-icon">📦</span> Saída de Materiais</h3>
+                        
+                        <div class="table-container" style="margin-bottom: 2rem;">
+                            <h4>Itens já retirados para este chamado:</h4>
                             {% if solicitacao.materiais_usados %}
                             <table class="solicitacoes-table">
-                                <thead>
-                                    <tr>
-                                        <th>Item</th>
-                                        <th>Quantidade Retirada</th>
-                                        <th>Data da Retirada</th>
-                                    </tr>
-                                </thead>
+                                <thead><tr><th>Item</th><th>Qtd. Retirada</th><th>Data</th></tr></thead>
                                 <tbody>
                                     {% for saida in solicitacao.materiais_usados %}
-                                    <tr>
-                                        <td>{{ saida.produto.nome }}</td>
-                                        <td>{{ saida.quantidade_saida }}</td>
-                                        <td>{{ saida.data_saida.strftime('%d/%m/%Y %H:%M') }}</td>
-                                    </tr>
+                                    <tr><td>{{ saida.produto.nome }}</td><td>{{ saida.quantidade_saida }}</td><td>{{ saida.data_saida.strftime('%d/%m/%y %H:%M') }}</td></tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                             {% else %}
-                            <p class="empty-list-message">Nenhum material foi retirado para este chamado ainda.</p>
+                            <p class="empty-list-message">Nenhum material foi retirado.</p>
                             {% endif %}
+                        </div>
+
+                        <div class="add-item-form-section">
+                            <h4>Adicionar novo item à requisição:</h4>
+                            <form method="POST" action="{{ url_for('adicionar_item_solicitacao', solicitacao_id=solicitacao.id) }}">
+                                <div class="form-row">
+                                    <div class="form-group" style="flex-grow: 2;"><label for="produto_id">Produto:</label><select name="produto_id" class="setor-select" required><option value="">Selecione um produto...</option>{% for produto in produtos_disponiveis %}<option value="{{ produto.id }}">{{ produto.nome }} (Estoque: {{ produto.quantidade }})</option>{% endfor %}</select></div>
+                                    <div class="form-group"><label for="quantidade_saida">Quantidade:</label><input type="number" name="quantidade_saida" class="cadastro-input" min="1" required></div>
+                                </div>
+                                <div class="form-actions" style="justify-content: flex-end; border-top: none; padding-top: 0;"><button type="submit" class="btn btn-primary">Adicionar Item</button></div>
+                            </form>
+                        </div>
+
+                        <div class="acoes-buttons" style="margin-top: 2rem; border-top: 1px solid #eee; padding-top: 2rem; justify-content: space-between;">
+                            <a href="{{ url_for('gerar_requisicao_pdf', solicitacao_id=solicitacao.id) }}" class="btn btn-tertiary">📄 Gerar PDF de Requisição</a>
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Marcar este chamado como CONCLUÍDO?')">
+                                <input type="hidden" name="status" value="entregue">
+                                <button type="submit" class="btn btn-entregar">📦 Marcar como Concluído</button>
+                            </form>
                         </div>
                     </div>
 
-                    {% if solicitacao.status == 'aprovada' %}
-                    <div class="detalhes-section add-item-form-section">
-                        <h3 class="section-title">
-                            <span class="section-icon">➕</span>
-                            Adicionar Item/Material
-                        </h3>
-                        <form method="POST" action="{{ url_for('adicionar_item_solicitacao', solicitacao_id=solicitacao.id) }}">
-                            <div class="form-row">
-                                <div class="form-group" style="flex-grow: 2;">
-                                    <label for="produto_id">Produto:</label>
-                                    <select name="produto_id" class="setor-select" required>
-                                        <option value="">Selecione um produto...</option>
-                                        {% for produto in produtos_disponiveis %}
-                                            <option value="{{ produto.id }}">
-                                                {{ produto.nome }} (Estoque: {{ produto.quantidade }})
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="quantidade_saida">Quantidade:</label>
-                                    <input type="number" name="quantidade_saida" class="cadastro-input" min="1" required>
-                                </div>
-                            </div>
-                            <div class="form-actions" style="justify-content: flex-end; border-top: none; padding-top: 0;">
-                                <button type="submit" class="btn btn-primary">Adicionar ao Chamado</button>
-                            </div>
-                        </form>
+                    {% elif solicitacao.status == 'rejeitada' %}
+                    <div class="detalhes-section">
+                        <h3 class="section-title reject-title"><span class="section-icon">❌</span> Chamado Rejeitado</h3>
+                        <div class="rejeicao-motivo-box">
+                            <strong>Motivo da Rejeição:</strong>
+                            <p>{{ solicitacao.motivo_rejeicao }}</p>
+                        </div>
+                    </div>
+
+                    {% elif solicitacao.status == 'entregue' %}
+                     <div class="detalhes-section">
+                        <h3 class="section-title"><span class="section-icon">✅</span> Chamado Concluído</h3>
+                        <p>Este chamado foi marcado como concluído. O solicitante será notificado para aprovar ou reabrir o chamado.</p>
+                        <h4>Resumo de Itens Utilizados:</h4>
+                        {% if solicitacao.materiais_usados %}
+                        <div class="table-container">
+                            <table class="solicitacoes-table">
+                                <thead><tr><th>Item</th><th>Qtd. Total Utilizada</th></tr></thead>
+                                <tbody>
+                                    {% for saida in solicitacao.materiais_usados %}
+                                    <tr><td>{{ saida.produto.nome }}</td><td>{{ saida.quantidade_saida }}</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <p class="empty-list-message">Nenhum material foi utilizado neste chamado.</p>
+                        {% endif %}
                     </div>
                     {% endif %}
                     
-                    <div class="acoes-container">
-                        </div>
-
                     <div class="page-actions">
                         <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn btn-secondary">⬅️ Voltar para Lista</a>
+                        <form method="POST" action="{{ url_for('excluir_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('ATENÇÃO: Deseja EXCLUIR permanentemente este chamado? Esta ação NÃO pode ser desfeita!')">
+                            <button type="submit" class="btn btn-danger">🗑️ Excluir Chamado</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -194,11 +190,7 @@
     <script>
         function toggleRejeitarForm() {
             var formContainer = document.getElementById('rejeitarFormContainer');
-            if (formContainer.style.display === 'none') {
-                formContainer.style.display = 'block';
-            } else {
-                formContainer.style.display = 'none';
-            }
+            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
         }
     </script>
 </body>
