@@ -241,34 +241,7 @@ def excluir_solicitacao(solicitacao_id):
         flash(f'Erro ao excluir chamado: {e}', 'error')
     return redirect(url_for('gerenciar_solicitacoes'))
 
-@app.route('/solicitacao/<int:solicitacao_id>/adicionar_item', methods=['POST'])
-@login_required
-@permission_required('saida_produto')
-def adicionar_item_solicitacao(solicitacao_id):
-    solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
-    if solicitacao.status != 'aprovada':
-        flash('Só é possível adicionar itens a chamados com status "Aprovado".', 'error')
-        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
-    try:
-        produto_id = request.form.get('produto_id')
-        quantidade_saida = int(request.form.get('quantidade_saida'))
-        produto = Produto.query.get(produto_id)
-        if not produto or quantidade_saida <= 0:
-            flash('Dados inválidos.', 'error')
-        elif produto.quantidade < quantidade_saida:
-            flash(f'Estoque insuficiente para "{produto.nome}". Restam: {produto.quantidade}.', 'error')
-        else:
-            produto.quantidade -= quantidade_saida
-            nova_saida = SaidaMaterial(solicitacao_id=solicitacao_id, produto_id=produto_id, quantidade_saida=quantidade_saida)
-            db.session.add(nova_saida)
-            db.session.commit()
-            flash(f'Item "{produto.nome}" adicionado ao chamado!', 'success')
-    except Exception as e:
-        db.session.rollback()
-        flash(f'Erro ao adicionar item: {e}', 'error')
-    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
-
-# NOVA ROTA PARA GERAR O PDF DA REQUISIÇÃO
+# ROTA ATUALIZADA PARA ADICIONAR MÚLTIPLOS ITENS A UM CHAMADO
 @app.route('/solicitacao/<int:solicitacao_id>/adicionar_item', methods=['POST'])
 @login_required
 @permission_required('saida_produto')
@@ -279,17 +252,15 @@ def adicionar_item_solicitacao(solicitacao_id):
         flash('Só é possível adicionar itens a chamados com status "Aprovado".', 'error')
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
 
-    # Pega as listas de IDs e quantidades do formulário
     produtos_ids = request.form.getlist('produto_id[]')
     quantidades_saida_str = request.form.getlist('quantidade_saida[]')
 
     itens_para_adicionar = []
     erros = []
 
-    # 1. Validação Primeiro: Verifica todos os itens antes de tocar no banco de dados
     for produto_id, qtd_str in zip(produtos_ids, quantidades_saida_str):
         if not produto_id or not qtd_str:
-            continue # Ignora linhas vazias
+            continue
 
         try:
             quantidade_saida = int(qtd_str)
@@ -306,40 +277,71 @@ def adicionar_item_solicitacao(solicitacao_id):
         except ValueError:
             erros.append("Quantidade inválida fornecida.")
 
-    # 2. Se houver qualquer erro, pare e mostre todos os erros
     if erros:
         for erro in erros:
             flash(erro, 'error')
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
     
-    # 3. Se tudo estiver OK, execute a transação no banco de dados
     if not itens_para_adicionar:
         flash("Nenhum item válido foi adicionado.", "warning")
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
 
     try:
-        total_itens_adicionados = 0
         for item in itens_para_adicionar:
             produto = item['produto']
             quantidade = item['quantidade']
-
             produto.quantidade -= quantidade
-            
             nova_saida = SaidaMaterial(
                 solicitacao_id=solicitacao_id,
                 produto_id=produto.id,
                 quantidade_saida=quantidade
             )
             db.session.add(nova_saida)
-            total_itens_adicionados += 1
-
         db.session.commit()
-        flash(f'{total_itens_adicionados} tipo(s) de item(ns) adicionado(s) ao chamado com sucesso!', 'success')
+        flash(f'{len(itens_para_adicionar)} tipo(s) de item(ns) adicionado(s) ao chamado com sucesso!', 'success')
     except Exception as e:
         db.session.rollback()
         flash(f'Ocorreu um erro ao salvar os itens: {e}', 'error')
 
     return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+# NOVA ROTA PARA GERAR O PDF DA REQUISIÇÃO
+@app.route('/solicitacao/<int:solicitacao_id>/gerar_pdf')
+@login_required
+@permission_required('saida_produto')
+def gerar_requisicao_pdf(solicitacao_id):
+    solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
+    
+    # Busca todos os materiais que já saíram para este chamado
+    saidas_de_material = solicitacao.materiais_usados
+    
+    if not saidas_de_material:
+        flash('Nenhum material foi retirado para este chamado. Não é possível gerar PDF.', 'warning')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+    
+    # Prepara a lista de produtos para o template do PDF
+    produtos_para_pdf = [
+        {
+            'codigo_barras': saida.produto.codigo_barras,
+            'nome': saida.produto.nome,
+            'quantidade_solicitada': saida.quantidade_saida
+        }
+        for saida in saidas_de_material
+    ]
+    
+    data_hora = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+    logo_base64 = convert_logo_to_base64('static/dmttlogo.png')
+    
+    # Renderiza o mesmo template 'saida_pdf.html' com os dados corretos
+    rendered = render_template('saida_pdf.html', 
+                               produtos=produtos_para_pdf,
+                               setor=solicitacao.setor,
+                               data_pedido=data_hora, 
+                               logo_base64=logo_base64)
+    
+    pdf = pdfkit.from_string(rendered, False, configuration=pdfkit_config, options={'enable-local-file-access': None})
+    
+    return send_file(BytesIO(pdf), download_name=f'Requisicao_Chamado_{solicitacao.id}.pdf', as_attachment=True)
 
 # --- ROTAS DE USUÁRIOS E COMPATIBILIDADE ---
 @app.route('/quantidade_produto/<int:produto_id>', methods=['GET'])
@@ -354,7 +356,6 @@ def cadastro_usuario():
     if current_user.tipo_usuario != 'admin':
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
-    # ... Lógica de cadastro
     return render_template('cadastro_usuario.html')
 
 @app.route('/lista_usuarios')
@@ -373,7 +374,6 @@ def atualizar_cadastro(usuario_id):
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
     usuario = Usuario.query.get_or_404(usuario_id)
-    # ... Lógica de atualização
     return render_template('atualizar_cadastro.html', usuario=usuario)
 
 @app.route('/excluir_usuario/<int:usuario_id>', methods=['POST'])
@@ -382,7 +382,6 @@ def excluir_usuario(usuario_id):
     if current_user.tipo_usuario != 'admin':
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
-    # ... Lógica de exclusão
     return redirect(url_for('lista_usuarios'))
 
 @app.route('/exibir_index')
