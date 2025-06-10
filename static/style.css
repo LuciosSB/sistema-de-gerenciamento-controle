@@ -3968,3 +3968,75 @@ select option {
     background: #a5d6a7;
     color: white;
 }
+/* ===== ESTILOS PARA FORMULÁRIO DE DEVOLUÇÃO DE ITENS ===== */
+
+.devolucao-form {
+    margin-top: 2rem;
+    padding: 25px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.devolucao-header {
+    font-size: 1.2rem;
+    color: #003366;
+    margin-bottom: 0.5rem;
+}
+
+.devolucao-instructions {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.col-devolver {
+    width: 10%;
+    text-align: center;
+}
+
+.col-checkbox {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.devolucao-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #003366;
+}
+
+.col-status-devolucao {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.status-devolucao {
+    font-weight: bold;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.status-retornado {
+    color: #155724;
+    background-color: #d4edda;
+}
+
+.status-pendente {
+    color: #856404;
+    background-color: #fff3cd;
+}
+
+.status-consumido {
+    color: #6c757d;
+    background-color: #e9ecef;
+}
+
+.devolucao-actions {
+    justify-content: flex-end !important;
+    padding-top: 1rem !important;
+    border-top: 1px solid #dee2e6;
+}

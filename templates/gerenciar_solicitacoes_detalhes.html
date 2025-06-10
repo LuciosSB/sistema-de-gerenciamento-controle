@@ -103,7 +103,6 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
                     
                     {% elif solicitacao.status == 'aprovada' %}
                     <div class="detalhes-section">
@@ -173,24 +172,70 @@
                     </div>
 
                     {% elif solicitacao.status == 'entregue' %}
-                     <div class="detalhes-section">
+                    <div class="detalhes-section">
                         <h3 class="section-title"><span class="section-icon">✅</span> Chamado Concluído</h3>
-                        <p>Este chamado foi marcado como concluído. O solicitante será notificado para aprovar ou reabrir o chamado.</p>
-                        <h4>Resumo de Itens Utilizados:</h4>
-                        {% if solicitacao.materiais_usados %}
-                        <div class="table-container">
-                            <table class="solicitacoes-table">
-                                <thead><tr><th>Item</th><th>Qtd. Total Utilizada</th></tr></thead>
-                                <tbody>
-                                    {% for saida in solicitacao.materiais_usados %}
-                                    <tr><td>{{ saida.produto.nome }}</td><td>{{ saida.quantidade_saida }}</td></tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        {% else %}
-                        <p class="empty-list-message">Nenhum material foi utilizado neste chamado.</p>
-                        {% endif %}
+                        <p>Este chamado foi marcado como concluído. Use o formulário abaixo para registrar a devolução de itens retornáveis.</p>
+                        
+                        <form method="POST" action="{{ url_for('confirmar_devolucao_itens', solicitacao_id=solicitacao.id) }}" class="devolucao-form">
+                            <h4 class="devolucao-header">Controle de Devolução de Itens</h4>
+                            <p class="devolucao-instructions">
+                                Marque os itens retornáveis que voltaram para o estoque. Itens consumíveis ou não marcados serão baixados permanentemente do inventário.
+                            </p>
+                    
+                            {% if solicitacao.materiais_usados %}
+                            <div class="table-container">
+                                <table class="solicitacoes-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-devolver">Devolver?</th>
+                                            <th>Item</th>
+                                            <th>Qtd.</th>
+                                            <th>Tipo</th>
+                                            <th>Status da Devolução</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for saida in solicitacao.materiais_usados %}
+                                        <tr>
+                                            <td class="col-checkbox">
+                                                {% if saida.produto.tipo_item == 'retornavel' and not saida.retornado %}
+                                                    <input type="checkbox" name="saida_id" value="{{ saida.id }}" class="devolucao-checkbox">
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ saida.produto.nome }}</td>
+                                            <td>{{ saida.quantidade_saida }}</td>
+                                            <td>
+                                                <div class="tipo-item-badge tipo-{{ saida.produto.tipo_item }}">
+                                                    {{ saida.produto.tipo_item|capitalize }}
+                                                </div>
+                                            </td>
+                                            <td class="col-status-devolucao">
+                                                {% if saida.produto.tipo_item == 'retornavel' %}
+                                                    {% if saida.retornado %}
+                                                        <span class="status-devolucao status-retornado">✔ Retornado</span>
+                                                    {% else %}
+                                                        <span class="status-devolucao status-pendente">Pendente</span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span class="status-devolucao status-consumido">- Consumido -</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="form-actions devolucao-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    🔁 Confirmar Devolução de Itens Marcados
+                                </button>
+                            </div>
+                    
+                            {% else %}
+                            <p class="empty-list-message">Nenhum material foi utilizado neste chamado.</p>
+                            {% endif %}
+                        </form>
                     </div>
                     {% endif %}
                     
@@ -208,22 +253,15 @@
     <script>
         document.getElementById('add-item-btn').addEventListener('click', function() {
             const container = document.getElementById('itens-container');
-            // Clona a primeira linha de item, que serve como nosso modelo
             const novoItemRow = container.querySelector('.item-row').cloneNode(true);
-
-            // Limpa os valores do clone para o usuário preencher
             novoItemRow.querySelector('select').value = '';
             novoItemRow.querySelector('input').value = '';
-            
-            // Mostra o botão de remover no novo item (o primeiro fica escondido)
             const removeBtn = novoItemRow.querySelector('.btn-remove-item');
             removeBtn.style.display = 'flex';
-
             container.appendChild(novoItemRow);
         });
 
         function removerItem(button) {
-            // Encontra a linha-pai do botão que foi clicado
             const itemRow = button.closest('.item-row');
             itemRow.remove();
         }

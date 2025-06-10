@@ -343,6 +343,51 @@ def gerar_requisicao_pdf(solicitacao_id):
     
     return send_file(BytesIO(pdf), download_name=f'Requisicao_Chamado_{solicitacao.id}.pdf', as_attachment=True)
 
+# Em app.py
+
+# ... (outras rotas)
+
+@app.route('/solicitacao/<int:solicitacao_id>/confirmar_devolucao', methods=['POST'])
+@login_required
+@permission_required('saida_produto') # Ou a permissão que fizer mais sentido
+def confirmar_devolucao_itens(solicitacao_id):
+    # Pega a lista de IDs dos checkboxes marcados no formulário
+    ids_das_saidas_retornadas = request.form.getlist('saida_id')
+    
+    if not ids_das_saidas_retornadas:
+        flash('Nenhum item retornável foi selecionado para devolução.', 'warning')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+    itens_processados = 0
+    try:
+        for saida_id in ids_das_saidas_retornadas:
+            saida_material = SaidaMaterial.query.get(saida_id)
+            
+            # Garante que o item pertence ao chamado correto e ainda não foi retornado
+            if saida_material and saida_material.solicitacao_id == solicitacao_id and not saida_material.retornado:
+                # Aumenta a quantidade do produto no estoque
+                produto = saida_material.produto
+                produto.quantidade += saida_material.quantidade_saida
+                
+                # Marca a saída como "retornado" para não ser devolvida novamente
+                saida_material.retornado = True
+                
+                db.session.add(produto)
+                db.session.add(saida_material)
+                itens_processados += 1
+
+        db.session.commit()
+        if itens_processados > 0:
+            flash(f'{itens_processados} item(ns) retornado(s) ao estoque com sucesso!', 'success')
+        else:
+            flash('Os itens selecionados já haviam sido retornados anteriormente.', 'info')
+            
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Ocorreu um erro ao processar a devolução: {e}', 'error')
+        
+    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
 # --- ROTAS DE USUÁRIOS E COMPATIBILIDADE ---
 @app.route('/quantidade_produto/<int:produto_id>', methods=['GET'])
 @login_required

@@ -90,3 +90,26 @@ class SaidaMaterial(db.Model):
 
     def __repr__(self):
         return f'<SaidaMaterial {self.quantidade_saida}x {self.produto.nome} para Chamado {self.solicitacao_id}>'
+    
+    # Em models.py
+
+# ... (outras classes)
+
+class SaidaMaterial(db.Model):
+    __tablename__ = 'saida_materiais'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    solicitacao_id = db.Column(db.Integer, db.ForeignKey('solicitacoes.id'), nullable=False)
+    produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=False)
+    quantidade_saida = db.Column(db.Integer, nullable=False)
+    data_saida = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    
+    # Adicione esta linha
+    retornado = db.Column(db.Boolean, default=False, nullable=False)
+    
+    # Relações que ligam este modelo aos outros
+    solicitacao = db.relationship('Solicitacao', backref=db.backref('materiais_usados', lazy=True, cascade="all, delete-orphan"))
+    produto = db.relationship('Produto')
+
+    def __repr__(self):
+        return f'<SaidaMaterial {self.quantidade_saida}x {self.produto.nome} para Chamado {self.solicitacao_id}>'
