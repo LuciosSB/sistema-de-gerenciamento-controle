@@ -161,17 +161,6 @@
                             </a>
                             {% endif %}
                             
-                            {% if current_user.has_permission('saida_produto') %}
-                            <a href="{{ url_for('saida_produto') }}" class="menu-card">
-                                <div class="card-icon"><span class="icon-emoji">📤</span></div>
-                                <div class="card-content">
-                                    <h3>Requisitar Material</h3>
-                                    <p>Registre a retirada de material do estoque para um chamado</p>
-                                    <div class="card-action"><span class="action-text">Acessar</span></div>
-                                </div>
-                            </a>
-                            {% endif %}
-                            
                             {% if current_user.has_permission('atualizar_produto') %}
                             <a href="{{ url_for('selecionar_produto_atualizar') }}" class="menu-card">
                                 <div class="card-icon"><span class="icon-emoji">✏️</span></div>
