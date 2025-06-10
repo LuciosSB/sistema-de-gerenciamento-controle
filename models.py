@@ -39,10 +39,6 @@ class Produto(db.Model):
     codigo_barras = db.Column(db.String(20), unique=True, nullable=False)
     nome = db.Column(db.String(100), nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
-    
-    # NOVO CAMPO para diferenciar itens que voltam dos que não voltam.
-    # 'consumivel' para o que não volta (ex: parafusos, fita isolante).
-    # 'retornavel' para o que deve ser devolvido (ex: furadeira, multímetro).
     tipo_item = db.Column(db.String(50), nullable=False, default='consumivel')
     
     def __repr__(self):
@@ -61,20 +57,36 @@ class Solicitacao(db.Model):
     __tablename__ = 'solicitacoes'
     
     id = db.Column(db.Integer, primary_key=True)
-    
-    # Campos existentes que serão mantidos
     nome_solicitante = db.Column(db.String(255), nullable=False)
     setor = db.Column(db.String(255), nullable=False)
     descricao = db.Column(db.Text, nullable=True)
-    status = db.Column(db.String(50), nullable=False, default='pendente')  # Ex: pendente, aprovada, rejeitada, concluida
+    status = db.Column(db.String(50), nullable=False, default='pendente')
     data_solicitacao = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     data_atualizacao = db.Column(db.DateTime, nullable=True, onupdate=datetime.utcnow)
-
-    # --- CAMPOS NOVOS PARA O CHAMADO DE MANUTENÇÃO ---
     titulo = db.Column(db.String(200), nullable=False, default="Título não informado")
     categoria = db.Column(db.String(100), nullable=False, default="Geral")
-    urgencia = db.Column(db.String(50), nullable=False, default='baixa') # Ex: baixa, media, alta
+    urgencia = db.Column(db.String(50), nullable=False, default='baixa')
     motivo_rejeicao = db.Column(db.Text, nullable=True)
+    
+    # A relação com SaidaMaterial é definida pelo backref 'solicitacao' na classe SaidaMaterial
     
     def __repr__(self):
         return f'<Solicitacao {self.id}: {self.titulo} - {self.status}>'
+
+
+# NOVO MODELO ADICIONADO
+class SaidaMaterial(db.Model):
+    __tablename__ = 'saida_materiais'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    solicitacao_id = db.Column(db.Integer, db.ForeignKey('solicitacoes.id'), nullable=False)
+    produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=False)
+    quantidade_saida = db.Column(db.Integer, nullable=False)
+    data_saida = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    
+    # Relações que ligam este modelo aos outros
+    solicitacao = db.relationship('Solicitacao', backref=db.backref('materiais_usados', lazy=True, cascade="all, delete-orphan"))
+    produto = db.relationship('Produto')
+
+    def __repr__(self):
+        return f'<SaidaMaterial {self.quantidade_saida}x {self.produto.nome} para Chamado {self.solicitacao_id}>'
