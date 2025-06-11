@@ -4040,3 +4040,112 @@ select option {
     padding-top: 1rem !important;
     border-top: 1px solid #dee2e6;
 }
+
+/* ===== ESTILOS PARA A SEÇÃO DE COMENTÁRIOS ===== */
+.comments-section {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.comments-section .section-title {
+    border-bottom-color: #17a2b8; /* Cor azul para diferenciar */
+}
+
+.comment-list {
+    margin-bottom: 25px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.comment-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    border-left: 4px solid #17a2b8;
+}
+
+.comment-author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #003366;
+    color: #feed00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.comment-content {
+    flex-grow: 1;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: #003366;
+}
+
+.comment-date {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.comment-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #343a40;
+    white-space: pre-wrap; /* Mantém as quebras de linha */
+}
+
+.no-comments {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+}
+
+.comment-form-container {
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    resize: vertical;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.comment-textarea:focus {
+    outline: none;
+    border-color: #003366;
+}
+
+.comment-form .btn {
+    align-self: flex-end; /* Alinha o botão à direita */
+    min-width: 180px;
+}

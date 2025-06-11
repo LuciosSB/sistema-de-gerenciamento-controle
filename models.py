@@ -68,13 +68,10 @@ class Solicitacao(db.Model):
     urgencia = db.Column(db.String(50), nullable=False, default='baixa')
     motivo_rejeicao = db.Column(db.Text, nullable=True)
     
-    # A relação com SaidaMaterial é definida pelo backref 'solicitacao' na classe SaidaMaterial
     
     def __repr__(self):
         return f'<Solicitacao {self.id}: {self.titulo} - {self.status}>'
 
-
-# Em models.py - Esta deve ser a ÚNICA definição da classe SaidaMaterial
 
 class SaidaMaterial(db.Model):
     __tablename__ = 'saida_materiais'
@@ -85,12 +82,27 @@ class SaidaMaterial(db.Model):
     quantidade_saida = db.Column(db.Integer, nullable=False)
     data_saida = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     
-    # Este é o campo que adicionamos
     retornado = db.Column(db.Boolean, default=False, nullable=False)
     
-    # Relações que ligam este modelo aos outros
     solicitacao = db.relationship('Solicitacao', backref=db.backref('materiais_usados', lazy=True, cascade="all, delete-orphan"))
     produto = db.relationship('Produto')
 
     def __repr__(self):
         return f'<SaidaMaterial {self.quantidade_saida}x {self.produto.nome} para Chamado {self.solicitacao_id}>'
+    
+
+class Comentario(db.Model):
+    __tablename__ = 'comentarios'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    texto = db.Column(db.Text, nullable=False)
+    data_criacao = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    solicitacao_id = db.Column(db.Integer, db.ForeignKey('solicitacoes.id'), nullable=False)
+    
+    usuario = db.relationship('Usuario')
+    solicitacao = db.relationship('Solicitacao', backref=db.backref('comentarios', lazy='dynamic', cascade="all, delete-orphan"))
+
+    def __repr__(self):
+        return f'<Comentario {self.id} para Chamado {self.solicitacao_id}>'

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, f
 import pdfkit
 from io import BytesIO
 from db_setup import db
-from models import Produto, Setor, Solicitacao, Usuario, SaidaMaterial
+from models import Produto, Setor, Solicitacao, Usuario, SaidaMaterial, Comentario
 from sqlalchemy.orm import Session
 import json
 from datetime import datetime
@@ -343,15 +343,10 @@ def gerar_requisicao_pdf(solicitacao_id):
     
     return send_file(BytesIO(pdf), download_name=f'Requisicao_Chamado_{solicitacao.id}.pdf', as_attachment=True)
 
-# Em app.py
-
-# ... (outras rotas)
-
 @app.route('/solicitacao/<int:solicitacao_id>/confirmar_devolucao', methods=['POST'])
 @login_required
-@permission_required('saida_produto') # Ou a permissão que fizer mais sentido
+@permission_required('saida_produto') 
 def confirmar_devolucao_itens(solicitacao_id):
-    # Pega a lista de IDs dos checkboxes marcados no formulário
     ids_das_saidas_retornadas = request.form.getlist('saida_id')
     
     if not ids_das_saidas_retornadas:
@@ -363,13 +358,10 @@ def confirmar_devolucao_itens(solicitacao_id):
         for saida_id in ids_das_saidas_retornadas:
             saida_material = SaidaMaterial.query.get(saida_id)
             
-            # Garante que o item pertence ao chamado correto e ainda não foi retornado
             if saida_material and saida_material.solicitacao_id == solicitacao_id and not saida_material.retornado:
-                # Aumenta a quantidade do produto no estoque
                 produto = saida_material.produto
                 produto.quantidade += saida_material.quantidade_saida
-                
-                # Marca a saída como "retornado" para não ser devolvida novamente
+
                 saida_material.retornado = True
                 
                 db.session.add(produto)
@@ -386,6 +378,32 @@ def confirmar_devolucao_itens(solicitacao_id):
         db.session.rollback()
         flash(f'Ocorreu um erro ao processar a devolução: {e}', 'error')
         
+    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+@app.route('/solicitacao/<int:solicitacao_id>/adicionar_comentario', methods=['POST'])
+@login_required
+@permission_required('gerenciar_solicitacoes') 
+def adicionar_comentario(solicitacao_id):
+    solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
+    texto_comentario = request.form.get('texto_comentario', '').strip()
+
+    if not texto_comentario:
+        flash('O campo de comentário não pode estar vazio.', 'error')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+    try:
+        novo_comentario = Comentario(
+            texto=texto_comentario,
+            usuario_id=current_user.id, 
+            solicitacao_id=solicitacao.id
+        )
+        db.session.add(novo_comentario)
+        db.session.commit()
+        flash('Comentário adicionado com sucesso!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao adicionar comentário: {e}', 'error')
+
     return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
 
 # --- ROTAS DE USUÁRIOS E COMPATIBILIDADE ---
