@@ -166,7 +166,6 @@ def atualizar_produto(produto_id):
             flash(f'Erro ao atualizar: {e}', 'error')
     return render_template('atualizar.html', produto=produto)
 
-# --- ROTAS DE SOLICITAÇÃO ---
 @app.route('/portal_solicitacoes', methods=['GET', 'POST'])
 def portal_solicitacoes():
     if request.method == 'POST':
@@ -179,7 +178,8 @@ def portal_solicitacoes():
                 urgencia=request.form.get('urgencia', 'baixa').strip(),
                 descricao=request.form.get('descricao', '').strip(),
                 status='pendente',
-                data_solicitacao=datetime.now()
+                # LINHA CORRIGIDA ABAIXO
+                data_solicitacao=datetime.utcnow() 
             )
             if not novo_chamado.nome_solicitante or not novo_chamado.setor or not novo_chamado.titulo:
                 flash('Os campos Nome, Setor e Título são obrigatórios.', 'error')
