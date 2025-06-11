@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar_style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='home_style.css') }}">
     <title>{% block title %}Sistema de Gestão{% endblock %}</title>
 </head>
@@ -59,20 +57,42 @@
             <div class="notifications-section">
                 <h4>Notificações Recentes</h4>
                 <div id="notificationsList">
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages|reverse|slice(4) %}
-                            <div class="notification-item notification-{{ category }}">
-                                <div class="notification-icon">
-                                    {% if category == 'success' %}✅{% elif category == 'error' %}❌{% elif category == 'warning' %}⚠️{% else %}🔔{% endif %}
+                    {% with all_messages = get_flashed_messages(with_categories=true) %}
+                        {% if all_messages %}
+                            {% for item in all_messages|reverse|slice(4) %}
+                                
+                                {# Bloco de lógica para tratar os dois tipos de mensagem #}
+                                {% set category = 'info' %}  {# Categoria padrão #}
+                                {% set message = '' %}
+                                
+                                {% if item is iterable and item is not string %}
+                                    {# Caso 1: O item é um par (categoria, mensagem) #}
+                                    {% set category = item[0] %}
+                                    {% set message = item[1] %}
+                                {% else %}
+                                    {# Caso 2: O item é apenas a mensagem (string) #}
+                                    {% set message = item %}
+                                {% endif %}
+
+                                <div class="notification-item notification-{{ category }}">
+                                    <div class="notification-icon">
+                                        {% if category == 'success' %}✅
+                                        {% elif category == 'error' %}❌
+                                        {% elif category == 'warning' %}⚠️
+                                        {% else %}🔔
+                                        {% endif %}
+                                    </div>
+                                    <div class="notification-content">
+                                        <span class="notification-title">
+                                            {% if category == 'success' %}Sucesso
+                                            {% elif category == 'error' %}Erro
+                                            {% elif category == 'warning' %}Aviso
+                                            {% else %}Info
+                                            {% endif %}
+                                        </span>
+                                        <span class="notification-text">{{ message }}</span>
+                                    </div>
                                 </div>
-                                <div class="notification-content">
-                                    <span class="notification-title">
-                                        {% if category == 'success' %}Sucesso{% elif category == 'error' %}Erro{% elif category == 'warning' %}Aviso{% else %}Info{% endif %}
-                                    </span>
-                                    <span class="notification-text">{{ message }}</span>
-                                </div>
-                            </div>
                             {% endfor %}
                         {% else %}
                             <div class="notification-empty">
