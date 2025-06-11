@@ -27,49 +27,26 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>Menu & Opções</h3>
+            <h3>Opções</h3>
             <button class="close-btn" id="closeSidebar">×</button>
         </div>
         
         <div class="sidebar-content">
             <div class="user-section">
-                <div class="user-avatar">👤</div>
+                <div class="user-avatar">
+                    {% if current_user.is_authenticated %}{{ current_user.username[0]|upper }}{% else %}👤{% endif %}
+                </div>
                 <div class="user-info">
                     {% if current_user.is_authenticated %}
                         <span class="user-name">{{ current_user.username|title }}</span>
-                        <span class="user-role">
-                            {% if current_user.tipo_usuario == 'admin' %}
-                                Administrador
-                            {% elif current_user.tipo_usuario == 'almoxarifado' %}
-                                Equipe de Manutenção
-                            {% elif current_user.tipo_usuario == 'usuario_padrao' %}
-                                Técnico
-                            {% elif current_user.tipo_usuario == 'usuario_solicitante' %}
-                                Solicitante
-                            {% else %}
-                                Usuário
-                            {% endif %}
-                        </span>
                     {% endif %}
                 </div>
             </div>
-
+    
             <div class="sidebar-menu">
-                <a href="#" class="menu-item">
-                    <span class="menu-icon">👤</span>
-                    <span>Meu Perfil</span>
-                </a>
-                
-                {% if current_user.has_permission('listar_usuarios') %}
-                <a href="{{ url_for('lista_usuarios') }}" class="menu-item">
-                    <span class="menu-icon">👥</span>
-                    <span>Gerenciar Usuários</span>
-                </a>
-                {% endif %}
-
-                <a href="#" class="menu-item">
-                    <span class="menu-icon">🔧</span>
-                    <span>Configurações</span>
+                <a href="#" class="menu-item" id="darkModeToggle">
+                    <span class="menu-icon">🌙</span>
+                    <span>Forçar Modo Escuro</span>
                 </a>
                 <a href="{{ url_for('logout') }}" class="menu-item logout-item" id="logoutBtn">
                     <span class="menu-icon">🚪</span>
@@ -81,13 +58,38 @@
                 <h4>Notificações Recentes</h4>
                 <div id="notificationsList">
                     {% with messages = get_flashed_messages(with_categories=true) %}
+                        {# Verifica se existem mensagens para exibir #}
                         {% if messages %}
-                            {% for category, message in messages %}
-                                {% endfor %}
+                            {# 
+                               Lógica de Notificação:
+                               1. `|reverse`: Inverte a lista para que a mais recente (última a ser adicionada) venha primeiro.
+                               2. `|slice(4)`: Pega apenas os 4 primeiros itens da lista invertida (as 4 mais recentes).
+                            #}
+                            {% for category, message in messages|reverse|slice(4) %}
+                            <div class="notification-item notification-{{ category }}">
+                                <div class="notification-icon">
+                                    {% if category == 'success' %}✅
+                                    {% elif category == 'error' %}❌
+                                    {% elif category == 'warning' %}⚠️
+                                    {% else %}🔔
+                                    {% endif %}
+                                </div>
+                                <div class="notification-content">
+                                    <span class="notification-title">
+                                        {% if category == 'success' %}Sucesso
+                                        {% elif category == 'error' %}Erro
+                                        {% elif category == 'warning' %}Aviso
+                                        {% else %}Info
+                                        {% endif %}
+                                    </span>
+                                    <span class="notification-text">{{ message }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
                         {% else %}
                             <div class="notification-empty">
-                                <span class="empty-icon">🔔</span>
-                                <span class="empty-text">Nenhuma notificação recente</span>
+                                <span class="empty-icon">📭</span>
+                                <span class="empty-text">Nenhuma notificação nova</span>
                             </div>
                         {% endif %}
                     {% endwith %}
@@ -107,11 +109,6 @@
                         <span class="produto-count">DMTT</span>
                     </div>
                 </div>
-
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% endif %}
-                {% endwith %}
 
                 <div class="panel-content">
                     <div class="department-section">
@@ -192,7 +189,6 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Lógica do script para sidebar e animações permanece a mesma
             const settingsBtn = document.getElementById('settingsBtn');
             const sidebar = document.getElementById('sidebar');
             const closeSidebar = document.getElementById('closeSidebar');
