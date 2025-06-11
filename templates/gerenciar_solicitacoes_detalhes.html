@@ -48,17 +48,6 @@
                     </div>
                 </div>
 
-                <div class="panel-content">
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                            <div class="flash-message {{ category }}">
-                                <div class="flash-text">{{ message }}</div>
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
-
                     <div class="detalhes-container">
                         <div class="detalhes-section">
                             <h3 class="section-title"><span class="section-icon">📋</span> Detalhes do Chamado</h3>

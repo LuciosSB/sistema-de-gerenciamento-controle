@@ -26,6 +26,16 @@
                     <h2>Abertura de Chamado de Manutenção</h2>
                     <p>Preencha o formulário abaixo para abrir um novo chamado. Campos com <span class="required-indicator">*</span> são obrigatórios.</p>
                 </div>
+                                <div class="panel-content">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                <div class="flash-text">{{ message }}</div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
             </div>
         </div>
         <div class="solicitation-container">
