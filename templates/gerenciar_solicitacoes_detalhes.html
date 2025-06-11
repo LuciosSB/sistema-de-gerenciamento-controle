@@ -82,6 +82,29 @@
                         </div>
                     </div>
 
+                    {% if solicitacao.status == 'pendente' %}
+                    <div class="acoes-container">
+                        <h3 class="section-title"><span class="section-icon">⚙️</span> Ações de Atendimento</h3>
+                        <div class="acoes-buttons">
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado?')">
+                                <input type="hidden" name="status" value="aprovada">
+                                <button type="submit" class="btn btn-atender">✅ Aprovar Chamado</button>
+                            </form>
+                            <button type="button" class="btn btn-rejeitar" onclick="toggleRejeitarForm()">❌ Rejeitar Chamado</button>
+                        </div>
+                        <div id="rejeitarFormContainer" class="rejeitar-form-container" style="display:none;">
+                            <h4>Motivo da Rejeição (será visível para o solicitante)</h4>
+                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}">
+                                <input type="hidden" name="status" value="rejeitada">
+                                <textarea name="motivo_rejeicao" rows="4" placeholder="Descreva por que este chamado está sendo rejeitado..." required></textarea>
+                                <div class="rejeitar-form-actions">
+                                    <button type="submit" class="btn btn-danger">Confirmar Rejeição</button>
+                                    <button type="button" class="btn btn-secondary" onclick="toggleRejeitarForm()">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    
+                    {% elif solicitacao.status == 'aprovada' %}
                     <div class="comments-section">
                         <h3 class="section-title"><span class="section-icon">💬</span> Comentários da Equipe Técnica</h3>
                         <div class="comment-list">
@@ -111,29 +134,6 @@
                         </div>
                     </div>
 
-                    {% if solicitacao.status == 'pendente' %}
-                    <div class="acoes-container">
-                        <h3 class="section-title"><span class="section-icon">⚙️</span> Ações de Atendimento</h3>
-                        <div class="acoes-buttons">
-                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado?')">
-                                <input type="hidden" name="status" value="aprovada">
-                                <button type="submit" class="btn btn-atender">✅ Aprovar Chamado</button>
-                            </form>
-                            <button type="button" class="btn btn-rejeitar" onclick="toggleRejeitarForm()">❌ Rejeitar Chamado</button>
-                        </div>
-                        <div id="rejeitarFormContainer" class="rejeitar-form-container" style="display:none;">
-                            <h4>Motivo da Rejeição (será visível para o solicitante)</h4>
-                            <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}">
-                                <input type="hidden" name="status" value="rejeitada">
-                                <textarea name="motivo_rejeicao" rows="4" placeholder="Descreva por que este chamado está sendo rejeitado..." required></textarea>
-                                <div class="rejeitar-form-actions">
-                                    <button type="submit" class="btn btn-danger">Confirmar Rejeição</button>
-                                    <button type="button" class="btn btn-secondary" onclick="toggleRejeitarForm()">Cancelar</button>
-                                </div>
-                            </form>
-                        </div>
-                    
-                    {% elif solicitacao.status == 'aprovada' %}
                     <div class="detalhes-section">
                         <h3 class="section-title"><span class="section-icon">📦</span> Saída de Materiais</h3>
                         <div class="table-container" style="margin-bottom: 2rem;">
@@ -280,14 +280,20 @@
     </div>
     
     <script>
-        document.getElementById('add-item-btn').addEventListener('click', function() {
-            const container = document.getElementById('itens-container');
-            const novoItemRow = container.querySelector('.item-row').cloneNode(true);
-            novoItemRow.querySelector('select').value = '';
-            novoItemRow.querySelector('input').value = '';
-            const removeBtn = novoItemRow.querySelector('.btn-remove-item');
-            removeBtn.style.display = 'flex';
-            container.appendChild(novoItemRow);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Adiciona um listener apenas se o botão existir na página
+            const addItemBtn = document.getElementById('add-item-btn');
+            if(addItemBtn) {
+                addItemBtn.addEventListener('click', function() {
+                    const container = document.getElementById('itens-container');
+                    const novoItemRow = container.querySelector('.item-row').cloneNode(true);
+                    novoItemRow.querySelector('select').value = '';
+                    novoItemRow.querySelector('input').value = '';
+                    const removeBtn = novoItemRow.querySelector('.btn-remove-item');
+                    removeBtn.style.display = 'flex';
+                    container.appendChild(novoItemRow);
+                });
+            }
         });
 
         function removerItem(button) {
