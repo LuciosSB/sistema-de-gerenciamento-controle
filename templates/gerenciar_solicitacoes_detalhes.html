@@ -86,7 +86,7 @@
                         <h3 class="section-title"><span class="section-icon">💬</span> Comentários da Equipe Técnica</h3>
                         <div class="comment-list">
                             {% if solicitacao.comentarios.all() %}
-                                {% for comentario in solicitacao.comentarios.order_by(comentario.data_criacao) %}
+                                {% for comentario in solicitacao.comentarios.order_by('data_criacao') %}
                                 <div class="comment-item">
                                     <div class="comment-author-avatar">{{ comentario.usuario.username[0]|upper }}</div>
                                     <div class="comment-content">
