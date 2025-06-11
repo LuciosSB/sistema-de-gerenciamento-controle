@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Requisição de Saída de Produtos - Chamado #{{ solicitacao.id }}</title>
+    <title>Requisição Manutenção - Chamado #{{ solicitacao.id }}</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -113,7 +113,7 @@
             <div class="titulo-container">
                 <h1 class="titulo">Prefeitura Municipal de Maceió</h1>
                 <h2 class="subtitulo">DEPARTAMENTO MUNICIPAL DE TRANSPORTE E TRANSITO (DMTT)</h2>
-                <h3 class="subtitulo">REQUISIÇÃO DE MATERIAL</h3>
+                <h3 class="subtitulo">REQUISIÇÃO DE MANUTENÇÃO</h3>
             </div>
         </div>
     </div>
@@ -129,8 +129,8 @@
             <tr>
                 <th>Código</th>
                 <th>Nome do Produto</th>
-                <th>Qtd. Fornecida</th>
                 <th>Qtd. Solicitada</th>
+                <th>Qtd. Fornecida</th>
             </tr>
         </thead>
         <tbody>
@@ -139,7 +139,7 @@
                 <td>{{ produto.codigo_barras or 'N/A' }}</td>
                 <td>{{ produto.nome }}</td>
                 <td>{{ produto.quantidade_solicitada }}</td>
-                <td></td>
+                <td>{{ produto.quantidade_fornecida }}</td> {# CORRIGIDO #}
             </tr>
             {% endfor %}
         </tbody>
@@ -185,7 +185,7 @@
             
             <div class="signature-box">
                 <div class="signature-line"></div>
-                <div class="signature-label">Autorização</div>
+                <div class="signature-label">Visto do Solicitante</div>
             </div>
         </div>
     </div>

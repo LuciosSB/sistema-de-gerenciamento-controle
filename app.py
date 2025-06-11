@@ -264,27 +264,37 @@ def adicionar_item_solicitacao(solicitacao_id):
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
 
     produtos_ids = request.form.getlist('produto_id[]')
+    quantidades_solicitada_str = request.form.getlist('quantidade_solicitada[]') # NOVO
     quantidades_saida_str = request.form.getlist('quantidade_saida[]')
 
     itens_para_adicionar = []
     erros = []
 
-    for produto_id, qtd_str in zip(produtos_ids, quantidades_saida_str):
-        if not produto_id or not qtd_str:
+    for i in range(len(produtos_ids)):
+        produto_id = produtos_ids[i]
+        qtd_solicitada_str = quantidades_solicitada_str[i]
+        qtd_saida_str = quantidades_saida_str[i]
+
+        if not produto_id or not qtd_saida_str or not qtd_solicitada_str:
             continue
 
         try:
-            quantidade_saida = int(qtd_str)
+            quantidade_solicitada = int(qtd_solicitada_str) # NOVO
+            quantidade_saida = int(qtd_saida_str)
             produto = Produto.query.get(produto_id)
 
             if not produto:
                 erros.append(f"Produto com ID {produto_id} não encontrado.")
-            elif quantidade_saida <= 0:
-                erros.append("A quantidade deve ser maior que zero.")
+            elif quantidade_saida <= 0 or quantidade_solicitada <= 0: # NOVO
+                erros.append("As quantidades devem ser maiores que zero.")
             elif produto.quantidade < quantidade_saida:
                 erros.append(f'Estoque insuficiente para "{produto.nome}". Pedido: {quantidade_saida}, Disponível: {produto.quantidade}.')
             else:
-                itens_para_adicionar.append({'produto': produto, 'quantidade': quantidade_saida})
+                itens_para_adicionar.append({
+                    'produto': produto, 
+                    'quantidade_saida': quantidade_saida,
+                    'quantidade_solicitada': quantidade_solicitada # NOVO
+                })
         except ValueError:
             erros.append("Quantidade inválida fornecida.")
 
@@ -300,14 +310,16 @@ def adicionar_item_solicitacao(solicitacao_id):
     try:
         for item in itens_para_adicionar:
             produto = item['produto']
-            quantidade = item['quantidade']
-            produto.quantidade -= quantidade
+            produto.quantidade -= item['quantidade_saida']
+            
             nova_saida = SaidaMaterial(
                 solicitacao_id=solicitacao_id,
                 produto_id=produto.id,
-                quantidade_saida=quantidade
+                quantidade_solicitada=item['quantidade_solicitada'], # NOVO
+                quantidade_saida=item['quantidade_saida']
             )
             db.session.add(nova_saida)
+            
         db.session.commit()
         flash(f'{len(itens_para_adicionar)} tipo(s) de item(ns) adicionado(s) ao chamado com sucesso!', 'success')
     except Exception as e:
@@ -316,7 +328,6 @@ def adicionar_item_solicitacao(solicitacao_id):
 
     return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
 
-# NOVA ROTA PARA GERAR O PDF DA REQUISIÇÃO
 @app.route('/solicitacao/<int:solicitacao_id>/gerar_pdf')
 @login_required
 @permission_required('saida_produto')
@@ -333,7 +344,8 @@ def gerar_requisicao_pdf(solicitacao_id):
         {
             'codigo_barras': saida.produto.codigo_barras,
             'nome': saida.produto.nome,
-            'quantidade_solicitada': saida.quantidade_saida
+            'quantidade_solicitada': saida.quantidade_solicitada, # CORRIGIDO
+            'quantidade_fornecida': saida.quantidade_saida      # CORRIGIDO
         }
         for saida in saidas_de_material
     ]
@@ -341,7 +353,6 @@ def gerar_requisicao_pdf(solicitacao_id):
     data_hora = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
     logo_base64 = convert_logo_to_base64('static/dmttlogo.png')
     
-    # Renderiza o template, passando o objeto 'solicitacao' completo
     rendered = render_template('saida_pdf.html', 
                                solicitacao=solicitacao,
                                produtos=produtos_para_pdf,

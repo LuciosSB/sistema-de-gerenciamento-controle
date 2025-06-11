@@ -79,6 +79,9 @@ class SaidaMaterial(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     solicitacao_id = db.Column(db.Integer, db.ForeignKey('solicitacoes.id'), nullable=False)
     produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=False)
+    
+    quantidade_solicitada = db.Column(db.Integer, nullable=False, default=1) 
+    
     quantidade_saida = db.Column(db.Integer, nullable=False)
     data_saida = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     
@@ -89,6 +92,7 @@ class SaidaMaterial(db.Model):
 
     def __repr__(self):
         return f'<SaidaMaterial {self.quantidade_saida}x {self.produto.nome} para Chamado {self.solicitacao_id}>'
+
     
 
 class Comentario(db.Model):

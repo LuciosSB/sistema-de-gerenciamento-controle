@@ -140,10 +140,21 @@
                             <h4>Itens já retirados para este chamado:</h4>
                             {% if solicitacao.materiais_usados %}
                             <table class="solicitacoes-table">
-                                <thead><tr><th>Item</th><th>Qtd. Retirada</th><th>Data</th></tr></thead>
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Qtd. Solicitada</th>
+                                        <th>Qtd. Fornecida</th>
+                                        <th>Data</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     {% for saida in solicitacao.materiais_usados %}
-                                    <tr><td>{{ saida.produto.nome }}</td><td>{{ saida.quantidade_saida }}</td><td>{{ saida.data_saida|localtime }}</td></tr>
+                                    <tr>
+                                        <td>{{ saida.produto.nome }}</td>
+                                        <td></td><td>{{ saida.quantidade_saida }}</td>
+                                        <td>{{ saida.data_saida|localtime }}</td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -167,8 +178,12 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="quantidade_saida[]">Quantidade:</label>
-                                            <input type="number" name="quantidade_saida[]" class="cadastro-input" min="1" required>
+                                            <label for="quantidade_solicitada[]">Qtd. Solicitada:</label>
+                                            <input type="number" name="quantidade_solicitada[]" class="cadastro-input" min="1" placeholder="Ex: 5">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="quantidade_saida[]">Qtd. Fornecida:</label>
+                                            <input type="number" name="quantidade_saida[]" class="cadastro-input" min="1" required placeholder="Ex: 5">
                                         </div>
                                         <button type="button" class="btn btn-remove-item" onclick="removerItem(this)" style="display: none;">🗑️</button>
                                     </div>
@@ -203,12 +218,12 @@
                     {% elif solicitacao.status == 'entregue' %}
                     <div class="detalhes-section">
                         <h3 class="section-title"><span class="section-icon">✅</span> Chamado Concluído</h3>
-                        <p>Este chamado foi marcado como concluído. Use o formulário abaixo para registrar a devolução de itens retornáveis.</p>
+                        <p>Este chamado foi marcado como concluído. Use o formulário abaixo para registrar a devolução de itens.</p>
                         
                         <form method="POST" action="{{ url_for('confirmar_devolucao_itens', solicitacao_id=solicitacao.id) }}" class="devolucao-form">
                             <h4 class="devolucao-header">Controle de Devolução de Itens</h4>
                             <p class="devolucao-instructions">
-                                Marque os itens retornáveis que voltaram para o estoque. Itens consumíveis ou não marcados serão baixados permanentemente do inventário.
+                                Itens retornáveis já vêm marcados para devolução. Marque os itens de consumo caso tenham retornado ao estoque. Itens não marcados serão baixados permanentemente.
                             </p>
                     
                             {% if solicitacao.materiais_usados %}
@@ -227,8 +242,14 @@
                                         {% for saida in solicitacao.materiais_usados %}
                                         <tr>
                                             <td class="col-checkbox">
-                                                {% if saida.produto.tipo_item == 'retornavel' and not saida.retornado %}
-                                                    <input type="checkbox" name="saida_id" value="{{ saida.id }}" class="devolucao-checkbox">
+                                                {# Exibe o checkbox apenas se o item ainda não foi retornado #}
+                                                {% if not saida.retornado %}
+                                                    <input type="checkbox" 
+                                                           name="saida_id" 
+                                                           value="{{ saida.id }}" 
+                                                           class="devolucao-checkbox"
+                                                           {# Marca por padrão se for um item retornável #}
+                                                           {% if saida.produto.tipo_item == 'retornavel' %}checked{% endif %}>
                                                 {% endif %}
                                             </td>
                                             <td>{{ saida.produto.nome }}</td>
@@ -246,7 +267,11 @@
                                                         <span class="status-devolucao status-pendente">Pendente</span>
                                                     {% endif %}
                                                 {% else %}
-                                                    <span class="status-devolucao status-consumido">- Consumido -</span>
+                                                     {% if saida.retornado %}
+                                                        <span class="status-devolucao status-retornado">✔ Retornado</span>
+                                                    {% else %}
+                                                        <span class="status-devolucao status-consumido">- Consumido -</span>
+                                                    {% endif %}
                                                 {% endif %}
                                             </td>
                                         </tr>
@@ -287,8 +312,12 @@
                 addItemBtn.addEventListener('click', function() {
                     const container = document.getElementById('itens-container');
                     const novoItemRow = container.querySelector('.item-row').cloneNode(true);
-                    novoItemRow.querySelector('select').value = '';
-                    novoItemRow.querySelector('input').value = '';
+                    
+                    // Limpa os valores dos inputs clonados
+                    novoItemRow.querySelector('select[name="produto_id[]"]').value = '';
+                    novoItemRow.querySelector('input[name="quantidade_solicitada[]"]').value = '';
+                    novoItemRow.querySelector('input[name="quantidade_saida[]"]').value = '';
+
                     const removeBtn = novoItemRow.querySelector('.btn-remove-item');
                     removeBtn.style.display = 'flex';
                     container.appendChild(novoItemRow);
@@ -298,7 +327,10 @@
 
         function removerItem(button) {
             const itemRow = button.closest('.item-row');
-            itemRow.remove();
+            // Só remove se não for a última linha
+            if (document.querySelectorAll('.item-row').length > 1) {
+                itemRow.remove();
+            }
         }
 
         function toggleRejeitarForm() {
