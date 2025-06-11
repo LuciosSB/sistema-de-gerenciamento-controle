@@ -25,6 +25,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Faça login para acessar esta página.'
+login_manager.login_message_category = 'info'
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -62,7 +63,6 @@ def to_localtime(utc_datetime):
     local_dt = utc_datetime.replace(tzinfo=pytz.utc).astimezone(local_tz)
     return local_dt.strftime('%d/%m/%Y às %H:%M')
 
-# Registre a função como um filtro do Jinja2
 app.jinja_env.filters['localtime'] = to_localtime
 
 # --- ROTAS DE AUTENTICAÇÃO E NAVEGAÇÃO ---
@@ -113,7 +113,11 @@ def cadastro_produto():
         quantidade = request.form['quantidade']
         tipo_item = request.form['tipo_item']
         
-        produto_existente = Produto.query.filter_by(codigo_barras=codigo_barras).first()
+        # Evita cadastrar código de barras vazio como único
+        produto_existente = None
+        if codigo_barras:
+            produto_existente = Produto.query.filter_by(codigo_barras=codigo_barras).first()
+
         if produto_existente:
             flash('Código de barras já cadastrado!', 'error')
             return render_template('cadastro.html')
@@ -134,7 +138,7 @@ def cadastro_produto():
 @login_required
 @permission_required('listar_produtos')
 def listar_produtos():
-    produtos = Produto.query.all()
+    produtos = Produto.query.order_by(Produto.nome).all()
     return render_template('produtos.html', produtos=produtos)
 
 @app.route('/atualizar', methods=['GET', 'POST'])
@@ -147,6 +151,7 @@ def selecionar_produto_atualizar():
     produtos = Produto.query.all()
     return render_template('selecionar_produto.html', produtos=produtos)
 
+# FUNÇÃO CORRIGIDA
 @app.route('/atualizar/<int:produto_id>', methods=['GET', 'POST'])
 @login_required
 @permission_required('atualizar_produto')
@@ -157,7 +162,7 @@ def atualizar_produto(produto_id):
             produto.codigo_barras = request.form['codigo_barras']
             produto.nome = request.form['nome']
             produto.quantidade = int(request.form['quantidade'])
-            produto.tipo_item = request.form['tipo_item']
+            produto.tipo_item = request.form['tipo_item'] # Agora este campo virá do formulário
             db.session.commit()
             flash('Item/Produto atualizado com sucesso!', 'success')
             return redirect(url_for('listar_produtos'))
@@ -166,6 +171,7 @@ def atualizar_produto(produto_id):
             flash(f'Erro ao atualizar: {e}', 'error')
     return render_template('atualizar.html', produto=produto)
 
+# --- ROTAS DE SOLICITAÇÕES ---
 @app.route('/portal_solicitacoes', methods=['GET', 'POST'])
 def portal_solicitacoes():
     if request.method == 'POST':
@@ -178,7 +184,6 @@ def portal_solicitacoes():
                 urgencia=request.form.get('urgencia', 'baixa').strip(),
                 descricao=request.form.get('descricao', '').strip(),
                 status='pendente',
-                # LINHA CORRIGIDA ABAIXO
                 data_solicitacao=datetime.utcnow() 
             )
             if not novo_chamado.nome_solicitante or not novo_chamado.setor or not novo_chamado.titulo:
@@ -252,7 +257,6 @@ def excluir_solicitacao(solicitacao_id):
         flash(f'Erro ao excluir chamado: {e}', 'error')
     return redirect(url_for('gerenciar_solicitacoes'))
 
-# ROTA ATUALIZADA PARA ADICIONAR MÚLTIPLOS ITENS A UM CHAMADO
 @app.route('/solicitacao/<int:solicitacao_id>/adicionar_item', methods=['POST'])
 @login_required
 @permission_required('saida_produto')
@@ -264,7 +268,7 @@ def adicionar_item_solicitacao(solicitacao_id):
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
 
     produtos_ids = request.form.getlist('produto_id[]')
-    quantidades_solicitada_str = request.form.getlist('quantidade_solicitada[]') # NOVO
+    quantidades_solicitada_str = request.form.getlist('quantidade_solicitada[]')
     quantidades_saida_str = request.form.getlist('quantidade_saida[]')
 
     itens_para_adicionar = []
@@ -277,15 +281,14 @@ def adicionar_item_solicitacao(solicitacao_id):
 
         if not produto_id or not qtd_saida_str or not qtd_solicitada_str:
             continue
-
         try:
-            quantidade_solicitada = int(qtd_solicitada_str) # NOVO
+            quantidade_solicitada = int(qtd_solicitada_str)
             quantidade_saida = int(qtd_saida_str)
             produto = Produto.query.get(produto_id)
 
             if not produto:
                 erros.append(f"Produto com ID {produto_id} não encontrado.")
-            elif quantidade_saida <= 0 or quantidade_solicitada <= 0: # NOVO
+            elif quantidade_saida <= 0 or quantidade_solicitada <= 0:
                 erros.append("As quantidades devem ser maiores que zero.")
             elif produto.quantidade < quantidade_saida:
                 erros.append(f'Estoque insuficiente para "{produto.nome}". Pedido: {quantidade_saida}, Disponível: {produto.quantidade}.')
@@ -293,7 +296,7 @@ def adicionar_item_solicitacao(solicitacao_id):
                 itens_para_adicionar.append({
                     'produto': produto, 
                     'quantidade_saida': quantidade_saida,
-                    'quantidade_solicitada': quantidade_solicitada # NOVO
+                    'quantidade_solicitada': quantidade_solicitada
                 })
         except ValueError:
             erros.append("Quantidade inválida fornecida.")
@@ -315,7 +318,7 @@ def adicionar_item_solicitacao(solicitacao_id):
             nova_saida = SaidaMaterial(
                 solicitacao_id=solicitacao_id,
                 produto_id=produto.id,
-                quantidade_solicitada=item['quantidade_solicitada'], # NOVO
+                quantidade_solicitada=item['quantidade_solicitada'],
                 quantidade_saida=item['quantidade_saida']
             )
             db.session.add(nova_saida)
@@ -333,9 +336,7 @@ def adicionar_item_solicitacao(solicitacao_id):
 @permission_required('saida_produto')
 def gerar_requisicao_pdf(solicitacao_id):
     solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
-    
     saidas_de_material = solicitacao.materiais_usados
-    
     if not saidas_de_material:
         flash('Nenhum material foi retirado para este chamado. Não é possível gerar PDF.', 'warning')
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
@@ -344,23 +345,19 @@ def gerar_requisicao_pdf(solicitacao_id):
         {
             'codigo_barras': saida.produto.codigo_barras,
             'nome': saida.produto.nome,
-            'quantidade_solicitada': saida.quantidade_solicitada, # CORRIGIDO
-            'quantidade_fornecida': saida.quantidade_saida      # CORRIGIDO
+            'quantidade_solicitada': saida.quantidade_solicitada,
+            'quantidade_fornecida': saida.quantidade_saida
         }
         for saida in saidas_de_material
     ]
-    
     data_hora = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
     logo_base64 = convert_logo_to_base64('static/dmttlogo.png')
-    
     rendered = render_template('saida_pdf.html', 
                                solicitacao=solicitacao,
                                produtos=produtos_para_pdf,
                                data_pedido=data_hora, 
                                logo_base64=logo_base64)
-    
     pdf = pdfkit.from_string(rendered, False, configuration=pdfkit_config, options={'enable-local-file-access': None})
-    
     return send_file(BytesIO(pdf), download_name=f'Requisicao_Chamado_{solicitacao.id}.pdf', as_attachment=True)
 
 @app.route('/solicitacao/<int:solicitacao_id>/confirmar_devolucao', methods=['POST'])
@@ -368,7 +365,6 @@ def gerar_requisicao_pdf(solicitacao_id):
 @permission_required('saida_produto') 
 def confirmar_devolucao_itens(solicitacao_id):
     ids_das_saidas_retornadas = request.form.getlist('saida_id')
-    
     if not ids_das_saidas_retornadas:
         flash('Nenhum item retornável foi selecionado para devolução.', 'warning')
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
@@ -377,13 +373,10 @@ def confirmar_devolucao_itens(solicitacao_id):
     try:
         for saida_id in ids_das_saidas_retornadas:
             saida_material = SaidaMaterial.query.get(saida_id)
-            
             if saida_material and saida_material.solicitacao_id == solicitacao_id and not saida_material.retornado:
                 produto = saida_material.produto
                 produto.quantidade += saida_material.quantidade_saida
-
                 saida_material.retornado = True
-                
                 db.session.add(produto)
                 db.session.add(saida_material)
                 itens_processados += 1
@@ -406,7 +399,6 @@ def confirmar_devolucao_itens(solicitacao_id):
 def adicionar_comentario(solicitacao_id):
     solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
     texto_comentario = request.form.get('texto_comentario', '').strip()
-
     if not texto_comentario:
         flash('O campo de comentário não pode estar vazio.', 'error')
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
@@ -433,12 +425,44 @@ def quantidade_produto(produto_id):
     produto = Produto.query.get(produto_id)
     return jsonify({'quantidade': produto.quantidade}) if produto else jsonify({'quantidade': 0})
 
+# FUNÇÃO CORRIGIDA
 @app.route('/cadastro_usuario', methods=['GET', 'POST'])
 @login_required
 def cadastro_usuario():
     if current_user.tipo_usuario != 'admin':
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
+    
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        dados = request.form.get('dados')
+        tipo_usuario = request.form.get('tipo_usuario')
+
+        if not all([username, password, dados, tipo_usuario]):
+            flash('Todos os campos são obrigatórios.', 'error')
+            return redirect(url_for('cadastro_usuario'))
+        
+        if Usuario.query.filter_by(username=username).first():
+            flash('Este nome de usuário já existe.', 'error')
+            return redirect(url_for('cadastro_usuario'))
+
+        try:
+            novo_usuario = Usuario(
+                username=username,
+                dados=dados,
+                tipo_usuario=tipo_usuario
+            )
+            novo_usuario.set_password(password)
+            db.session.add(novo_usuario)
+            db.session.commit()
+            flash(f'Usuário "{username}" cadastrado com sucesso!', 'success')
+            return redirect(url_for('lista_usuarios'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Ocorreu um erro ao cadastrar o usuário: {e}', 'error')
+            return redirect(url_for('cadastro_usuario'))
+
     return render_template('cadastro_usuario.html')
 
 @app.route('/lista_usuarios')
@@ -450,13 +474,46 @@ def lista_usuarios():
     usuarios = Usuario.query.all()
     return render_template('lista_usuarios.html', usuarios=usuarios)
 
+# FUNÇÃO CORRIGIDA
 @app.route('/atualizar_cadastro/<int:usuario_id>', methods=['GET', 'POST'])
 @login_required
 def atualizar_cadastro(usuario_id):
     if current_user.tipo_usuario != 'admin':
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
+    
     usuario = Usuario.query.get_or_404(usuario_id)
+    
+    if request.method == 'POST':
+        username = request.form.get('username')
+        dados = request.form.get('dados')
+        tipo_usuario = request.form.get('tipo_usuario')
+        nova_senha = request.form.get('nova_senha')
+        ativo = 'ativo' in request.form
+
+        # Verifica se o novo username já está em uso por outro usuário
+        usuario_existente = Usuario.query.filter(Usuario.username == username, Usuario.id != usuario_id).first()
+        if usuario_existente:
+            flash(f'O nome de usuário "{username}" já está em uso.', 'error')
+            return redirect(url_for('atualizar_cadastro', usuario_id=usuario_id))
+
+        try:
+            usuario.username = username
+            usuario.dados = dados
+            usuario.tipo_usuario = tipo_usuario
+            usuario.ativo = ativo
+
+            if nova_senha:
+                usuario.set_password(nova_senha)
+            
+            db.session.commit()
+            flash('Cadastro do usuário atualizado com sucesso!', 'success')
+            return redirect(url_for('lista_usuarios'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao atualizar o cadastro: {e}', 'error')
+            return redirect(url_for('atualizar_cadastro', usuario_id=usuario_id))
+
     return render_template('atualizar_cadastro.html', usuario=usuario)
 
 @app.route('/excluir_usuario/<int:usuario_id>', methods=['POST'])
@@ -465,6 +522,20 @@ def excluir_usuario(usuario_id):
     if current_user.tipo_usuario != 'admin':
         flash('Acesso negado.', 'error')
         return redirect(url_for('dashboard'))
+        
+    if current_user.id == usuario_id:
+        flash('Você não pode excluir seu próprio usuário.', 'error')
+        return redirect(url_for('lista_usuarios'))
+        
+    try:
+        usuario_para_excluir = Usuario.query.get_or_404(usuario_id)
+        db.session.delete(usuario_para_excluir)
+        db.session.commit()
+        flash(f'Usuário "{usuario_para_excluir.username}" foi excluído permanentemente.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao excluir usuário: {e}', 'error')
+        
     return redirect(url_for('lista_usuarios'))
 
 @app.route('/exibir_index')

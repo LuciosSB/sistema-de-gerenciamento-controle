@@ -4151,3 +4151,243 @@ select option {
     align-self: flex-end; /* Alinha o botão à direita */
     min-width: 180px;
 }
+
+/*
+   ESTILOS VINDOS DE home_style.css e login_style.css
+   COLE ESTE BLOCO INTEIRO NO FINAL DO SEU ARQUIVO style.css
+*/
+
+/* ESTILOS DA SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 380px;
+    height: 100vh;
+    background-color: #003366;
+    border-left: 2px solid #feed00;
+    z-index: 1000;
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.active {
+    right: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background-color: #00264d;
+}
+
+.sidebar-header h3 {
+    color: #feed00;
+    font-size: 20px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.sidebar-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: #feed00;
+    color: #003366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-right: 15px;
+}
+
+.user-info .user-name {
+    color: white;
+    font-size: 16px;
+}
+
+.sidebar-menu {
+    padding: 20px 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    color: white;
+    text-decoration: none;
+}
+.menu-item:hover {
+    background: #004080;
+}
+
+.menu-icon {
+    margin-right: 15px;
+}
+
+.notifications-section {
+    margin-top: auto;
+    padding: 20px 25px;
+    border-top: 1px solid #004080;
+}
+
+.notifications-section h4 {
+    color: white;
+    margin-bottom: 15px;
+}
+
+#notificationsList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notification-item {
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+}
+.notification-text { color: #c5d2e0; }
+.notification-title { font-weight: 600; color: #e0e6ed; }
+.notification-empty { color: #8fa8b2; text-align: center; }
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4757;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ESTILOS DO DASHBOARD E LOGIN */
+.department-section {
+    margin-bottom: 50px;
+}
+
+.department-info {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 30px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 3px solid #003366;
+    border-radius: 16px;
+}
+.department-text h3 { color: #003366; font-size: 26px; }
+.department-text h4 { color: #004080; font-size: 20px; }
+.department-text p { color: #666; }
+
+.menu-container {
+    border: 3px solid #003366;
+    border-radius: 16px;
+    padding: 40px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.menu-card {
+    display: flex;
+    align-items: flex-start;
+    padding: 30px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 3px solid #003366;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.4s ease;
+}
+.menu-card:hover {
+    transform: translateY(-10px);
+    border-color: #feed00;
+}
+.card-icon { margin-right: 25px; font-size: 52px; color: #003366; }
+.card-content h3 { font-size: 22px; color: #003366; }
+.card-content p { font-size: 15px; color: #666; }
+
+.options-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.option-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 3px solid #003366;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+}
+
+.login-form-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none; /* Alterado para none por padrão */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.login-form {
+    background: white;
+    border: 3px solid #003366;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+}
