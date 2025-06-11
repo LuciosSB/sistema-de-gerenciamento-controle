@@ -75,7 +75,7 @@
                                                 {{ solicitacao.urgencia|capitalize }}
                                             </div>
                                         </td>
-                                        <td class="solicitacao-horario">{{ solicitacao.data_solicitacao.strftime('%d/%m/%Y %H:%M') }}</td>
+                                        <td class="solicitacao-horario">{{ solicitacao.data_solicitacao|localtime }}</td>
                                         <td class="solicitacao-status">
                                             <div class="status-badge 
                                                 {% if solicitacao.status == 'pendente' %}status-pendente

@@ -11,7 +11,6 @@
             margin: 20px;
         }
 
-        /* Estilos do Cabeçalho e Tabela (sem alterações) */
         .header { width: 100%; text-align: center; margin-bottom: 20px; }
         .header-content { display: table; width: 100%; }
         .logo-container { display: table-cell; vertical-align: middle; width: 90px; }
@@ -26,13 +25,12 @@
         td { font-size: 10px; }
         .info { margin-bottom: 15px; font-size: 12px; }
 
-        /* ======== NOVOS ESTILOS PARA CAIXAS DE CONTEÚDO (BASEADO NO SEU DESENHO) ======== */
         .content-box {
             border: 1px solid #000;
-            border-radius: 8px; /* Cantos arredondados como no desenho */
+            border-radius: 4px; 
             padding: 10px;
             margin-top: 15px;
-            page-break-inside: avoid; /* Evita que a caixa quebre entre páginas */
+            page-break-inside: avoid; 
         }
 
         .box-title {
@@ -66,7 +64,7 @@
 
         .comment-box {
             border: 1px solid #000;
-            border-radius: 8px;
+            border-radius: 4px;
             padding: 10px;
             margin-top: 10px;
             page-break-inside: avoid;
@@ -92,11 +90,9 @@
         .comment-text {
             font-size: 11px;
             line-height: 1.4;
-            white-space: pre-wrap; /* Mantém as quebras de linha dos comentários */
+            white-space: pre-wrap; 
         }
-        /* ================================================================================= */
 
-        /* Estilos do Rodapé (sem alterações) */
         .footer { margin-top: 25px; }
         .signature-section { width: 100%; margin-top: 35px; display: table; }
         .signature-box { display: table-cell; width: 33.3%; text-align: center; padding: 0 10px; }
@@ -133,8 +129,8 @@
             <tr>
                 <th>Código</th>
                 <th>Nome do Produto</th>
-                <th>Qtd. Solicitada</th>
                 <th>Qtd. Fornecida</th>
+                <th>Qtd. Solicitada</th>
             </tr>
         </thead>
         <tbody>
@@ -184,17 +180,13 @@
             
             <div class="signature-box">
                 <div class="signature-line"></div>
-                <div class="signature-label">Visto do Almoxarifado</div>
+                <div class="signature-label">Visto da Manutenção</div>
             </div>
             
             <div class="signature-box">
                 <div class="signature-line"></div>
                 <div class="signature-label">Autorização</div>
             </div>
-        </div>
-        
-        <div class="auto-generated">
-            <p>Este documento foi gerado automaticamente pelo sistema de almoxarifado.</p>
         </div>
     </div>
 </body>

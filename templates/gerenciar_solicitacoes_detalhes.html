@@ -73,7 +73,7 @@
                             <div class="detalhes-grid">
                                 <div class="detalhe-item"><label class="detalhe-label">Nome:</label><span class="detalhe-valor">{{ solicitacao.nome_solicitante }}</span></div>
                                 <div class="detalhe-item"><label class="detalhe-label">Setor:</label><span class="detalhe-valor">{{ solicitacao.setor }}</span></div>
-                                <div class="detalhe-item"><label class="detalhe-label">Data/Hora da Abertura:</label><span class="detalhe-valor">{{ solicitacao.data_solicitacao.strftime('%d/%m/%Y às %H:%M') }}</span></div>
+                                <div class="detalhe-item"><label class="detalhe-label">Data/Hora da Abertura:</label><span class="detalhe-valor">{{ solicitacao.data_solicitacao|localtime }}</span></div>
                             </div>
                         </div>
                         <div class="detalhes-section">
@@ -115,7 +115,7 @@
                                     <div class="comment-content">
                                         <div class="comment-header">
                                             <span class="comment-author">{{ comentario.usuario.username|title }}</span>
-                                            <span class="comment-date">{{ comentario.data_criacao.strftime('%d/%m/%Y às %H:%M') }}</span>
+                                            <span class="comment-date">{{ comentario.data_criacao|localtime }}</span>
                                         </div>
                                         <div class="comment-text">{{ comentario.texto }}</div>
                                     </div>
@@ -143,7 +143,7 @@
                                 <thead><tr><th>Item</th><th>Qtd. Retirada</th><th>Data</th></tr></thead>
                                 <tbody>
                                     {% for saida in solicitacao.materiais_usados %}
-                                    <tr><td>{{ saida.produto.nome }}</td><td>{{ saida.quantidade_saida }}</td><td>{{ saida.data_saida.strftime('%d/%m/%y %H:%M') }}</td></tr>
+                                    <tr><td>{{ saida.produto.nome }}</td><td>{{ saida.quantidade_saida }}</td><td>{{ saida.data_saida|localtime }}</td></tr>
                                     {% endfor %}
                                 </tbody>
                             </table>

@@ -11,6 +11,7 @@ import os
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from functools import wraps
 from config import Config
+import pytz
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
@@ -53,6 +54,16 @@ def convert_logo_to_base64(image_path):
             return base64.b64encode(image_file.read()).decode('utf-8')
     except Exception:
         return None
+    
+def to_localtime(utc_datetime):
+    if not utc_datetime:
+        return ""
+    local_tz = pytz.timezone('America/Maceio') # Fuso horário de Alagoas
+    local_dt = utc_datetime.replace(tzinfo=pytz.utc).astimezone(local_tz)
+    return local_dt.strftime('%d/%m/%Y às %H:%M')
+
+# Registre a função como um filtro do Jinja2
+app.jinja_env.filters['localtime'] = to_localtime
 
 # --- ROTAS DE AUTENTICAÇÃO E NAVEGAÇÃO ---
 @app.route('/')
