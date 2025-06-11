@@ -6,180 +6,104 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 10px; /* Reduzindo a fonte base para caber mais conteúdo */
+            font-size: 10px;
             color: #333;
             margin: 20px;
         }
 
-        .header {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        /* Estilos do Cabeçalho e Tabela (sem alterações) */
+        .header { width: 100%; text-align: center; margin-bottom: 20px; }
+        .header-content { display: table; width: 100%; }
+        .logo-container { display: table-cell; vertical-align: middle; width: 90px; }
+        .logo { width: 80px; height: auto; max-width: 80px; }
+        .titulo-container { display: table-cell; vertical-align: middle; text-align: center; }
+        .titulo { font-size: 22px; margin: 0; color: #000; font-weight: bold; }
+        .subtitulo { font-size: 13px; color: #000; margin: 4px 0; font-weight: bold; }
+        table.produtos-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; text-align: center; }
+        table.produtos-table, th, td { border: 1px solid #000; }
+        th, td { padding: 5px; text-align: left; }
+        th { background-color: #ffee00; color: #000; font-size: 11px; font-weight: bold; }
+        td { font-size: 10px; }
+        .info { margin-bottom: 15px; font-size: 12px; }
 
-        .header-content {
-            display: table;
-            width: 100%;
-        }
-
-        .logo-container {
-            display: table-cell;
-            vertical-align: middle;
-            width: 90px;
-        }
-
-        .logo {
-            width: 80px;
-            height: auto;
-            max-width: 80px;
-        }
-
-        .titulo-container {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        .titulo {
-            font-size: 22px;
-            margin: 0;
-            color: #000;
-            font-weight: bold;
-        }
-
-        .subtitulo {
-            font-size: 13px;
-            color: #000;
-            margin: 4px 0;
-            font-weight: bold;
-        }
-
-        table.produtos-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        table.produtos-table, th, td {
+        /* ======== NOVOS ESTILOS PARA CAIXAS DE CONTEÚDO (BASEADO NO SEU DESENHO) ======== */
+        .content-box {
             border: 1px solid #000;
+            border-radius: 8px; /* Cantos arredondados como no desenho */
+            padding: 10px;
+            margin-top: 15px;
+            page-break-inside: avoid; /* Evita que a caixa quebre entre páginas */
         }
 
-        th, td {
-            padding: 5px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #ffee00;
-            color: #000;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        td {
-            font-size: 10px;
-        }
-
-        .info {
-            margin-bottom: 15px;
-            font-size: 12px;
-        }
-        
-        /* ======== NOVOS ESTILOS PARA LAYOUT COMPACTO ======== */
-        .details-container-table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: separate;
-            border-spacing: 10px 0;
-            page-break-inside: avoid; /* Tenta manter a tabela na mesma página */
-        }
-        
-        .details-cell {
-            width: 50%;
-            vertical-align: top;
-            border: 1px solid #000;
-            padding: 8px;
-        }
-
-        .details-cell-title {
+        .box-title {
             font-size: 12px;
             font-weight: bold;
             margin: 0 0 8px 0;
             padding-bottom: 4px;
             border-bottom: 1px solid #ccc;
         }
+        
+        .box-title .solicitante-name {
+            font-weight: normal;
+            color: #444;
+        }
 
-        .details-cell-content {
-            font-size: 10px;
-            line-height: 1.4;
-            white-space: pre-wrap;
-            word-wrap: break-word; /* Garante que palavras longas quebrem */
+        .box-content {
+            font-size: 11px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+        .box-content p {
+            margin: 0;
         }
         
-        .comment-item {
+        .section-divider-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 20px;
             margin-bottom: 5px;
-            padding-bottom: 5px;
-            border-bottom: 1px dotted #999;
         }
-        .comment-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+
+        .comment-box {
+            border: 1px solid #000;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            page-break-inside: avoid;
         }
-        .comment-item p {
-            margin: 0;
-            padding: 0;
-            line-height: 1.4;
+        
+        .comment-header {
+            display: block; /* Garante que o cabeçalho fique em sua própria área */
+            margin-bottom: 5px;
         }
-        .comment-item strong {
+
+        .comment-header .author {
+            font-size: 11px;
+            font-weight: bold;
             color: #003366;
+            margin-right: 10px;
         }
-        .comment-item em {
-            font-size: 9px;
+
+        .comment-header .date {
+            font-size: 10px;
             color: #555;
         }
-        /* ==================================================== */
 
-        .footer {
-            margin-top: 25px;
+        .comment-text {
+            font-size: 11px;
+            line-height: 1.4;
+            white-space: pre-wrap; /* Mantém as quebras de linha dos comentários */
         }
+        /* ================================================================================= */
 
-        .signature-section {
-            width: 100%;
-            margin-top: 35px;
-            display: table;
-        }
-
-        .signature-box {
-            display: table-cell;
-            width: 33.3%;
-            text-align: center;
-            padding: 0 10px;
-        }
-
-        .signature-line {
-            border-bottom: 1px solid #000;
-            height: 35px;
-            margin-bottom: 5px;
-        }
-
-        .signature-label {
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .auto-generated {
-            text-align: center;
-            font-size: 9px;
-            margin-top: 20px;
-            color: #777;
-        }
-
-        img {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
+        /* Estilos do Rodapé (sem alterações) */
+        .footer { margin-top: 25px; }
+        .signature-section { width: 100%; margin-top: 35px; display: table; }
+        .signature-box { display: table-cell; width: 33.3%; text-align: center; padding: 0 10px; }
+        .signature-line { border-bottom: 1px solid #000; height: 35px; margin-bottom: 5px; }
+        .signature-label { font-size: 10px; font-weight: bold; }
+        .auto-generated { text-align: center; font-size: 9px; margin-top: 20px; color: #777; }
+        img { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     </style>
 </head>
 <body>
@@ -219,40 +143,37 @@
                 <td>{{ produto.codigo_barras or 'N/A' }}</td>
                 <td>{{ produto.nome }}</td>
                 <td>{{ produto.quantidade_solicitada }}</td>
-                <td></td> </tr>
+                <td></td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <table class="details-container-table">
-        <tr>
-            <td class="details-cell">
-                <h4 class="details-cell-title">Descrição do Problema (Relato do Solicitante)</h4>
-                <div class="details-cell-content">
-                    {{ solicitacao.descricao or 'Nenhuma descrição detalhada foi fornecida.' }}
-                </div>
-            </td>
-            <td class="details-cell">
-                <h4 class="details-cell-title">Observações da Equipe Técnica</h4>
-                <div class="details-cell-content">
-                    {% if solicitacao.comentarios.all() %}
-                        {% for comentario in solicitacao.comentarios.order_by('data_criacao') %}
-                            <div class="comment-item">
-                                <p>
-                                    <strong>{{ comentario.usuario.username|title }}</strong> 
-                                    <em>({{ comentario.data_criacao.strftime('%d/%m/%y %H:%M') }})</em>:
-                                    {{ comentario.texto }}
-                                </p>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p>Nenhuma observação técnica adicionada.</p>
-                    {% endif %}
-                </div>
-            </td>
-        </tr>
-    </table>
+    <div class="content-box">
+        <h4 class="box-title">
+            Descrição do Problema 
+            <span class="solicitante-name"> (Relato de: {{ solicitacao.nome_solicitante }})</span>
+        </h4>
+        <div class="box-content">
+            <p>{{ solicitacao.descricao or 'Nenhuma descrição detalhada foi fornecida.' }}</p>
+        </div>
+    </div>
 
+    {% if solicitacao.comentarios.all() %}
+        <h4 class="section-divider-title">Observações da Equipe Técnica</h4>
+        
+        {% for comentario in solicitacao.comentarios.order_by('data_criacao') %}
+            <div class="comment-box">
+                <div class="comment-header">
+                    <span class="author">{{ comentario.usuario.username|title }}</span>
+                    <span class="date">({{ comentario.data_criacao.strftime('%d/%m/%y %H:%M') }})</span>
+                </div>
+                <div class="comment-text">
+                    {{- comentario.texto -}}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
 
     <div class="footer">
         <div class="signature-section">
