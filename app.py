@@ -312,14 +312,12 @@ def adicionar_item_solicitacao(solicitacao_id):
 def gerar_requisicao_pdf(solicitacao_id):
     solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
     
-    # Busca todos os materiais que já saíram para este chamado
     saidas_de_material = solicitacao.materiais_usados
     
     if not saidas_de_material:
         flash('Nenhum material foi retirado para este chamado. Não é possível gerar PDF.', 'warning')
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
     
-    # Prepara a lista de produtos para o template do PDF
     produtos_para_pdf = [
         {
             'codigo_barras': saida.produto.codigo_barras,
@@ -332,10 +330,10 @@ def gerar_requisicao_pdf(solicitacao_id):
     data_hora = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
     logo_base64 = convert_logo_to_base64('static/dmttlogo.png')
     
-    # Renderiza o mesmo template 'saida_pdf.html' com os dados corretos
+    # Renderiza o template, passando o objeto 'solicitacao' completo
     rendered = render_template('saida_pdf.html', 
+                               solicitacao=solicitacao,
                                produtos=produtos_para_pdf,
-                               setor=solicitacao.setor,
                                data_pedido=data_hora, 
                                logo_base64=logo_base64)
     
