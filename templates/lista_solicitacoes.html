@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acompanhamento de Chamados - Manutenção DMTT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">DMTT - Acompanhamento</div>
+                <div class="header-info">
+                    <span class="header-text">Status dos Chamados</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="list-container">
+            <div class="list-title">
+                <span class="list-icon">📊</span>
+                <h2>Chamados de Manutenção Recentes</h2>
+            </div>
+
+            {% if solicitacoes %}
+                {% for solicitacao in solicitacoes %}
+                <div class="solicitation-item-public">
+                    <div class="solicitation-header-public">
+                        <div class="solicitation-title-public">
+                            #{{ solicitacao.id }} - {{ solicitacao.titulo }}
+                        </div>
+                        <div class="solicitation-status-public status-{{ solicitacao.status }}">
+                            {{ solicitacao.status|replace('_', ' ')|capitalize }}
+                        </div>
+                    </div>
+                    <div class="solicitation-details-public">
+                        <span><strong>Solicitante:</strong> {{ solicitacao.nome_solicitante }}</span>
+                        <span><strong>Setor:</strong> {{ solicitacao.setor }}</span>
+                        <span><strong>Abertura:</strong> {{ solicitacao.data_solicitacao|localtime }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-list">
+                    <div class="empty-icon">📭</div>
+                    <h3>Nenhum chamado ativo ou recente</h3>
+                    <p>Não há chamados pendentes ou atualizados nas últimas 24 horas.</p>
+                </div>
+            {% endif %}
+
+             <div class="form-actions-container" style="border-top: 2px solid #feed00; margin-top: 30px;">
+                <a href="{{ url_for('portal_solicitacoes') }}" class="btn btn-solicitar">
+                    <span class="btn-icon">➕</span>
+                    Abrir um Novo Chamado
+                </a>
+                <a href="{{ url_for('exibir_login') }}" class="btn btn-back">
+                    <span class="btn-icon">🏠</span>
+                    Voltar ao Início
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

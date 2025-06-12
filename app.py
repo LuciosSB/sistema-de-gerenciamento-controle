@@ -538,6 +538,22 @@ def excluir_usuario(usuario_id):
         
     return redirect(url_for('lista_usuarios'))
 
+@app.route('/lista_solicitacoes')
+def lista_solicitacoes():
+    """
+    Exibe uma lista pública de chamados recentes.
+    Chamados com status 'rejeitada' ou 'entregue' são exibidos por apenas 24 horas.
+    """
+    limite_de_tempo = datetime.utcnow() - timedelta(days=1)
+    solicitacoes_visiveis = Solicitacao.query.filter(
+        db.or_(
+            Solicitacao.status.notin_(['rejeitada', 'entregue']),
+            Solicitacao.data_atualizacao > limite_de_tempo
+        )
+    ).order_by(Solicitacao.data_solicitacao.desc()).all()
+
+    return render_template('lista_solicitacoes.html', solicitacoes=solicitacoes_visiveis)
+
 @app.route('/exibir_index')
 def exibir_index():
     return redirect(url_for('login'))

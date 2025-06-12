@@ -982,3 +982,107 @@ header {
         transform: translateY(0);
     }
 }
+/* ===== ESTILOS PARA A PÁGINA DE LISTA DE SOLICITAÇÕES PÚBLICA ===== */
+
+.list-container {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 3px solid #003366;
+    border-radius: 16px;
+    padding: 30px;
+    margin-top: 30px;
+    box-shadow: 0 6px 20px rgba(0, 51, 102, 0.1);
+}
+
+.list-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #003366;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #feed00;
+}
+
+.list-icon {
+    font-size: 26px;
+}
+
+.solicitation-item-public {
+    background: #fff;
+    border: 1px solid #e0e6ed;
+    border-left: 5px solid #004080;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.solicitation-item-public:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 51, 102, 0.1);
+    border-left-color: #feed00;
+}
+
+.solicitation-header-public {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.solicitation-title-public {
+    font-size: 18px;
+    font-weight: 600;
+    color: #003366;
+}
+
+.solicitation-status-public {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+/* Reutilizando os status da outra folha de estilo */
+.status-pendente {
+    background-color: #fff3cd; color: #856404;
+}
+.status-aprovada {
+    background-color: #d4edda; color: #155724;
+}
+.status-rejeitada {
+    background-color: #f8d7da; color: #721c24;
+}
+.status-entregue {
+    background-color: #d1ecf1; color: #0c5460;
+}
+
+.solicitation-details-public {
+    display: flex;
+    gap: 25px;
+    font-size: 14px;
+    color: #555;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.empty-list {
+    text-align: center;
+    padding: 40px;
+}
+
+.empty-list .empty-icon {
+    font-size: 48px;
+    margin-bottom: 1rem;
+    color: #003366;
+    opacity: 0.6;
+}
+
+.empty-list h3 {
+    color: #003366;
+}
