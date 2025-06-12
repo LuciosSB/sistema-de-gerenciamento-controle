@@ -31,12 +31,57 @@
                     <article class="chamado-card status-{{ solicitacao.status }}">
                         <div class="card-header">
                             <h2 class="card-titulo">#{{ solicitacao.id }} - {{ solicitacao.titulo }}</h2>
-                            <span class="card-status">{{ solicitacao.status|replace('_', ' ')|capitalize }}</span>
+                            <span class="card-status">
+                                {% if solicitacao.status == 'aprovada' %}
+                                    Aprovada/Em Atendimento
+                                {% elif solicitacao.status == 'entregue' %}
+                                    Finalizada
+                                {% else %}
+                                    {{ solicitacao.status|replace('_', ' ')|capitalize }}
+                                {% endif %}
+                            </span>
                         </div>
                         <div class="card-body">
                             <p><strong>Solicitante:</strong> {{ solicitacao.nome_solicitante }}</p>
                             <p><strong>Setor:</strong> {{ solicitacao.setor }}</p>
                             <p><strong>Abertura:</strong> {{ solicitacao.data_solicitacao|localtime }}</p>
+                        </div>
+
+                        <div class="card-extra-details">
+                            {% set ultimo_comentario = solicitacao.get_ultimo_comentario() %}
+
+                            {% if solicitacao.status == 'entregue' %}
+                                <p><strong>Concluído por:</strong>
+                                    <span class="detail-value">
+                                    {% if ultimo_comentario %}{{ ultimo_comentario.usuario.username|title }}{% else %}Equipe de Manutenção{% endif %}
+                                    </span>
+                                </p>
+                                <p><strong>Último Comentário:</strong>
+                                    <span class="detail-value">
+                                    {% if ultimo_comentario %}{{ ultimo_comentario.texto }}{% else %}Nenhum comentário adicionado.{% endif %}
+                                    </span>
+                                </p>
+                            
+                            {% elif solicitacao.status == 'aprovada' %}
+                                <p><strong>Aprovado por:</strong>
+                                    <span class="detail-value">
+                                    {% if ultimo_comentario %}{{ ultimo_comentario.usuario.username|title }}{% else %}Equipe de Manutenção{% endif %}
+                                    </span>
+                                </p>
+                                <p><strong>Último Comentário:</strong>
+                                    <span class="detail-value">
+                                    {% if ultimo_comentario %}{{ ultimo_comentario.texto }}{% else %}Nenhum comentário adicionado.{% endif %}
+                                    </span>
+                                </p>
+
+                            {% elif solicitacao.status == 'rejeitada' %}
+                                <p><strong>Recusado por:</strong> <span class="detail-value">Equipe de Manutenção</span></p>
+                                <p><strong>Motivo:</strong> <span class="detail-value">{{ solicitacao.motivo_rejeicao or 'Não especificado.' }}</span></p>
+                            
+                            {% elif solicitacao.status == 'excluido' %}
+                                <p class="detail-value-special">Esta solicitação foi removida. Para mais detalhes, contate a equipe de manutenção.</p>
+
+                            {% endif %}
                         </div>
                     </article>
                     {% endfor %}

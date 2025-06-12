@@ -76,7 +76,10 @@ class Solicitacao(db.Model):
     categoria = db.Column(db.String(100), nullable=False, default="Geral")
     urgencia = db.Column(db.String(50), nullable=False, default='baixa')
     motivo_rejeicao = db.Column(db.Text, nullable=True)
-    
+
+    def get_ultimo_comentario(self):
+        # Este método busca e retorna o último comentário associado a este chamado
+        return self.comentarios.order_by(Comentario.id.desc()).first()
     
     def __repr__(self):
         return f'<Solicitacao {self.id}: {self.titulo} - {self.status}>'

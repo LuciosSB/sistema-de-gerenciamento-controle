@@ -4463,3 +4463,38 @@ select option {
 #clearNotificationsBtn:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
+
+/* ===== ESTILOS PARA DETALHES EXTRAS NO CARD DE CHAMADO ===== */
+
+.card-extra-details {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px dashed #f0f0f0;
+}
+
+.card-extra-details p {
+    font-size: 13px;
+    color: #333;
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.card-extra-details p strong {
+    color: #003366;
+    margin-right: 5px;
+}
+
+.detail-value {
+    color: #555;
+}
+
+.detail-value-special {
+    font-style: italic;
+    color: #dc3545;
+    font-weight: 500;
+}
+
+/* Cor da borda baseada no status, como na sua imagem */
+.chamado-card.status-rejeitada .card-extra-details { border-top-color: #ffdddd; }
+.chamado-card.status-entregue .card-extra-details,
+.chamado-card.status-aprovada .card-extra-details { border-top-color: #d4edda; }

@@ -31,8 +31,16 @@
                     <div class="detalhe-item"><label class="detalhe-label">Última Atualização:</label><span class="detalhe-valor">{{ solicitacao.data_atualizacao|localtime if solicitacao.data_atualizacao else 'N/A' }}</span></div>
                     <div class="detalhe-item"><label class="detalhe-label">Urgência:</label><div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">{{ solicitacao.urgencia|capitalize }}</div></div>
                     <div class="detalhe-item"><label class="detalhe-label">Status Final:</label>
-                        <div class="status-badge status-{{ solicitacao.status }}">{{ solicitacao.status|capitalize }}</div>
+                    <div class="status-badge status-{{ solicitacao.status }}">
+                        {% if solicitacao.status == 'aprovada' %}
+                            Aprovada/Em Atendimento
+                        {% elif solicitacao.status == 'entregue' %}
+                            Finalizada
+                        {% else %}
+                            {{ solicitacao.status|capitalize }}
+                        {% endif %}
                     </div>
+                </div>
                 </div>
             </div>
 

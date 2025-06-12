@@ -53,15 +53,27 @@
                                     </td>
                                     <td class="solicitacao-horario">{{ solicitacao.data_solicitacao|localtime }}</td>
                                     <td class="solicitacao-status">
-                                        <div class="status-badge
-                                            {% if solicitacao.status == 'pendente' %}status-pendente
-                                            {% elif solicitacao.status == 'aprovada' %}status-aprovada
-                                            {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
-                                            {% elif solicitacao.status == 'entregue' %}status-entregue
-                                            {% elif solicitacao.status == 'excluido' %}status-excluido
-                                            {% endif %}">
+                                        <div class="status-badge 
+                                        {% if solicitacao.status == 'pendente' %}status-pendente
+                                        {% elif solicitacao.status == 'aprovada' %}status-aprovada
+                                        {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
+                                        {% elif solicitacao.status == 'entregue' %}status-entregue
+                                        {% elif solicitacao.status == 'excluido' %}status-excluido
+                                        {% endif %}">
+
+                                        {# LÓGICA DE TEXTO ATUALIZADA #}
+                                        {% if solicitacao.status == 'aprovada' %}
+                                            ✅ Aprovada/Em Atendimento
+                                        {% elif solicitacao.status == 'entregue' %}
+                                            📦 Finalizada
+                                        {% elif solicitacao.status == 'pendente' %}
+                                            🔄 Pendente
+                                        {% elif solicitacao.status == 'rejeitada' %}
+                                            ❌ Rejeitada
+                                        {% else %}
                                             {{ solicitacao.status|capitalize }}
-                                        </div>
+                                        {% endif %}
+                                    </div>
                                     </td>
                                     <td class="solicitacao-acoes">
                                         <a href="{{ url_for('historico_detalhes', solicitacao_id=solicitacao.id) }}" class="btn-acao btn-visualizar">
