@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Chamados{% endblock %}
+
+{% block content %}
+    <nav>
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
+                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
+                <li class="active"><a href="{{ url_for('historico') }}">Histórico</a></li>
+                <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="panel active" id="historico-panel">
+            <div class="panel-header">
+                <h2>Histórico Completo de Chamados</h2>
+                <div class="header-actions">
+                    <span class="solicitacao-count">{{ solicitacoes|length }} registro(s) no total</span>
+                </div>
+            </div>
+            <div class="panel-content">
+                <div class="table-container">
+                    {% if solicitacoes %}
+                    <div class="table-wrapper">
+                        <table class="solicitacoes-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-numero">ID</th>
+                                    <th class="col-titulo">Título do Chamado</th>
+                                    <th class="col-solicitante">Solicitante</th>
+                                    <th class="col-setor">Setor</th>
+                                    <th class="col-urgencia">Urgência</th>
+                                    <th class="col-horario">Data/Hora</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="col-acoes">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for solicitacao in solicitacoes %}
+                                <tr class="solicitacao-row {% if solicitacao.status == 'excluido' %}solicitacao-excluida{% endif %}">
+                                    <td class="solicitacao-numero">#{{ solicitacao.id }}</td>
+                                    <td class="solicitacao-titulo">{{ solicitacao.titulo }}</td>
+                                    <td class="solicitacao-nome">{{ solicitacao.nome_solicitante }}</td>
+                                    <td class="solicitacao-setor">{{ solicitacao.setor }}</td>
+                                    <td class="solicitacao-urgencia">
+                                        <div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">
+                                            {{ solicitacao.urgencia|capitalize }}
+                                        </div>
+                                    </td>
+                                    <td class="solicitacao-horario">{{ solicitacao.data_solicitacao|localtime }}</td>
+                                    <td class="solicitacao-status">
+                                        <div class="status-badge
+                                            {% if solicitacao.status == 'pendente' %}status-pendente
+                                            {% elif solicitacao.status == 'aprovada' %}status-aprovada
+                                            {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
+                                            {% elif solicitacao.status == 'entregue' %}status-entregue
+                                            {% elif solicitacao.status == 'excluido' %}status-excluido
+                                            {% endif %}">
+                                            {{ solicitacao.status|capitalize }}
+                                        </div>
+                                    </td>
+                                    <td class="solicitacao-acoes">
+                                        <a href="{{ url_for('historico_detalhes', solicitacao_id=solicitacao.id) }}" class="btn-acao btn-visualizar">
+                                        👁️ Detalhes
+                                    </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📂</div>
+                        <h3>Nenhum chamado no histórico</h3>
+                        <p>Ainda não há nenhum registro de chamado de manutenção no sistema.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

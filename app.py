@@ -566,6 +566,30 @@ def lista_solicitacoes():
 
     return render_template('lista_solicitacoes.html', solicitacoes=solicitacoes_visiveis)
 
+@app.route('/historico')
+@login_required
+def historico():
+    if not current_user.has_permission('gerenciar_solicitacoes'):
+        flash('Você não tem permissão para acessar o histórico completo.', 'error')
+        return redirect(url_for('dashboard'))
+
+    todos_os_chamados = Solicitacao.query.order_by(Solicitacao.data_solicitacao.desc()).all()
+    
+    return render_template('historico.html', solicitacoes=todos_os_chamados)
+
+@app.route('/historico/detalhes/<int:solicitacao_id>')
+@login_required
+def historico_detalhes(solicitacao_id):
+    # Apenas usuários com permissão podem ver os detalhes.
+    if not current_user.has_permission('gerenciar_solicitacoes'):
+        flash('Você não tem permissão para ver os detalhes do histórico.', 'error')
+        return redirect(url_for('historico'))
+
+    # Busca o chamado específico pelo ID ou retorna um erro 404 se não encontrar.
+    solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
+
+    return render_template('historico_detalhes.html', solicitacao=solicitacao)
+
 @app.route('/exibir_index')
 def exibir_index():
     return redirect(url_for('login'))

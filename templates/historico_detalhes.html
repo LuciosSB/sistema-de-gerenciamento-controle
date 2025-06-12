@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Detalhes do Chamado #{{ solicitacao.id }}{% endblock %}
+
+{% block content %}
+<nav>
+    <div class="container">
+        <ul class="nav-list">
+            <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
+            <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
+            <li class="active"><a href="{{ url_for('historico') }}">Histórico</a></li>
+            <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="main-content">
+    <div class="panel active" id="detalhes-historico-panel">
+        <div class="panel-header">
+            <h2>Detalhes do Chamado #{{ solicitacao.id }}</h2>
+        </div>
+
+        <div class="panel-content">
+            <div class="detalhes-section">
+                <h3 class="section-title"><span class="section-icon">📋</span> Informações Gerais</h3>
+                <div class="detalhes-grid">
+                    <div class="detalhe-item detalhe-full"><label class="detalhe-label">Título:</label><span class="detalhe-valor titulo-principal">{{ solicitacao.titulo }}</span></div>
+                    <div class="detalhe-item"><label class="detalhe-label">Solicitante:</label><span class="detalhe-valor">{{ solicitacao.nome_solicitante }}</span></div>
+                    <div class="detalhe-item"><label class="detalhe-label">Setor:</label><span class="detalhe-valor">{{ solicitacao.setor }}</span></div>
+                    <div class="detalhe-item"><label class="detalhe-label">Data de Abertura:</label><span class="detalhe-valor">{{ solicitacao.data_solicitacao|localtime }}</span></div>
+                    <div class="detalhe-item"><label class="detalhe-label">Última Atualização:</label><span class="detalhe-valor">{{ solicitacao.data_atualizacao|localtime if solicitacao.data_atualizacao else 'N/A' }}</span></div>
+                    <div class="detalhe-item"><label class="detalhe-label">Urgência:</label><div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">{{ solicitacao.urgencia|capitalize }}</div></div>
+                    <div class="detalhe-item"><label class="detalhe-label">Status Final:</label>
+                        <div class="status-badge status-{{ solicitacao.status }}">{{ solicitacao.status|capitalize }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detalhes-section">
+                <h3 class="section-title"><span class="section-icon">📝</span> Descrição do Problema</h3>
+                <div class="descricao-container"><p class="descricao-texto">{{ solicitacao.descricao or 'Nenhuma descrição detalhada foi fornecida.' }}</p></div>
+            </div>
+
+            {% if solicitacao.status == 'rejeitada' and solicitacao.motivo_rejeicao %}
+            <div class="detalhes-section">
+                <h3 class="section-title reject-title"><span class="section-icon">❌</span> Motivo da Rejeição</h3>
+                <div class="rejeicao-motivo-box"><p>{{ solicitacao.motivo_rejeicao }}</p></div>
+            </div>
+            {% elif solicitacao.status == 'excluido' %}
+            <div class="detalhes-section">
+                <h3 class="section-title excluido-title"><span class="section-icon">🗑️</span> Chamado Removido</h3>
+                <div class="excluido-info-box"><p>Este chamado foi removido do sistema na data da "Última Atualização".</p></div>
+                </div>
+            {% endif %}
+
+            <div class="detalhes-section">
+                <h3 class="section-title"><span class="section-icon">📦</span> Materiais Utilizados</h3>
+                {% if solicitacao.materiais_usados %}
+                <div class="table-container">
+                    <table class="solicitacoes-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qtd. Solicitada</th>
+                                <th>Qtd. Fornecida</th>
+                                <th>Status da Devolução</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for saida in solicitacao.materiais_usados %}
+                            <tr>
+                                <td>{{ saida.produto.nome }}</td>
+                                <td>{{ saida.quantidade_solicitada }}</td>
+                                <td>{{ saida.quantidade_saida }}</td>
+                                <td class="col-status-devolucao">
+                                    {% if saida.produto.tipo_item == 'retornavel' %}
+                                        {% if saida.retornado %}
+                                            <span class="status-devolucao status-retornado">✔ Retornado</span>
+                                        {% else %}
+                                            <span class="status-devolucao status-pendente">Pendente</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="status-devolucao status-consumido">- Consumido -</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="empty-list-message">Nenhum material foi registrado para este chamado.</p>
+                {% endif %}
+            </div>
+
+            <div class="detalhes-section comments-section">
+                <h3 class="section-title"><span class="section-icon">💬</span> Comentários da Equipe Técnica</h3>
+                <div class="comment-list">
+                    {% if solicitacao.comentarios.all() %}
+                        {% for comentario in solicitacao.comentarios.order_by('data_criacao') %}
+                        <div class="comment-item">
+                            <div class="comment-author-avatar">{{ comentario.usuario.username[0]|upper }}</div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author">{{ comentario.usuario.username|title }}</span>
+                                    <span class="comment-date">{{ comentario.data_criacao|localtime }}</span>
+                                </div>
+                                <div class="comment-text">{{ comentario.texto }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-comments">Nenhum comentário técnico foi adicionado.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="page-actions">
+                <a href="{{ url_for('historico') }}" class="btn btn-secondary">⬅️ Voltar para o Histórico</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

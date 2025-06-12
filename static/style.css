@@ -4392,3 +4392,35 @@ select option {
     max-width: 400px;
     width: 90%;
 }
+
+.solicitacao-excluida {
+    opacity: 0.6;
+    background-color: #f1f1f1 !important; 
+}
+
+.solicitacao-excluida .solicitacao-titulo {
+    text-decoration: line-through; 
+}
+
+.status-badge.status-excluido {
+    background-color: #6c757d;
+    color: white;
+    border: 1px solid #5a6268;
+}
+
+/* Adicione este estilo ao final do seu style.css */
+
+/* Título da seção de item excluído */
+.section-title.excluido-title {
+    border-bottom-color: #6c757d; /* Cinza */
+}
+
+/* Caixa de informação para item excluído */
+.excluido-info-box {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    padding: 20px;
+    border-radius: 6px;
+    line-height: 1.6;
+}
