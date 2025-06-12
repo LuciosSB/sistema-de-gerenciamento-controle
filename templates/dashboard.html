@@ -70,7 +70,7 @@
                 </a>
                 {% endif %}
 
-                {% if current_user.has_permission('cadastro_usuario') %}
+                {% if current_user.tipo_usuario == 'admin' %}
                 <a href="{{ url_for('cadastro_usuario') }}" class="menu-card">
                     <div class="card-icon"><span class="icon-emoji">👤</span></div>
                     <div class="card-content">
