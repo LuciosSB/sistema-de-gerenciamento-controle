@@ -117,10 +117,19 @@
                         <span class="btn-icon">📤</span>
                         Abrir Chamado
                     </button>
+                    {% if current_user.is_authenticated %}
+                    {# Se o usuário ESTÁ logado, leva para a página interna de gerenciamento #}
                     <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn btn-view-requests">
                         <span class="btn-icon">📊</span>
-                        Ver Chamados
+                        Gerenciar Chamados
                     </a>
+                {% else %}
+                    {# Se o usuário NÃO ESTÁ logado, leva para a nova página pública de acompanhamento #}
+                    <a href="{{ url_for('lista_solicitacoes') }}" class="btn btn-view-requests">
+                        <span class="btn-icon">📊</span>
+                        Acompanhar Chamado
+                    </a>
+                {% endif %}
                     <a href="{{ url_for('exibir_login') }}" class="btn btn-back">
                         <span class="btn-icon">🏠</span>
                         Voltar ao Início

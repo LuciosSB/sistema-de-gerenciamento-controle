@@ -18,40 +18,36 @@
         </div>
     </header>
 
-    <div class="container">
-        <div class="list-container">
-            <div class="list-title">
-                <span class="list-icon">📊</span>
-                <h2>Chamados de Manutenção Recentes</h2>
+    <main class="container">
+        <div class="acompanhamento-container">
+            <div class="acompanhamento-header">
+                <span class="acompanhamento-icon">📊</span>
+                <h1>Chamados de Manutenção Recentes</h1>
             </div>
 
-            {% if solicitacoes %}
-                {% for solicitacao in solicitacoes %}
-                <div class="solicitation-item-public">
-                    <div class="solicitation-header-public">
-                        <div class="solicitation-title-public">
-                            #{{ solicitacao.id }} - {{ solicitacao.titulo }}
+            <div class="acompanhamento-lista">
+                {% if solicitacoes %}
+                    {% for solicitacao in solicitacoes %}
+                    <article class="chamado-card status-{{ solicitacao.status }}">
+                        <div class="card-header">
+                            <h2 class="card-titulo">#{{ solicitacao.id }} - {{ solicitacao.titulo }}</h2>
+                            <span class="card-status">{{ solicitacao.status|replace('_', ' ')|capitalize }}</span>
                         </div>
-                        <div class="solicitation-status-public status-{{ solicitacao.status }}">
-                            {{ solicitacao.status|replace('_', ' ')|capitalize }}
+                        <div class="card-body">
+                            <p><strong>Solicitante:</strong> {{ solicitacao.nome_solicitante }}</p>
+                            <p><strong>Setor:</strong> {{ solicitacao.setor }}</p>
+                            <p><strong>Abertura:</strong> {{ solicitacao.data_solicitacao|localtime }}</p>
                         </div>
+                    </article>
+                    {% endfor %}
+                {% else %}
+                    <div class="chamado-card-empty">
+                        <p>Nenhum chamado encontrado no momento.</p>
                     </div>
-                    <div class="solicitation-details-public">
-                        <span><strong>Solicitante:</strong> {{ solicitacao.nome_solicitante }}</span>
-                        <span><strong>Setor:</strong> {{ solicitacao.setor }}</span>
-                        <span><strong>Abertura:</strong> {{ solicitacao.data_solicitacao|localtime }}</span>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <div class="empty-list">
-                    <div class="empty-icon">📭</div>
-                    <h3>Nenhum chamado ativo ou recente</h3>
-                    <p>Não há chamados pendentes ou atualizados nas últimas 24 horas.</p>
-                </div>
-            {% endif %}
+                {% endif %}
+            </div>
 
-             <div class="form-actions-container" style="border-top: 2px solid #feed00; margin-top: 30px;">
+            <div class="acompanhamento-actions">
                 <a href="{{ url_for('portal_solicitacoes') }}" class="btn btn-solicitar">
                     <span class="btn-icon">➕</span>
                     Abrir um Novo Chamado
@@ -62,6 +58,7 @@
                 </a>
             </div>
         </div>
-    </div>
+    </main>
+
 </body>
 </html>

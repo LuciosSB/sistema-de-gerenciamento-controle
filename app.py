@@ -202,7 +202,9 @@ def portal_solicitacoes():
 @login_required
 @permission_required('gerenciar_solicitacoes')
 def gerenciar_solicitacoes():
-    todas_as_solicitacoes = Solicitacao.query.order_by(Solicitacao.data_solicitacao.desc()).all()
+    # Adicione o filtro aqui para não mostrar os excluídos
+    todas_as_solicitacoes = Solicitacao.query.filter(Solicitacao.status != 'excluido').order_by(Solicitacao.data_solicitacao.desc()).all()
+
     limite_de_tempo = datetime.utcnow() - timedelta(days=1)
     solicitacoes_visiveis = [s for s in todas_as_solicitacoes if not (s.status == 'entregue' and s.data_atualizacao and s.data_atualizacao < limite_de_tempo)]
     return render_template('gerenciar_solicitacoes.html', solicitacoes=solicitacoes_visiveis)
@@ -243,15 +245,20 @@ def atualizar_status_solicitacao(solicitacao_id):
         flash(f'Erro ao atualizar status: {e}', 'error')
     return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
 
+# NOVO CÓDIGO - 
 @app.route('/excluir_solicitacao/<int:solicitacao_id>', methods=['POST'])
 @login_required
 @permission_required('gerenciar_solicitacoes')
 def excluir_solicitacao(solicitacao_id):
     try:
         solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
-        db.session.delete(solicitacao)
+        
+        # Em vez de deletar, mudamos o status e a data de atualização
+        solicitacao.status = 'excluido'
+        solicitacao.data_atualizacao = datetime.utcnow()
+        
         db.session.commit()
-        flash(f'Chamado #{solicitacao_id} excluído com sucesso.', 'success')
+        flash(f'Chamado #{solicitacao.id} foi movido para a lixeira.', 'success')
     except Exception as e:
         db.session.rollback()
         flash(f'Erro ao excluir chamado: {e}', 'error')
@@ -538,17 +545,22 @@ def excluir_usuario(usuario_id):
         
     return redirect(url_for('lista_usuarios'))
 
+# SUBSTITUA PELA VERSÃO ABAIXO
 @app.route('/lista_solicitacoes')
 def lista_solicitacoes():
     """
-    Exibe uma lista pública de chamados recentes.
-    Chamados com status 'rejeitada' ou 'entregue' são exibidos por apenas 24 horas.
+    Exibe uma lista pública de chamados recentes com filtros inteligentes.
     """
+
     limite_de_tempo = datetime.utcnow() - timedelta(days=1)
+
     solicitacoes_visiveis = Solicitacao.query.filter(
         db.or_(
             Solicitacao.status.notin_(['rejeitada', 'entregue']),
-            Solicitacao.data_atualizacao > limite_de_tempo
+            db.and_(
+                Solicitacao.data_atualizacao.isnot(None),
+                Solicitacao.data_atualizacao > limite_de_tempo
+            )
         )
     ).order_by(Solicitacao.data_solicitacao.desc()).all()
 

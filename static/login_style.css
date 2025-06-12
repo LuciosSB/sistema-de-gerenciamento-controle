@@ -1086,3 +1086,127 @@ header {
 .empty-list h3 {
     color: #003366;
 }
+
+/* ===== ESTILOS PARA NOVA PÁGINA DE ACOMPANHAMENTO ===== */
+
+.acompanhamento-container {
+    background-color: #fff;
+    border: 3px solid #003366;
+    border-radius: 16px;
+    padding: 20px 30px;
+    margin-top: 30px;
+}
+
+.acompanhamento-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #003366;
+    border-bottom: 2px solid #feed00;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.acompanhamento-header h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.acompanhamento-icon {
+    font-size: 28px;
+}
+
+.acompanhamento-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chamado-card {
+    border: 1px solid #ddd;
+    border-left-width: 6px;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    padding: 15px 20px;
+    transition: box-shadow 0.3s ease;
+}
+
+.chamado-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.card-titulo {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.card-status {
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.card-body {
+    font-size: 14px;
+    color: #555;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.card-body p {
+    margin: 5px 0;
+}
+
+.chamado-card-empty {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+/* Cores das bordas e dos status dos cards */
+.chamado-card.status-pendente { border-left-color: #ffc107; }
+.chamado-card.status-pendente .card-status { background-color: #ffc107; color: #333; }
+
+.chamado-card.status-aprovada { border-left-color: #28a745; }
+.chamado-card.status-aprovada .card-status { background-color: #28a745; }
+
+.chamado-card.status-rejeitada { border-left-color: #dc3545; }
+.chamado-card.status-rejeitada .card-status { background-color: #dc3545; }
+
+.chamado-card.status-entregue { border-left-color: #17a2b8; }
+.chamado-card.status-entregue .card-status { background-color: #17a2b8; }
+
+.chamado-card.status-excluido { border-left-color: #6c757d; }
+.chamado-card.status-excluido .card-status { background-color: #6c757d; }
+
+
+.acompanhamento-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* Adicione este estilo ao final do seu login_style.css */
+
+.chamado-card.status-excluido { border-left-color: #6c757d; }
+.chamado-card.status-excluido .card-status { background-color: #6c757d; }
+.chamado-card.status-excluido .card-titulo { text-decoration: line-through; color: #6c757d; }
