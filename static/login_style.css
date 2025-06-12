@@ -93,9 +93,11 @@ header {
 
 /* ===== CONTAINER DE OPÇÕES ===== */
 .options-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    display: flex; 
+    justify-content: center; 
+    align-items: stretch;    
     gap: 30px;
+    flex-wrap: nowrap;         
     margin-bottom: 30px;
 }
 
@@ -1210,3 +1212,54 @@ header {
 .chamado-card.status-excluido { border-left-color: #6c757d; }
 .chamado-card.status-excluido .card-status { background-color: #6c757d; }
 .chamado-card.status-excluido .card-titulo { text-decoration: line-through; color: #6c757d; }
+
+/* AJUSTE PARA OS BOTÕES DENTRO DO FORMULÁRIO DE LOGIN */
+.login-form .form-actions {
+    justify-content: space-between; /* Garante espaço entre os botões */
+}
+
+.login-form .form-actions .btn {
+    flex: 1; /* Permite que os botões cresçam */
+    min-width: 120px; /* Reduz a largura mínima para caberem melhor */
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+header {
+    margin-bottom: 25px; /* Era 40px */
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.department-info {
+    padding: 20px; /* Era 30px */
+    gap: 20px;
+}
+
+.department-text h2 {
+    font-size: 22px;
+}
+
+.department-section {
+    margin-bottom: 25px;
+}
+
+.option-card {
+    padding: 25px; /* Era 30px */
+}
+.card-icon {
+    margin-bottom: 15px; /* Era 20px */
+}
+.card-content h3 {
+    margin-bottom: 10px; 
+}
+.card-content p {
+    margin-bottom: 20px;
+}
+.card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: space-around;
+}
