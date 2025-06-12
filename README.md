@@ -40,8 +40,8 @@ Siga os passos abaixo para configurar o ambiente e rodar o projeto.
 
 **1. Clonar o Repositório**
 ```bash
-git clone <url-do-seu-repositorio>
-cd <nome-da-pasta-do-projeto>
+git clone <https://github.com/LuciosSB/sistema-de-gerenciamento-controle>
+cd <controleAlmox-main - Copia>
 ```
 
 **2. Criar e Ativar o Ambiente Virtual**
