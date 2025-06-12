@@ -4424,3 +4424,42 @@ select option {
     border-radius: 6px;
     line-height: 1.6;
 }
+
+/* ===== MELHORIAS NA SIDEBAR E NOTIFICAÇÕES ===== */
+
+.main-container {
+    padding-top: 0; /* Ajuste para remover espaçamento extra */
+}
+
+.user-role {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    font-style: italic;
+}
+
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.notifications-header h4 {
+    color: white;
+    margin: 0;
+}
+
+#clearNotificationsBtn {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#clearNotificationsBtn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
