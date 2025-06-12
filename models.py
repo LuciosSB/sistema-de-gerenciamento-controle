@@ -21,11 +21,20 @@ class Usuario(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
     
     def has_permission(self, permission):
+        
         permissions_map = {
-            'almoxarifado': ['cadastro_usuario', 'atualizar_produto', 'listar_produtos', 'saida_produto', 'gerenciar_solicitacoes'],
-            'usuario_padrao': ['gerenciar_solicitacoes', 'cadastrar_item', 'listar_itens', 'atualizar_item'],
-            'usuario_solicitante': ['portal_solicitacoes','gerenciar_solicitacoes'],
-            'admin':['cadastro_usuario', 'listar_usuarios', 'atualizar_usuario', 'deletar_usuario', 'gerenciar_solicitacoes','cadastrar_produto', 'atualizar_produto', 'listar_produtos', 'saida_produto','cadastrar_item', 'listar_itens', 'atualizar_item']
+            'admin': [
+                'gerenciar_solicitacoes', 'cadastrar_produto', 'listar_produtos', 
+                'atualizar_produto', 'saida_produto', 'cadastro_usuario', 
+                'listar_usuarios', 'atualizar_cadastro', 'excluir_usuario', 'historico'
+            ],
+            'manutencao': [
+                'gerenciar_solicitacoes', 'cadastrar_produto', 'listar_produtos', 
+                'atualizar_produto', 'saida_produto'
+            ],
+            'usuario_padrao': [
+                'gerenciar_solicitacoes', 'listar_produtos'
+            ]
         }
         return permission in permissions_map.get(self.tipo_usuario, [])
     

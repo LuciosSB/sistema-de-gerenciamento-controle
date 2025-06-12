@@ -41,8 +41,7 @@
                         <span class="user-name">{{ current_user.username|title }}</span>
                         <span class="user-role">
                             {% if current_user.tipo_usuario == 'admin' %} Administrador
-                            {% elif current_user.tipo_usuario == 'almoxarifado' %} Equipe de Manutenção
-                            {% else %} Usuário
+                            {% elif current_user.tipo_usuario == 'manutencao' %} Equipe de Manutenção {% else %} Usuário
                             {% endif %}
                         </span>
                     {% endif %}

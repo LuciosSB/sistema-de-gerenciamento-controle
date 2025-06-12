@@ -86,19 +86,16 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="tipo_usuario">Tipo de Usuário <span class="required">*</span></label>
-                                <select id="tipo_usuario" name="tipo_usuario" required>
-                                    <option value="admin" {% if usuario.tipo_usuario == 'admin' %}selected{% endif %}>
-                                        👑 Administrador
-                                    </option>
-                                    <option value="almoxarifado" {% if usuario.tipo_usuario == 'almoxarifado' %}selected{% endif %}>
-                                        📦 Almoxarifado
-                                    </option>
-                                    <option value="usuario_padrao" {% if usuario.tipo_usuario == 'usuario_padrao' %}selected{% endif %}>
-                                        ⚡ Usuário Padrão
-                                    </option>
-                                    <option value="usuario_solicitante" {% if usuario.tipo_usuario == 'usuario_solicitante' %}selected{% endif %}>
-                                        📝 Solicitante
-                                    </option>
+                                        <select id="tipo_usuario" name="tipo_usuario" required>
+                                            <option value="admin" {% if usuario.tipo_usuario == 'admin' %}selected{% endif %}>
+                                                👑 Administrador
+                                            </option>
+                                            <option value="manutencao" {% if usuario.tipo_usuario == 'manutencao' %}selected{% endif %}>
+                                                📦 Manutenção
+                                            </option>
+                                            <option value="usuario_padrao" {% if usuario.tipo_usuario == 'usuario_padrao' %}selected{% endif %}>
+                                                ⚡ Usuário Padrão
+                                            </option>
                                 </select>
                             </div>
 

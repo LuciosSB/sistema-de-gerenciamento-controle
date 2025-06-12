@@ -44,23 +44,15 @@
                                     <td class="usuario-nome">{{ usuario.username }}</td>
                                     <td class="usuario-dados">{{ usuario.dados }}</td>
                                     <td class="usuario-tipo">
-                                        <div class="tipo-badge
-                                            {% if usuario.tipo_usuario == 'admin' %}tipo-admin
-                                            {% elif usuario.tipo_usuario == 'almoxarifado' %}tipo-funcionario
-                                            {% elif usuario.tipo_usuario == 'usuario_padrao' %}tipo-funcionario
-                                            {% else %}tipo-usuario{% endif %}">
-                                            {% if usuario.tipo_usuario == 'admin' %}
-                                                👑 Administrador
-                                            {% elif usuario.tipo_usuario == 'almoxarifado' %}
-                                                📦 Almoxarifado
-                                            {% elif usuario.tipo_usuario == 'usuario_padrao' %}
-                                                ⚡ Usuario Padrão
-                                            {% elif usuario.tipo_usuario == 'usuario_solicitante' %}
-                                                📝 Solicitante
-                                            {% else %}
-                                                👤 Usuário Padrão
-                                            {% endif %}
-                                        </div>
+                                        <div class="tipo-badge ...">
+                                        {% if usuario.tipo_usuario == 'admin' %}
+                                            👑 Administrador
+                                        {% elif usuario.tipo_usuario == 'manutencao' %} 🔧 Manutenção {% elif usuario.tipo_usuario == 'usuario_padrao' %}
+                                            ⚡ Usuario Padrão
+                                        {% else %}
+                                            👤 Usuário Padrão
+                                        {% endif %}
+                                    </div>
                                     </td>
                                     <td class="usuario-status">
                                         <div class="status-badge
