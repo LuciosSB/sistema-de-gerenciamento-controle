@@ -1,86 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Listar Itens e Ferramentas</title>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Estoque da Manutenção</div>
-                 <div class="header-actions">
-                    <button class="settings-btn" id="settingsBtn">
-                        <span class="settings-icon">⚙️</span>
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                                <span class="notification-badge">{{ messages|length }}</span>
-                            {% endif %}
-                        {% endwith %}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3>Menu & Opções</h3>
-            <button class="close-btn" id="closeSidebar">×</button>
-        </div>
-        <div class="sidebar-content">
-            <div class="user-section">
-                <div class="user-avatar">👤</div>
-                <div class="user-info">
-                    {% if current_user.is_authenticated %}
-                        <span class="user-name">{{ current_user.username|title }}</span>
-                        <span class="user-role">
-                            {% if current_user.tipo_usuario == 'admin' %} Administrador
-                            {% elif current_user.tipo_usuario == 'almoxarifado' %} Equipe de Manutenção
-                            {% else %} Usuário
-                            {% endif %}
-                        </span>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="sidebar-menu">
-                <a href="#" class="menu-item"><span class="menu-icon">👤</span><span>Meu Perfil</span></a>
-                {% if current_user.has_permission('listar_usuarios') %}
-                <a href="{{ url_for('lista_usuarios') }}" class="menu-item"><span class="menu-icon">👥</span><span>Gerenciar Usuários</span></a>
-                {% endif %}
-                <a href="{{ url_for('logout') }}" class="menu-item logout-item" id="logoutBtn"><span class="menu-icon">🚪</span><span>Sair do Sistema</span></a>
-            </div>
-            
-            <div class="notifications-section">
-                <h4>Notificações Recentes</h4>
-                <div id="notificationsList">
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                            <div class="notification-item notification-{{ category }}">
-                                <div class="notification-icon">
-                                    {% if category == 'success' %}✅{% elif category == 'error' %}❌{% else %}🔔{% endif %}
-                                </div>
-                                <div class="notification-content">
-                                    <span class="notification-title">
-                                        {% if category == 'success' %}Operação Realizada{% elif category == 'error' %}Erro no Sistema{% else %}Notificação{% endif %}
-                                    </span>
-                                    <span class="notification-text">{{ message }}</span>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="notification-empty"><span class="empty-icon">🔔</span><span class="empty-text">Nenhuma notificação recente</span></div>
-                        {% endif %}
-                    {% endwith %}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+{% block title %}Listar Itens e Ferramentas{% endblock %}
 
+{% block content %}
     <nav>
         <div class="container">
             <ul class="nav-list">
@@ -125,7 +47,7 @@
                                         </td>
                                         <td class="produto-nome">{{ produto.nome }}</td>
                                         <td class="produto-quantidade">
-                                            <div class="quantidade-badge 
+                                            <div class="quantidade-badge
                                                 {% if produto.quantidade == 0 %}quantidade-zero
                                                 {% elif produto.quantidade <= 5 %}quantidade-baixa
                                                 {% else %}quantidade-alta{% endif %}">
@@ -163,36 +85,4 @@
             </div>
         </div>
     </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const settingsBtn = document.getElementById('settingsBtn');
-            const sidebar = document.getElementById('sidebar');
-            const closeSidebar = document.getElementById('closeSidebar');
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
-            const logoutBtn = document.getElementById('logoutBtn');
-
-            function openSidebar() {
-                sidebar.classList.add('active');
-                sidebarOverlay.classList.add('active');
-            }
-
-            function closeSidebarFunc() {
-                sidebar.classList.remove('active');
-                sidebarOverlay.classList.remove('active');
-            }
-
-            settingsBtn.addEventListener('click', openSidebar);
-            closeSidebar.addEventListener('click', closeSidebarFunc);
-            sidebarOverlay.addEventListener('click', closeSidebarFunc);
-
-            logoutBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (confirm('Tem certeza que deseja sair do sistema?')) {
-                    window.location.href = this.href;
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+{% endblock %}

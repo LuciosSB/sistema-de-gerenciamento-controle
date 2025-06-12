@@ -106,6 +106,7 @@ nav {
 /* ===== ESTILOS DO CONTEÚDO PRINCIPAL ===== */
 .main-content {
     display: flex;
+    flex-direction: column; 
     gap: 20px;
 }
 

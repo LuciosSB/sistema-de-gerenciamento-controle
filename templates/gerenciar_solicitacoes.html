@@ -1,24 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Gerenciar Chamados de Manutenção</title>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Sistema de Manutenção</div>
-                <div class="user-info">
-                    <div class="user-icon">👤</div>
-                    <span class="user-name">Administrador</span>
-                </div>
-            </div>
-        </div>
-    </header>
+{% extends "base.html" %}
 
+{% block title %}Gerenciar Chamados de Manutenção{% endblock %}
+
+{% block content %}
     <nav>
         <div class="container">
             <ul class="nav-list">
@@ -31,102 +15,100 @@
         </div>
     </nav>
 
-    <div class="container">
-        <div class="main-content">
-            <div class="panel active" id="solicitacoes-panel">
-                <div class="panel-header">
-                    <div class="header-row">
-                        <h2>Gerenciar Chamados</h2>
-                        <button id="autoRefreshBtn" class="btn-auto-refresh" title="Ativar/Desativar atualização automática">
-                            🔄
-                        </button>
-                        <span class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
-                    </div>
-                     <div class="refresh-status" style="text-align: right; margin-top: -15px; height: 15px;">
-                        <span id="countdown" class="countdown" style="display: none;"></span>
-                    </div>
+    <div class="main-content">
+        <div class="panel active" id="solicitacoes-panel">
+            <div class="panel-header">
+                <div class="header-row">
+                    <h2>Gerenciar Chamados</h2>
+                    <button id="autoRefreshBtn" class="btn-auto-refresh" title="Ativar/Desativar atualização automática">
+                        🔄
+                    </button>
+                    <span class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
                 </div>
-                <div class="panel-content">
-                    <div class="table-container">
-                        {% if solicitacoes %}
-                        <div class="table-wrapper">
-                            <table class="solicitacoes-table">
-                                <thead>
-                                    <tr>
-                                        <th class="col-numero">ID</th>
-                                        <th class="col-titulo">Título do Chamado</th>
-                                        <th class="col-solicitante">Solicitante</th>
-                                        <th class="col-setor">Setor</th>
-                                        <th class="col-urgencia">Urgência</th>
-                                        <th class="col-horario">Data/Hora</th>
-                                        <th class="col-status">Status</th>
-                                        <th class="col-acoes">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for solicitacao in solicitacoes %}
-                                    <tr class="solicitacao-row">
-                                        <td class="solicitacao-numero">#{{ solicitacao.id }}</td>
-                                        <td class="solicitacao-titulo">{{ solicitacao.titulo }}</td>
-                                        <td class="solicitacao-nome">{{ solicitacao.nome_solicitante }}</td>
-                                        <td class="solicitacao-setor">{{ solicitacao.setor }}</td>
-                                        <td class="solicitacao-urgencia">
-                                            <div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">
-                                                {{ solicitacao.urgencia|capitalize }}
-                                            </div>
-                                        </td>
-                                        <td class="solicitacao-horario">{{ solicitacao.data_solicitacao|localtime }}</td>
-                                        <td class="solicitacao-status">
-                                            <div class="status-badge 
-                                                {% if solicitacao.status == 'pendente' %}status-pendente
-                                                {% elif solicitacao.status == 'aprovada' %}status-aprovada
-                                                {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
-                                                {% elif solicitacao.status == 'entregue' %}status-entregue
-                                                {% endif %}">
-                                                {% if solicitacao.status == 'pendente' %}
-                                                    🔄 Pendente
-                                                {% elif solicitacao.status == 'aprovada' %}
-                                                    ✅ Aprovada
-                                                {% elif solicitacao.status == 'rejeitada' %}
-                                                    ❌ Rejeitada
-                                                {% elif solicitacao.status == 'entregue' %}
-                                                    📦 Concluído
-                                                {% else %}
-                                                    {{ solicitacao.status|capitalize }}
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                        <td class="solicitacao-acoes">
-                                            <a href="{{ url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id) }}" class="btn-acao btn-visualizar">
-                                                👁️ Detalhes
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        {% else %}
-                        <div class="empty-state">
-                            <div class="empty-icon">📋</div>
-                            <h3>Nenhum chamado encontrado</h3>
-                            <p>Não há chamados de manutenção registrados no sistema no momento.</p>
-                            <p>Você pode abrir um novo chamado no Portal de Chamados.</p>
-                        </div>
-                        {% endif %}
+                 <div class="refresh-status" style="text-align: right; margin-top: -15px; height: 15px;">
+                    <span id="countdown" class="countdown" style="display: none;"></span>
+                </div>
+            </div>
+            <div class="panel-content">
+                <div class="table-container">
+                    {% if solicitacoes %}
+                    <div class="table-wrapper">
+                        <table class="solicitacoes-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-numero">ID</th>
+                                    <th class="col-titulo">Título do Chamado</th>
+                                    <th class="col-solicitante">Solicitante</th>
+                                    <th class="col-setor">Setor</th>
+                                    <th class="col-urgencia">Urgência</th>
+                                    <th class="col-horario">Data/Hora</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="col-acoes">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for solicitacao in solicitacoes %}
+                                <tr class="solicitacao-row">
+                                    <td class="solicitacao-numero">#{{ solicitacao.id }}</td>
+                                    <td class="solicitacao-titulo">{{ solicitacao.titulo }}</td>
+                                    <td class="solicitacao-nome">{{ solicitacao.nome_solicitante }}</td>
+                                    <td class="solicitacao-setor">{{ solicitacao.setor }}</td>
+                                    <td class="solicitacao-urgencia">
+                                        <div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">
+                                            {{ solicitacao.urgencia|capitalize }}
+                                        </div>
+                                    </td>
+                                    <td class="solicitacao-horario">{{ solicitacao.data_solicitacao|localtime }}</td>
+                                    <td class="solicitacao-status">
+                                        <div class="status-badge
+                                            {% if solicitacao.status == 'pendente' %}status-pendente
+                                            {% elif solicitacao.status == 'aprovada' %}status-aprovada
+                                            {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
+                                            {% elif solicitacao.status == 'entregue' %}status-entregue
+                                            {% endif %}">
+                                            {% if solicitacao.status == 'pendente' %}
+                                                🔄 Pendente
+                                            {% elif solicitacao.status == 'aprovada' %}
+                                                ✅ Aprovada
+                                            {% elif solicitacao.status == 'rejeitada' %}
+                                                ❌ Rejeitada
+                                            {% elif solicitacao.status == 'entregue' %}
+                                                📦 Concluído
+                                            {% else %}
+                                                {{ solicitacao.status|capitalize }}
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="solicitacao-acoes">
+                                        <a href="{{ url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id) }}" class="btn-acao btn-visualizar">
+                                            👁️ Detalhes
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <h3>Nenhum chamado encontrado</h3>
+                        <p>Não há chamados de manutenção registrados no sistema no momento.</p>
+                        <p>Você pode abrir um novo chamado no Portal de Chamados.</p>
+                    </div>
+                    {% endif %}
+                </div>
 
-                    <div class="page-actions">
-                        <a href="{{ url_for('portal_solicitacoes') }}" class="btn btn-primary">
-                            ➕ Abrir Novo Chamado
-                        </a>
-                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
-                            🏠 Página Inicial
-                        </a>
-                        <button onclick="location.reload()" class="btn btn-primary">
-                            🔄 Atualizar Lista
-                        </button>
-                    </div>
+                <div class="page-actions">
+                    <a href="{{ url_for('portal_solicitacoes') }}" class="btn btn-primary">
+                        ➕ Abrir Novo Chamado
+                    </a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                        🏠 Página Inicial
+                    </a>
+                    <button onclick="location.reload()" class="btn btn-primary">
+                        🔄 Atualizar Lista
+                    </button>
                 </div>
             </div>
         </div>
@@ -137,34 +119,34 @@
             const autoRefreshBtn = document.getElementById('autoRefreshBtn');
             const countdownSpan = document.getElementById('countdown');
             const REFRESH_INTERVAL_SECONDS = 60; // 1 minuto
-            
+
             let countdownTimer;
-            
+
             // Função para iniciar o processo de auto-refresh
             function startAutoRefresh() {
                 // Marca o botão como ativo
                 autoRefreshBtn.classList.add('active');
                 countdownSpan.style.display = 'inline-block';
-                
+
                 let secondsRemaining = REFRESH_INTERVAL_SECONDS;
-                
+
                 // Atualiza o contador visual a cada segundo
                 countdownTimer = setInterval(() => {
                     secondsRemaining--;
                     countdownSpan.textContent = `Atualizando em ${secondsRemaining}s...`;
-                    
+
                     if (secondsRemaining <= 0) {
                         clearInterval(countdownTimer);
                         location.reload();
                     }
                 }, 1000);
             }
-            
+
             // Verifica o estado no localStorage quando a página carrega
             if (localStorage.getItem('autoRefreshActive') === 'true') {
                 startAutoRefresh();
             }
-            
+
             // Adiciona o evento de clique ao botão
             autoRefreshBtn.addEventListener('click', function() {
                 // Limpa qualquer timer existente para evitar duplicação
@@ -182,5 +164,4 @@
             });
         });
     </script>
-</body>
-</html>
+{% endblock %}

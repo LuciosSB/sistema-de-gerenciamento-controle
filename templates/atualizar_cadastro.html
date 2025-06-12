@@ -1,26 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Atualizar Usuário - {{ usuario.username }}</title>
-</head>
-<body>
-    <!-- Cabeçalho do Sistema -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Sistema de Produtos</div>
-                <div class="user-info">
-                    <div class="user-icon">👤</div>
-                    <span class="user-name">{{ current_user.username }}</span>
-                </div>
-            </div>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <!-- Navegação -->
+{% block title %}Atualizar Usuário - {{ usuario.username }}{% endblock %}
+
+{% block content %}
     <nav>
         <div class="container">
             <ul class="nav-list">
@@ -34,183 +16,170 @@
         </div>
     </nav>
 
-    <!-- Conteúdo Principal -->
-    <div class="container">
-        <div class="main-content">
-            <div class="panel active" id="atualizar-usuario-panel">
-                <div class="panel-header">
-                    <h2>Atualizar Usuário</h2>
-                    <div class="header-actions">
-                        <span class="usuario-info-badge">
-                            ID: {{ usuario.id }} | 
-                            {% if usuario.ativo %}
-                                <span class="status-ativo">●</span> ATIVO
-                            {% else %}
-                                <span class="status-inativo">●</span> INATIVO
-                            {% endif %}
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="panel-content">
-                    <!-- Exibir mensagens flash -->
-                    {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                                <div class="alert alert-{{ category }}">
-                                    <span class="alert-icon">
-                                        {% if category == 'success' %}✅
-                                        {% elif category == 'error' %}❌
-                                        {% elif category == 'warning' %}⚠️
-                                        {% else %}ℹ️{% endif %}
-                                    </span>
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
+    <div class="panel active" id="atualizar-usuario-panel">
+        <div class="panel-header">
+            <h2>Atualizar Usuário</h2>
+            <div class="header-actions">
+                <span class="usuario-info-badge">
+                    ID: {{ usuario.id }} |
+                    {% if usuario.ativo %}
+                        <span class="status-ativo">●</span> ATIVO
+                    {% else %}
+                        <span class="status-inativo">●</span> INATIVO
+                    {% endif %}
+                </span>
+            </div>
+        </div>
 
-                    <!-- Formulário de Atualização -->
-                    <div class="form-container">
-                        <form method="POST" class="usuario-form" id="updateUserForm">
-                            <!-- Informações Básicas -->
-                            <div class="form-section">
-                                <h3 class="section-title">
-                                    <span class="section-icon">👤</span>
-                                    Informações do Usuário
-                                </h3>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="username">Nome de Usuário <span class="required">*</span></label>
-                                        <input type="text" 
-                                               id="username" 
-                                               name="username" 
-                                               value="{{ usuario.username }}" 
-                                               required 
-                                               placeholder="Digite o nome de usuário">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="dados">Dados do Usuário <span class="required">*</span></label>
-                                        <input type="text" 
-                                               id="dados" 
-                                               name="dados" 
-                                               value="{{ usuario.dados }}" 
-                                               required 
-                                               placeholder="Digite os dados do usuário">
-                                    </div>
-                                </div>
-                            </div>
+        <div class="panel-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span class="alert-icon">
+                                {% if category == 'success' %}✅
+                                {% elif category == 'error' %}❌
+                                {% elif category == 'warning' %}⚠️
+                                {% else %}ℹ️{% endif %}
+                            </span>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-                            <!-- Configurações de Acesso -->
-                            <div class="form-section">
-                                <h3 class="section-title">
-                                    <span class="section-icon">🔐</span>
-                                    Configurações de Acesso
-                                </h3>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="tipo_usuario">Tipo de Usuário <span class="required">*</span></label>
-                                        <select id="tipo_usuario" name="tipo_usuario" required>
-                                            <option value="admin" {% if usuario.tipo_usuario == 'admin' %}selected{% endif %}>
-                                                👑 Administrador
-                                            </option>
-                                            <option value="almoxarifado" {% if usuario.tipo_usuario == 'almoxarifado' %}selected{% endif %}>
-                                                📦 Almoxarifado
-                                            </option>
-                                            <option value="usuario_padrao" {% if usuario.tipo_usuario == 'usuario_padrao' %}selected{% endif %}>
-                                                ⚡ Usuário Padrão
-                                            </option>
-                                            <option value="usuario_solicitante" {% if usuario.tipo_usuario == 'usuario_solicitante' %}selected{% endif %}>
-                                                📝 Solicitante
-                                            </option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="checkbox-label">
-                                            <input type="checkbox" 
-                                                   id="ativo" 
-                                                   name="ativo" 
-                                                   {% if usuario.ativo %}checked{% endif %}>
-                                            <span class="checkbox-custom"></span>
-                                            <span class="checkbox-text">Usuário Ativo</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Alteração de Senha -->
-                            <div class="form-section">
-                                <h3 class="section-title">
-                                    <span class="section-icon">🔑</span>
-                                    Alterar Senha (Opcional)
-                                </h3>
-                                
-                                <div class="form-row">
-                                    <div class="form-group password-group">
-                                        <label for="nova_senha">Nova Senha</label>
-                                        <div class="password-input-wrapper">
-                                            <input type="password" 
-                                                   id="nova_senha" 
-                                                   name="nova_senha" 
-                                                   placeholder="Digite a nova senha (mínimo 6 caracteres)"
-                                                   minlength="6">
-                                            <button type="button" class="password-toggle" onclick="togglePassword('nova_senha')">
-                                                👁️
-                                            </button>
-                                        </div>
-                                        <small class="form-help">Deixe em branco para manter a senha atual</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Ações do Formulário -->
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    💾 Salvar Alterações
-                                </button>
-                                <a href="{{ url_for('lista_usuarios') }}" class="btn btn-secondary">
-                                    ↩️ Voltar para Lista
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Zona de Perigo - Exclusão -->
-                    <div class="danger-zone">
-                        <h3 class="danger-title">
-                            <span class="danger-icon">⚠️</span>
-                            Zona de Perigo
+            <div class="form-container">
+                <form method="POST" class="usuario-form" id="updateUserForm">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">👤</span>
+                            Informações do Usuário
                         </h3>
-                        <p class="danger-description">
-                            A exclusão do usuário é permanente e não pode ser desfeita. 
-                            Todos os dados associados serão perdidos.
-                        </p>
-                        
-                        <form method="POST" 
-                              action="{{ url_for('excluir_usuario', usuario_id=usuario.id) }}" 
-                              onsubmit="return confirmDelete('{{ usuario.username }}')" 
-                              class="delete-form">
-                            <button type="submit" class="btn btn-danger">
-                                🗑️ Excluir Usuário Permanentemente
-                            </button>
-                        </form>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="username">Nome de Usuário <span class="required">*</span></label>
+                                <input type="text"
+                                       id="username"
+                                       name="username"
+                                       value="{{ usuario.username }}"
+                                       required
+                                       placeholder="Digite o nome de usuário">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dados">Dados do Usuário <span class="required">*</span></label>
+                                <input type="text"
+                                       id="dados"
+                                       name="dados"
+                                       value="{{ usuario.dados }}"
+                                       required
+                                       placeholder="Digite os dados do usuário">
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">🔐</span>
+                            Configurações de Acesso
+                        </h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tipo_usuario">Tipo de Usuário <span class="required">*</span></label>
+                                <select id="tipo_usuario" name="tipo_usuario" required>
+                                    <option value="admin" {% if usuario.tipo_usuario == 'admin' %}selected{% endif %}>
+                                        👑 Administrador
+                                    </option>
+                                    <option value="almoxarifado" {% if usuario.tipo_usuario == 'almoxarifado' %}selected{% endif %}>
+                                        📦 Almoxarifado
+                                    </option>
+                                    <option value="usuario_padrao" {% if usuario.tipo_usuario == 'usuario_padrao' %}selected{% endif %}>
+                                        ⚡ Usuário Padrão
+                                    </option>
+                                    <option value="usuario_solicitante" {% if usuario.tipo_usuario == 'usuario_solicitante' %}selected{% endif %}>
+                                        📝 Solicitante
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox"
+                                           id="ativo"
+                                           name="ativo"
+                                           {% if usuario.ativo %}checked{% endif %}>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-text">Usuário Ativo</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">🔑</span>
+                            Alterar Senha (Opcional)
+                        </h3>
+
+                        <div class="form-row">
+                            <div class="form-group password-group">
+                                <label for="nova_senha">Nova Senha</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password"
+                                           id="nova_senha"
+                                           name="nova_senha"
+                                           placeholder="Digite a nova senha (mínimo 6 caracteres)"
+                                           minlength="6">
+                                    <button type="button" class="password-toggle" onclick="togglePassword('nova_senha')">
+                                        👁️
+                                    </button>
+                                </div>
+                                <small class="form-help">Deixe em branco para manter a senha atual</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            💾 Salvar Alterações
+                        </button>
+                        <a href="{{ url_for('lista_usuarios') }}" class="btn btn-secondary">
+                            ↩️ Voltar para Lista
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="danger-zone">
+                <h3 class="danger-title">
+                    <span class="danger-icon">⚠️</span>
+                    Zona de Perigo
+                </h3>
+                <p class="danger-description">
+                    A exclusão do usuário é permanente e não pode ser desfeita.
+                    Todos os dados associados serão perdidos.
+                </p>
+
+                <form method="POST"
+                      action="{{ url_for('excluir_usuario', usuario_id=usuario.id) }}"
+                      onsubmit="return confirmDelete('{{ usuario.username }}')"
+                      class="delete-form">
+                    <button type="submit" class="btn btn-danger">
+                        🗑️ Excluir Usuário Permanentemente
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript -->
     <script>
         // Função para mostrar/ocultar senha
         function togglePassword(inputId) {
             const input = document.getElementById(inputId);
             const button = input.nextElementSibling;
-            
+
             if (input.type === 'password') {
                 input.type = 'text';
                 button.textContent = '🙈';
@@ -271,5 +240,4 @@
             });
         });
     </script>
-</body>
-</html>
+{% endblock %}

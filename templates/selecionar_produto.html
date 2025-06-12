@@ -1,26 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Selecionar Produto para Atualizar</title>
-</head>
-<body>
-    <!-- Cabeçalho do Sistema -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Sistema de Atualização de Produtos</div>
-                <div class="user-info">
-                    <div class="user-icon">👤</div>
-                    <span class="user-name">Administrador</span>
-                </div>
-            </div>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <!-- Navegação -->
+{% block title %}Selecionar Produto para Atualizar{% endblock %}
+
+{% block content %}
     <nav>
         <div class="container">
             <ul class="nav-list">
@@ -33,116 +15,107 @@
         </div>
     </nav>
 
-    <!-- Conteúdo Principal -->
-    <div class="container">
-        <div class="main-content">
-            <div class="panel active" id="selecionar-panel">
-                <div class="panel-header">
-                    <h2>Seleção de Produto para Atualização</h2>
-                    <div class="header-actions">
-                        <span class="produto-count">{{ produtos|length }} produto(s) disponível(eis)</span>
-                    </div>
+    <div class="main-content">
+        <div class="panel active" id="selecionar-panel">
+            <div class="panel-header">
+                <h2>Seleção de Produto para Atualização</h2>
+                <div class="header-actions">
+                    <span class="produto-count">{{ produtos|length }} produto(s) disponível(eis)</span>
                 </div>
-                <div class="panel-content">
-                    <!-- Container do formulário com borda -->
-                    <div class="form-container">
-                        {% if produtos %}
-                        <form method="POST" action="{{ url_for('selecionar_produto_atualizar') }}" class="selecao-form">
-                            <!-- Seção de Seleção -->
-                            <div class="form-section">
-                                <div class="section-title">
-                                    <span class="section-icon">🔍</span>
-                                    Escolha o Produto
-                                </div>
-                                <div class="form-group">
-                                    <label for="produto" class="select-label">
-                                        <span class="label-icon">📦</span>
-                                        Produto para Atualizar
-                                        <span class="required-indicator">*</span>
-                                    </label>
-                                    <select id="produto" name="produto_id" class="produto-select-main" required>
-                                        <option value="">🔸 Selecione um produto para atualizar</option>
-                                        {% for produto in produtos %}
-                                            <option value="{{ produto.id }}" data-quantidade="{{ produto.quantidade }}">
-                                                {{ produto.nome }}
-                                                {% if produto.codigo_barras %}
-                                                    - Código: {{ produto.codigo_barras }}
-                                                {% endif %}
-                                                (Estoque: {{ produto.quantidade }})
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                    <div class="select-helper">
-                                        💡 Dica: O estoque atual será exibido ao lado do nome de cada produto
-                                    </div>
-                                </div>
+            </div>
+            <div class="panel-content">
+                <div class="form-container">
+                    {% if produtos %}
+                    <form method="POST" action="{{ url_for('selecionar_produto_atualizar') }}" class="selecao-form">
+                        <div class="form-section">
+                            <div class="section-title">
+                                <span class="section-icon">🔍</span>
+                                Escolha o Produto
                             </div>
-
-                            <!-- Seção de Informações -->
-                            <div class="info-section">
-                                <div class="info-card">
-                                    <div class="info-header">
-                                        <span class="info-icon">ℹ️</span>
-                                        <h4>Informações sobre a Atualização</h4>
-                                    </div>
-                                    <div class="info-content">
-                                        <div class="info-item">
-                                            <span class="info-label">📋 Dados Editáveis:</span>
-                                            <span class="info-value">Nome, Código de Barras e Quantidade</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="info-label">🔄 Processo:</span>
-                                            <span class="info-value">Selecione → Edite → Confirme as alterações</span>
-                                        </div>
-                                        <div class="info-item">
-                                            <span class="info-label">⚠️ Atenção:</span>
-                                            <span class="info-value">Alterações no estoque afetam imediatamente o sistema</span>
-                                        </div>
-                                    </div>
+                            <div class="form-group">
+                                <label for="produto" class="select-label">
+                                    <span class="label-icon">📦</span>
+                                    Produto para Atualizar
+                                    <span class="required-indicator">*</span>
+                                </label>
+                                <select id="produto" name="produto_id" class="produto-select-main" required>
+                                    <option value="">🔸 Selecione um produto para atualizar</option>
+                                    {% for produto in produtos %}
+                                        <option value="{{ produto.id }}" data-quantidade="{{ produto.quantidade }}">
+                                            {{ produto.nome }}
+                                            {% if produto.codigo_barras %}
+                                                - Código: {{ produto.codigo_barras }}
+                                            {% endif %}
+                                            (Estoque: {{ produto.quantidade }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="select-helper">
+                                    💡 Dica: O estoque atual será exibido ao lado do nome de cada produto
                                 </div>
-                            </div>
-
-                            <!-- Ações do formulário -->
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    ✏️ Atualizar Produto Selecionado
-                                </button>
-                                <a href="{{ url_for('listar_produtos') }}" class="btn btn-tertiary">
-                                    📋 Ver Lista de Produtos
-                                </a>
-                                <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
-                                    🏠 Página Inicial
-                                </a>
-                            </div>
-                        </form>
-                        {% else %}
-                        <!-- Estado vazio quando não há produtos -->
-                        <div class="empty-state">
-                            <div class="empty-icon">📦</div>
-                            <h3>Nenhum produto cadastrado</h3>
-                            <p>Para atualizar produtos, é necessário ter pelo menos um produto cadastrado no sistema.</p>
-                            <div class="empty-actions">
-                                <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">
-                                    ➕ Cadastrar Primeiro Produto
-                                </a>
-                                <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
-                                    🏠 Página Inicial
-                                </a>
                             </div>
                         </div>
-                        {% endif %}
+
+                        <div class="info-section">
+                            <div class="info-card">
+                                <div class="info-header">
+                                    <span class="info-icon">ℹ️</span>
+                                    <h4>Informações sobre a Atualização</h4>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-item">
+                                        <span class="info-label">📋 Dados Editáveis:</span>
+                                        <span class="info-value">Nome, Código de Barras e Quantidade</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">🔄 Processo:</span>
+                                        <span class="info-value">Selecione → Edite → Confirme as alterações</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">⚠️ Atenção:</span>
+                                        <span class="info-value">Alterações no estoque afetam imediatamente o sistema</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                ✏️ Atualizar Produto Selecionado
+                            </button>
+                            <a href="{{ url_for('listar_produtos') }}" class="btn btn-tertiary">
+                                📋 Ver Lista de Produtos
+                            </a>
+                            <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
+                                🏠 Página Inicial
+                            </a>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <h3>Nenhum produto cadastrado</h3>
+                        <p>Para atualizar produtos, é necessário ter pelo menos um produto cadastrado no sistema.</p>
+                        <div class="empty-actions">
+                            <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">
+                                ➕ Cadastrar Primeiro Produto
+                            </a>
+                            <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
+                                🏠 Página Inicial
+                            </a>
+                        </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Script para melhorar a experiência do usuário -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const selectProduto = document.getElementById('produto');
             const form = document.querySelector('.selecao-form');
-            
+
             if (selectProduto && form) {
                 // Adiciona feedback visual na seleção
                 selectProduto.addEventListener('change', function() {
@@ -154,14 +127,14 @@
                         this.style.backgroundColor = '#f7f9fc';
                     }
                 });
-                
+
                 // Previne envio sem seleção
                 form.addEventListener('submit', function(e) {
                     if (!selectProduto.value) {
                         e.preventDefault();
                         selectProduto.focus();
                         selectProduto.style.borderColor = '#dc3545';
-                        
+
                         // Remove a cor de erro após 3 segundos
                         setTimeout(() => {
                             selectProduto.style.borderColor = '#ddd';
@@ -171,5 +144,4 @@
             }
         });
     </script>
-</body>
-</html>
+{% endblock %}

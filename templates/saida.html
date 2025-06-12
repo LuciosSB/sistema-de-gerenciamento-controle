@@ -1,22 +1,149 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Sistema de Saida de Produtos</title>
+{% extends "base.html" %}
+
+{% block title %}Saída de Produtos{% endblock %}
+
+{% block content %}
+    <nav>
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
+                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Solicitações</a></li>
+                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro</a></li>
+                <li><a href="{{ url_for('listar_produtos') }}">Listar Produtos</a></li>
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Produtos</a></li>
+                <li class="active"><a href="{{ url_for('saida_produto') }}">Saída de Produtos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="panel active" id="saida-panel">
+            <div class="panel-header">
+                <h2>Saída de Produtos</h2>
+                <div class="header-actions">
+                    <span class="produto-count">Registrar Movimentação</span>
+                </div>
+            </div>
+            <div class="panel-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'success' %}
+                                <div class="flash-message success">
+                                    <div class="flash-icon">✅</div>
+                                    <div class="flash-text">{{ message }}</div>
+                                </div>
+                            {% endif %}
+                            {% if category == 'error' %}
+                                <div class="flash-message error">
+                                    <div class="flash-icon">❌</div>
+                                    <div class="flash-text">{{ message }}</div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+
+                <div class="form-container">
+                    <form method="POST" action="{{ url_for('saida_produto') }}" class="saida-form">
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <span class="section-icon">📦</span>
+                                Produtos para Saída
+                            </h3>
+                            <div id="produtos_container" class="produtos-container">
+                                </div>
+                            <div class="add-produto-section">
+                                <button type="button" onclick="addProduto()" class="btn btn-add-produto">
+                                    ➕ Adicionar Produto
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <span class="section-icon">🏢</span>
+                                Destino da Saída
+                            </h3>
+
+                            <div class="setor-hybrid-container">
+                                <div class="setor-toggle-container">
+                                    <label class="setor-mode-label">
+                                        <input type="checkbox" id="modo_novo_setor" onchange="toggleSetorInput()">
+                                        <span class="setor-mode-text">Criar novo setor</span>
+                                    </label>
+                                    <button type="button" id="toggle_setor_btn" onclick="document.getElementById('modo_novo_setor').click()" class="btn-toggle-setor" title="Clique para alternar entre selecionar e escrever">
+                                        ✏️ Escrever Novo
+                                    </button>
+                                </div>
+
+                                <div id="edificio_container" class="edificio-container">
+                                    <div class="form-group">
+                                        <label for="edificio_select" class="edificio-label">Selecione o Edifício:</label>
+                                        <select id="edificio_select" name="edificio" class="edificio-select" onchange="updateSetores()">
+                                            <option value="">Escolha um edifício</option>
+                                            <option value="Superintendência">Superintendência</option>
+                                            <option value="Taxi">Taxi</option>
+                                            <option value="NOI">NOI</option>
+                                            <option value="DIOVIA">DIOVIA</option>
+                                            <option value="GETEC">GETEC</option>
+                                        </select>
+                                        <div class="edificio-info">Selecione um edifício para ver os setores</div>
+                                    </div>
+                                </div>
+
+                                <div id="setor_select_container" class="setor-select-container">
+                                    <div class="form-group">
+                                        <label for="setor_select" class="setor-label-dynamic">Selecione o Setor:</label>
+                                        <select id="setor_select" name="setor_id" class="setor-select" disabled>
+                                            <option value="">Selecione um setor</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="setor_input_container" class="setor-input-container" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="setor_input" class="setor-label-dynamic">Digite o Nome do Novo Setor:</label>
+                                        <input type="text"
+                                               id="setor_input"
+                                               name="novo_setor"
+                                               class="setor-input"
+                                               placeholder="Ex: Almoxarifado Central, Sala de Reuniões..."
+                                               autocomplete="off"
+                                               disabled>
+                                    </div>
+                                </div>
+
+                                <div class="setor-helper">
+                                    <span class="helper-text">💡 Você pode selecionar um setor de um edifício existente ou criar um novo setor personalizado</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <input type="submit" value="📝 Registrar Saída" class="btn btn-primary">
+                            <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
+                                🏠 Página Inicial
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         // Dados dos edifícios e setores
         const edificiosSetores = {
             "Superintendência": [
-                "Ass. Cop", "Ass. Com", "Ass. Gab", "Ass. Tec", "Chefia Gab.", 
+                "Ass. Cop", "Ass. Com", "Ass. Gab", "Ass. Tec", "Chefia Gab.",
                 "Def. Prev-ASSCOND", "Sec.Adj-Direção", "Deggi", "DTSMTU", "RH"
             ],
             "Taxi": [
                 "Def.Prev", "Protocolo", "Taxi Triagem"
             ],
             "NOI": [
-                "CGTRAN", "CGTRU", "DIEST", "DIOF", "DPOL", "Gest. Frota", 
+                "CGTRAN", "CGTRU", "DIEST", "DIOF", "DPOL", "Gest. Frota",
                 "GPOT", "GPROR", "NOI", "Recursos", "TI"
             ],
             "DIOVIA": [
@@ -49,7 +176,7 @@
                     <option value="{{ produto.id }}">{{ produto.nome }} (Quantidade: {{ produto.quantidade }})</option>
                 {% endfor %}
             `;
-            
+
             var quantidadeInput = document.createElement("input");
             quantidadeInput.type = "number";
             quantidadeInput.name = "quantidade_saida[]";
@@ -84,10 +211,10 @@
             const edificioSelect = document.getElementById('edificio_select');
             const setorSelect = document.getElementById('setor_select');
             const selectedEdificio = edificioSelect.value;
-            
+
             // Limpa os setores atuais
             setorSelect.innerHTML = '<option value="">Selecione um setor</option>';
-            
+
             if (selectedEdificio && edificiosSetores[selectedEdificio]) {
                 // Adiciona os setores do edifício selecionado
                 edificiosSetores[selectedEdificio].forEach(setor => {
@@ -96,19 +223,19 @@
                     option.textContent = setor;
                     setorSelect.appendChild(option);
                 });
-                
+
                 // Habilita o select de setores
                 setorSelect.disabled = false;
                 setorSelect.style.opacity = '1';
-                
+
                 // Atualiza o texto de ajuda
-                document.querySelector('.edificio-info').textContent = 
+                document.querySelector('.edificio-info').textContent =
                     `${edificiosSetores[selectedEdificio].length} setores disponíveis`;
             } else {
                 // Desabilita o select de setores
                 setorSelect.disabled = true;
                 setorSelect.style.opacity = '0.5';
-                document.querySelector('.edificio-info').textContent = 
+                document.querySelector('.edificio-info').textContent =
                     'Selecione um edifício para ver os setores';
             }
         }
@@ -119,31 +246,31 @@
             var modoInput = document.getElementById('modo_novo_setor');
             var toggleBtn = document.getElementById('toggle_setor_btn');
             var edificioContainer = document.getElementById('edificio_container');
-            
+
             // Limpar os campos quando alternar
             document.getElementById('setor_input').value = '';
             document.getElementById('edificio_select').value = '';
             document.getElementById('setor_select').value = '';
             updateSetores(); // Reset dos setores
-            
+
             if (modoInput.checked) {
                 // Modo input ativo - esconder selects e mostrar input
                 selectContainer.style.display = 'none';
                 edificioContainer.style.display = 'none';
                 inputContainer.style.display = 'block';
-                
+
                 // Desabilitar campos de select e remover required
                 document.getElementById('edificio_select').disabled = true;
                 document.getElementById('setor_select').disabled = true;
                 document.getElementById('edificio_select').removeAttribute('required');
                 document.getElementById('setor_select').removeAttribute('required');
-                
+
                 // Habilitar input e tornar obrigatório
                 var setorInput = document.getElementById('setor_input');
                 setorInput.disabled = false;
                 setorInput.setAttribute('required', 'required');
                 setorInput.focus();
-                
+
                 toggleBtn.innerHTML = '📋 Selecionar Existente';
                 toggleBtn.title = 'Clique para selecionar um setor existente';
             } else {
@@ -151,18 +278,18 @@
                 selectContainer.style.display = 'block';
                 edificioContainer.style.display = 'block';
                 inputContainer.style.display = 'none';
-                
+
                 // Habilitar campos de select e tornar obrigatórios
                 document.getElementById('edificio_select').disabled = false;
                 document.getElementById('setor_select').disabled = false;
                 document.getElementById('edificio_select').setAttribute('required', 'required');
                 document.getElementById('setor_select').setAttribute('required', 'required');
-                
+
                 // Desabilitar input e remover required
                 var setorInput = document.getElementById('setor_input');
                 setorInput.disabled = true;
                 setorInput.removeAttribute('required');
-                
+
                 toggleBtn.innerHTML = '✏️ Escrever Novo';
                 toggleBtn.title = 'Clique para escrever um novo setor';
             }
@@ -175,156 +302,4 @@
             addProduto();
         });
     </script>
-</head>
-<body>
-    <!-- Cabeçalho do Sistema -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Sistema de Saída de Produtos</div>
-                <div class="user-info">
-                    <div class="user-icon">👤</div>
-                    <span class="user-name">Administrador</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Navegação -->
-    <nav>
-        <div class="container">
-            <ul class="nav-list">
-                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
-                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Solicitações</a></li>
-                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro</a></li>
-                <li><a href="{{ url_for('listar_produtos') }}">Listar Produtos</a></li>
-                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Produtos</a></li>
-                <li class="active"><a href="{{ url_for('saida_produto') }}">Saída de Produtos</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Conteúdo Principal -->
-    <div class="container">
-        <div class="main-content">
-            <div class="panel active" id="saida-panel">
-                <div class="panel-header">
-                    <h2>Saída de Produtos</h2>
-                    <div class="header-actions">
-                        <span class="produto-count">Registrar Movimentação</span>
-                    </div>
-                </div>
-                <div class="panel-content">
-                    <!-- Mensagens Flash -->
-                    {% if success %}
-                        <div class="flash-message success">
-                            <div class="flash-icon">✅</div>
-                            <div class="flash-text">{{ success }}</div>
-                        </div>
-                    {% endif %}
-                    
-                    {% if error %}
-                        <div class="flash-message error">
-                            <div class="flash-icon">❌</div>
-                            <div class="flash-text">{{ error }}</div>
-                        </div>
-                    {% endif %}
-
-                    <!-- Container do formulário com borda -->
-                    <div class="form-container">
-                        <form method="POST" action="{{ url_for('saida_produto') }}" class="saida-form">
-                            <!-- Seção de Produtos -->
-                            <div class="form-section">
-                                <h3 class="section-title">
-                                    <span class="section-icon">📦</span>
-                                    Produtos para Saída
-                                </h3>
-                                <div id="produtos_container" class="produtos-container">
-                                    <!-- Produtos serão adicionados dinamicamente aqui -->
-                                </div>
-                                <div class="add-produto-section">
-                                    <button type="button" onclick="addProduto()" class="btn btn-add-produto">
-                                        ➕ Adicionar Produto
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Seção do Setor -->
-                            <div class="form-section">
-                                <h3 class="section-title">
-                                    <span class="section-icon">🏢</span>
-                                    Destino da Saída
-                                </h3>
-                                
-                                <!-- Container do campo híbrido de setor -->
-                                <div class="setor-hybrid-container">
-                                    <div class="setor-toggle-container">
-                                        <label class="setor-mode-label">
-                                            <input type="checkbox" id="modo_novo_setor" onchange="toggleSetorInput()">
-                                            <span class="setor-mode-text">Criar novo setor</span>
-                                        </label>
-                                        <button type="button" id="toggle_setor_btn" onclick="document.getElementById('modo_novo_setor').click()" class="btn-toggle-setor" title="Clique para alternar entre selecionar e escrever">
-                                            ✏️ Escrever Novo
-                                        </button>
-                                    </div>
-                                    
-                                    <!-- Container para seleção de edifício e setor -->
-                                    <div id="edificio_container" class="edificio-container">
-                                        <div class="form-group">
-                                            <label for="edificio_select" class="edificio-label">Selecione o Edifício:</label>
-                                            <select id="edificio_select" name="edificio" class="edificio-select" onchange="updateSetores()">
-                                                <option value="">Escolha um edifício</option>
-                                                <option value="Superintendência">Superintendência</option>
-                                                <option value="Taxi">Taxi</option>
-                                                <option value="NOI">NOI</option>
-                                                <option value="DIOVIA">DIOVIA</option>
-                                                <option value="GETEC">GETEC</option>
-                                            </select>
-                                            <div class="edificio-info">Selecione um edifício para ver os setores</div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div id="setor_select_container" class="setor-select-container">
-                                        <div class="form-group">
-                                            <label for="setor_select" class="setor-label-dynamic">Selecione o Setor:</label>
-                                            <select id="setor_select" name="setor_id" class="setor-select" disabled>
-                                                <option value="">Selecione um setor</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Container para novo setor -->
-                                    <div id="setor_input_container" class="setor-input-container" style="display: none;">
-                                        <div class="form-group">
-                                            <label for="setor_input" class="setor-label-dynamic">Digite o Nome do Novo Setor:</label>
-                                            <input type="text" 
-                                                   id="setor_input" 
-                                                   name="novo_setor" 
-                                                   class="setor-input" 
-                                                   placeholder="Ex: Almoxarifado Central, Sala de Reuniões..." 
-                                                   autocomplete="off"
-                                                   disabled>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="setor-helper">
-                                        <span class="helper-text">💡 Você pode selecionar um setor de um edifício existente ou criar um novo setor personalizado</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Ações do Formulário -->
-                            <div class="form-actions">
-                                <input type="submit" value="📝 Registrar Saída" class="btn btn-primary">
-                                <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
-                                    🏠 Página Inicial
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+{% endblock %}

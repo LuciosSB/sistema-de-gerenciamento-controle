@@ -1,26 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Lista de Usuários</title>
-</head>
-<body>
-    <!-- Cabeçalho do Sistema -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Sistema de Produtos</div>
-                <div class="user-info">
-                    <div class="user-icon">👤</div>
-                    <span class="user-name">{{ current_user.username if current_user.is_authenticated else 'Administrador' }}</span>
-                </div>
-            </div>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <!-- Navegação -->
+{% block title %}Lista de Usuários{% endblock %}
+
+{% block content %}
     <nav>
         <div class="container">
             <ul class="nav-list">
@@ -34,100 +16,93 @@
         </div>
     </nav>
 
-    <!-- Conteúdo Principal -->
-    <div class="container">
-        <div class="main-content">
-            <div class="panel active" id="usuarios-panel">
-                <div class="panel-header">
-                    <h2>Lista de Usuários do Sistema</h2>
-                    <div class="header-actions">
-                        <span class="usuario-count">{{ usuarios|length }} usuário(s) encontrado(s)</span>
-                    </div>
+    <div class="main-content">
+        <div class="panel active" id="usuarios-panel">
+            <div class="panel-header">
+                <h2>Lista de Usuários do Sistema</h2>
+                <div class="header-actions">
+                    <span class="usuario-count">{{ usuarios|length }} usuário(s) encontrado(s)</span>
                 </div>
-                <div class="panel-content">
-                    <!-- Container da tabela com borda -->
-                    <div class="table-container">
-                        {% if usuarios %}
-                        <div class="table-wrapper">
-                            <table class="usuarios-table">
-                                <thead>
-                                    <tr>
-                                        <th class="col-id">ID</th>
-                                        <th class="col-nome">Nome de Usuário</th>
-                                        <th class="col-dados">CPF/Dados</th>
-                                        <th class="col-tipo">Tipo</th>
-                                        <th class="col-status">Status</th>
-                                        <th class="col-acoes">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for usuario in usuarios %}
-                                    <tr class="usuario-row">
-                                        <td class="usuario-id">{{ usuario.id }}</td>
-                                        <td class="usuario-nome">{{ usuario.username }}</td>
-                                        <td class="usuario-dados">{{ usuario.dados }}</td>
-                                        <td class="usuario-tipo">
-                                            <div class="tipo-badge 
-                                                {% if usuario.tipo_usuario == 'admin' %}tipo-admin
-                                                {% elif usuario.tipo_usuario == 'almoxarifado' %}tipo-funcionario
-                                                {% elif usuario.tipo_usuario == 'usuario_padrao' %}tipo-funcionario
-                                                {% else %}tipo-usuario{% endif %}">
-                                                {% if usuario.tipo_usuario == 'admin' %}
-                                                    👑 Administrador
-                                                {% elif usuario.tipo_usuario == 'almoxarifado' %}
-                                                    📦 Almoxarifado
-                                                {% elif usuario.tipo_usuario == 'usuario_padrao' %}
-                                                    ⚡ Usuario Padrão
-                                                {% elif usuario.tipo_usuario == 'usuario_solicitante' %}
-                                                    📝 Solicitante
-                                                {% else %}
-                                                    👤 Usuário Padrão
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                        <td class="usuario-status">
-                                            <div class="status-badge 
-                                                {% if usuario.ativo %}status-ativo
-                                                {% else %}status-inativo{% endif %}">
-                                                {% if usuario.ativo %}
-                                                    ✅ Ativo
-                                                {% else %}
-                                                    ❌ Inativo
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                        <td class="usuario-acoes">
-                                            <a href="{{ url_for('atualizar_cadastro', usuario_id=usuario.id) }}" class="btn-acao btn-atualizar">
-                                                ✏️ Atualizar Cadastro
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        {% else %}
-                        <!-- Mensagem quando não há usuários -->
-                        <div class="empty-state">
-                            <div class="empty-icon">👥</div>
-                            <h3>Nenhum usuário encontrado</h3>
-                            <p>Não há usuários cadastrados no sistema no momento.</p>
-                        </div>
-                        {% endif %}
+            </div>
+            <div class="panel-content">
+                <div class="table-container">
+                    {% if usuarios %}
+                    <div class="table-wrapper">
+                        <table class="usuarios-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-id">ID</th>
+                                    <th class="col-nome">Nome de Usuário</th>
+                                    <th class="col-dados">CPF/Dados</th>
+                                    <th class="col-tipo">Tipo</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="col-acoes">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for usuario in usuarios %}
+                                <tr class="usuario-row">
+                                    <td class="usuario-id">{{ usuario.id }}</td>
+                                    <td class="usuario-nome">{{ usuario.username }}</td>
+                                    <td class="usuario-dados">{{ usuario.dados }}</td>
+                                    <td class="usuario-tipo">
+                                        <div class="tipo-badge
+                                            {% if usuario.tipo_usuario == 'admin' %}tipo-admin
+                                            {% elif usuario.tipo_usuario == 'almoxarifado' %}tipo-funcionario
+                                            {% elif usuario.tipo_usuario == 'usuario_padrao' %}tipo-funcionario
+                                            {% else %}tipo-usuario{% endif %}">
+                                            {% if usuario.tipo_usuario == 'admin' %}
+                                                👑 Administrador
+                                            {% elif usuario.tipo_usuario == 'almoxarifado' %}
+                                                📦 Almoxarifado
+                                            {% elif usuario.tipo_usuario == 'usuario_padrao' %}
+                                                ⚡ Usuario Padrão
+                                            {% elif usuario.tipo_usuario == 'usuario_solicitante' %}
+                                                📝 Solicitante
+                                            {% else %}
+                                                👤 Usuário Padrão
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="usuario-status">
+                                        <div class="status-badge
+                                            {% if usuario.ativo %}status-ativo
+                                            {% else %}status-inativo{% endif %}">
+                                            {% if usuario.ativo %}
+                                                ✅ Ativo
+                                            {% else %}
+                                                ❌ Inativo
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td class="usuario-acoes">
+                                        <a href="{{ url_for('atualizar_cadastro', usuario_id=usuario.id) }}" class="btn-acao btn-atualizar">
+                                            ✏️ Atualizar Cadastro
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">👥</div>
+                        <h3>Nenhum usuário encontrado</h3>
+                        <p>Não há usuários cadastrados no sistema no momento.</p>
+                    </div>
+                    {% endif %}
+                </div>
 
-                    <!-- Ações da página -->
-                    <div class="page-actions">
-                        <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
-                            🏠 Página Inicial
-                        </a>
-                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
-                            📊 Dashboard
-                        </a>
-                    </div>
+                <div class="page-actions">
+                    <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
+                        🏠 Página Inicial
+                    </a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                        📊 Dashboard
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
