@@ -81,6 +81,17 @@
                 </a>
                 {% endif %}
 
+                {% if current_user.tipo_usuario == 'admin' %}
+                <a href="{{ url_for('historico') }}" class="menu-card">
+                    <div class="card-icon"><span class="icon-emoji">📜</span></div>
+                    <div class="card-content">
+                        <h3>Histórico de Chamados</h3>
+                        <p>Visualize o registro completo de todos os chamados, incluindo os finalizados e excluídos</p>
+                        <div class="card-action"><span class="action-text">Acessar</span></div>
+                    </div>
+                </a>
+                {% endif %}
+
             </div>
         </div>
     </div>
