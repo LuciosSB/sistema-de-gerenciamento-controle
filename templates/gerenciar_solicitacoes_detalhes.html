@@ -12,9 +12,6 @@
             {% if current_user.has_permission('gerenciar_solicitacoes') %}
                 <li class="active"><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
             {% endif %}
-            {% if current_user.has_permission('historico') %}
-                <li><a href="{{ url_for('historico') }}">Histórico</a></li>
-            {% endif %}
             {% if current_user.has_permission('cadastrar_produto') %}
                 <li><a href="{{ url_for('cadastro_produto') }}">Cadastrar Item</a></li>
             {% endif %}
