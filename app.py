@@ -433,7 +433,6 @@ def quantidade_produto(produto_id):
     produto = Produto.query.get(produto_id)
     return jsonify({'quantidade': produto.quantidade}) if produto else jsonify({'quantidade': 0})
 
-# FUNÇÃO CORRIGIDA
 @app.route('/cadastro_usuario', methods=['GET', 'POST'])
 @login_required
 def cadastro_usuario():
@@ -546,7 +545,6 @@ def excluir_usuario(usuario_id):
         
     return redirect(url_for('lista_usuarios'))
 
-# SUBSTITUA PELA VERSÃO ABAIXO
 @app.route('/lista_solicitacoes')
 def lista_solicitacoes():
     """

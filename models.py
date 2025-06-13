@@ -35,7 +35,7 @@ class Usuario(UserMixin, db.Model):
             'usuario_gerenciador': [
                 'cadastrar_produto', 'listar_produtos',
                 'atualizar_produto', 'saida_produto', 'listar_solicitacoes', 'historico',
-                'portal_solocitacoes', 'gerenciar_solicitacoes',''
+                'portal_solocitacoes', 'gerenciar_solicitacoes','dashboard'
             ]
         }
         return permission in permissions_map.get(self.tipo_usuario, [])
