@@ -47,8 +47,10 @@
                                         <div class="tipo-badge ...">
                                         {% if usuario.tipo_usuario == 'admin' %}
                                             👑 Administrador
-                                        {% elif usuario.tipo_usuario == 'manutencao' %} 🔧 Manutenção {% elif usuario.tipo_usuario == 'usuario_padrao' %}
-                                            ⚡ Usuario Padrão
+                                        {% elif usuario.tipo_usuario == 'manutencao' %} 
+                                            🔧 Manutenção 
+                                        {% elif usuario.tipo_usuario == 'Gerenciador' %}
+                                            ⚡ Gerenciador
                                         {% else %}
                                             👤 Usuário Padrão
                                         {% endif %}

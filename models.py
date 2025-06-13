@@ -24,16 +24,18 @@ class Usuario(UserMixin, db.Model):
         
         permissions_map = {
             'admin': [
-                'gerenciar_solicitacoes', 'cadastrar_produto', 'listar_produtos', 
-                'atualizar_produto', 'saida_produto', 'cadastro_usuario', 
-                'listar_usuarios', 'atualizar_cadastro', 'excluir_usuario', 'historico'
+                'gerenciar_solicitacoes', 'dashboard', 'cadastrar_produto', 'listar_produtos', 
+                'atualizar_produto', 'saida_produto', 'cadastro_usuario', 'atualizar',
+                'listar_usuarios', 'atualizar_cadastro', 'excluir_usuario', 'historico', 'portal_solocitacoes', 
+                'gerenciar_solicitacoes', 'listar_solicitacoes'
             ],
             'manutencao': [
-                'gerenciar_solicitacoes', 'cadastrar_produto', 'listar_produtos', 
-                'atualizar_produto', 'saida_produto'
+                'gerenciar_solicitacoes', 'listar_produtos', 
             ],
-            'usuario_padrao': [
-                'gerenciar_solicitacoes', 'listar_produtos'
+            'usuario_gerenciador': [
+                'cadastrar_produto', 'listar_produtos',
+                'atualizar_produto', 'saida_produto', 'listar_solicitacoes', 'historico',
+                'portal_solocitacoes', 'gerenciar_solicitacoes',''
             ]
         }
         return permission in permissions_map.get(self.tipo_usuario, [])
