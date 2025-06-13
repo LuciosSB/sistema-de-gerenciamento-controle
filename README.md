@@ -1,6 +1,6 @@
 # Sistema de Gestão de Manutenção - DMTT
 
-Este é um sistema web desenvolvido em Flask para gerenciar chamados de manutenção, controlar o estoque de itens e ferramentas, e administrar usuários e permissões.
+Este é um sistema web desenvolvido em Flask que desesenvolvi para gerenciar chamados de manutenção, controlar o estoque de itens e ferramentas, e administrar usuários e permissões.
 
 ## Funcionalidades Principais
 
