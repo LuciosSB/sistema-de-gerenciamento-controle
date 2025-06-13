@@ -30,7 +30,7 @@ class Usuario(UserMixin, db.Model):
                 'gerenciar_solicitacoes', 'listar_solicitacoes'
             ],
             'manutencao': [
-                'gerenciar_solicitacoes', 'listar_produtos', 
+                'gerenciar_solicitacoes', 'listar_produtos', 'portal_solocitacoes'
             ],
             'usuario_gerenciador': [
                 'cadastrar_produto', 'listar_produtos',

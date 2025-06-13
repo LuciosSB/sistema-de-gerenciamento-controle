@@ -34,12 +34,52 @@
                 <div class="panel-header">
                     <h2>Estoque de Itens e Ferramentas</h2>
                     <div class="header-actions">
-                        <span class="produto-count">{{ produtos|length }} item(ns) encontrado(s)</span>
+                        <span id="produto-count" class="produto-count">{{ produtos|length }} item(ns) no total</span>
                     </div>
                 </div>
                 <div class="panel-content">
+
+                    <div class="form-container" style="margin-bottom: 2rem; padding: 20px;">
+                        <div class="form-section" style="margin-bottom: 0;">
+                            <h3 class="section-title"><span class="section-icon">🔍</span> Buscar e Filtrar Itens</h3>
+                            <div class="form-group">
+                                <label for="searchInput" class="cadastro-label">Buscar por Nome ou Código:</label>
+                                <input type="text" id="searchInput" class="cadastro-input" placeholder="Digite para começar a buscar...">
+                            </div>
+                            <div class="radio-group-container" style="margin-top: 20px;">
+                                <label class="radio-group-label">Filtrar por Tipo:</label>
+                                <div id="tipoFilter" class="radio-options">
+                                    <label class="radio-label">
+                                        <input type="radio" name="tipo_item_filter" value="todos" checked>
+                                        <span class="radio-custom"></span>
+                                        <span class="radio-text">Todos os Tipos</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="tipo_item_filter" value="consumivel">
+                                        <span class="radio-custom"></span>
+                                        <span class="radio-text">Apenas Consumíveis</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="tipo_item_filter" value="retornavel">
+                                        <span class="radio-custom"></span>
+                                        <span class="radio-text">Apenas Retornáveis</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-container">
                         {% if produtos %}
+                        <div class="table-controls">
+                            <label for="rowsPerPage">Mostrar</label>
+                            <select id="rowsPerPage">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>itens por página</span>
+                        </div>
                         <div class="table-wrapper">
                             <table class="produtos-table">
                                 <thead>
@@ -48,10 +88,11 @@
                                         <th class="col-codigo">Código</th>
                                         <th class="col-nome">Nome do Item</th>
                                         <th class="col-quantidade">Qtd.</th>
-                                        <th>Tipo</th> <th class="col-acoes">Ações</th>
+                                        <th>Tipo</th>
+                                        <th class="col-acoes">Ações</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="produtos-tbody">
                                     {% for produto in produtos %}
                                     <tr class="produto-row">
                                         <td class="produto-id">{{ produto.id }}</td>
@@ -67,7 +108,7 @@
                                                 {{ produto.quantidade }}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="produto-tipo" data-tipo="{{ produto.tipo_item }}">
                                             <div class="tipo-item-badge tipo-{{ produto.tipo_item }}">
                                                 {{ produto.tipo_item|capitalize }}
                                             </div>
@@ -79,6 +120,15 @@
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            <div id="empty-search-result" class="empty-state" style="display: none; padding: 40px;">
+                                <div class="empty-icon">🤷</div>
+                                <h3>Nenhum item encontrado</h3>
+                                <p>Sua busca não correspondeu a nenhum item no estoque.</p>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+                            <span id="pagination-info"></span>
+                            <div id="pagination-controls"></div>
                         </div>
                         {% else %}
                         <div class="empty-state">
@@ -98,4 +148,130 @@
             </div>
         </div>
     </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const tipoFilterRadios = document.querySelectorAll('input[name="tipo_item_filter"]');
+    const tableBody = document.getElementById('produtos-tbody');
+    const allRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
+    const countSpan = document.getElementById('produto-count');
+    const emptySearchResult = document.getElementById('empty-search-result');
+    const rowsPerPageSelect = document.getElementById('rowsPerPage');
+    const paginationControls = document.getElementById('pagination-controls');
+    const paginationInfo = document.getElementById('pagination-info');
+
+    let currentPage = 1;
+    let filteredRows = [...allRows];
+
+    function applyFilters() {
+        const searchText = searchInput.value.toLowerCase().trim();
+        const tipoFilter = document.querySelector('input[name="tipo_item_filter"]:checked').value;
+
+        filteredRows = allRows.filter(row => {
+            const nome = row.querySelector('.produto-nome').textContent.toLowerCase();
+            const codigo = row.querySelector('.produto-codigo').textContent.toLowerCase();
+            const tipo = row.querySelector('.produto-tipo').getAttribute('data-tipo');
+
+            const textMatch = nome.includes(searchText) || codigo.includes(searchText);
+            const tipoMatch = (tipoFilter === 'todos') || (tipo === tipoFilter);
+
+            return textMatch && tipoMatch;
+        });
+
+        currentPage = 1;
+        updateTable();
+    }
+
+    function updateTable() {
+        const rowsPerPage = parseInt(rowsPerPageSelect.value, 10);
+        const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+
+        // Esconde todas as linhas para depois mostrar apenas as da página atual
+        allRows.forEach(row => row.style.display = 'none');
+        
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const rowsToShow = filteredRows.slice(start, end);
+        
+        rowsToShow.forEach(row => row.style.display = '');
+
+        setupPagination(totalPages);
+        updateInfo(start, end);
+
+        if (filteredRows.length === 0 && allRows.length > 0) {
+            emptySearchResult.style.display = 'block';
+        } else {
+            emptySearchResult.style.display = 'none';
+        }
+    }
+
+    function setupPagination(totalPages) {
+        paginationControls.innerHTML = '';
+
+        if (totalPages <= 1) {
+            paginationInfo.textContent = '';
+            return;
+        }
+
+        // Botão Anterior
+        const prevButton = document.createElement('button');
+        prevButton.textContent = '« Anterior';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+            }
+        });
+        paginationControls.appendChild(prevButton);
+
+        // Botões de Página
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            if (i === currentPage) {
+                pageButton.classList.add('active');
+            }
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                updateTable();
+            });
+            paginationControls.appendChild(pageButton);
+        }
+
+        // Botão Próximo
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Próximo »';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateTable();
+            }
+        });
+        paginationControls.appendChild(nextButton);
+    }
+
+    function updateInfo(start, end) {
+        const totalFiltered = filteredRows.length;
+        const endOfPage = Math.min(end, totalFiltered);
+        if (totalFiltered > 0) {
+            paginationInfo.textContent = `Mostrando ${start + 1} a ${endOfPage} de ${totalFiltered} itens`;
+        } else {
+            paginationInfo.textContent = '';
+        }
+        countSpan.textContent = `${totalFiltered} item(ns) filtrado(s) de ${allRows.length} no total`;
+    }
+
+    // Adiciona os "listeners" de eventos
+    searchInput.addEventListener('input', applyFilters);
+    tipoFilterRadios.forEach(radio => radio.addEventListener('change', applyFilters));
+    rowsPerPageSelect.addEventListener('change', applyFilters);
+
+    // Inicializa a tabela
+    applyFilters();
+});
+</script>
+
 {% endblock %}

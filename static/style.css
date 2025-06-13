@@ -4498,3 +4498,53 @@ select option {
 .chamado-card.status-rejeitada .card-extra-details { border-top-color: #ffdddd; }
 .chamado-card.status-entregue .card-extra-details,
 .chamado-card.status-aprovada .card-extra-details { border-top-color: #d4edda; }
+
+/* Estilos para controles da tabela e paginação */
+.table-controls {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+.table-controls select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    margin-top: 1rem;
+    border-top: 1px solid #e0e8f0;
+}
+#pagination-info {
+    font-size: 14px;
+    color: #666;
+}
+#pagination-controls button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #003366;
+    padding: 8px 12px;
+    margin: 0 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+#pagination-controls button:hover {
+    background-color: #f0f8ff;
+    border-color: #003366;
+}
+#pagination-controls button.active {
+    background-color: #003366;
+    color: #feed00;
+    border-color: #003366;
+    font-weight: bold;
+}
+#pagination-controls button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
