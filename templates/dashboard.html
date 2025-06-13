@@ -70,18 +70,7 @@
                 </a>
                 {% endif %}
 
-                {% if current_user.tipo_usuario == 'admin' %}
-                <a href="{{ url_for('cadastro_usuario') }}" class="menu-card">
-                    <div class="card-icon"><span class="icon-emoji">👤</span></div>
-                    <div class="card-content">
-                        <h3>Cadastrar Usuário</h3>
-                        <p>Adicione novos usuários ao sistema (técnicos, solicitantes, etc.)</p>
-                        <div class="card-action"><span class="action-text">Acessar</span></div>
-                    </div>
-                </a>
-                {% endif %}
-
-                {% if current_user.tipo_usuario == 'admin' %}
+                {% if current_user.has_permission('historico') %}
                 <a href="{{ url_for('historico') }}" class="menu-card">
                     <div class="card-icon"><span class="icon-emoji">📜</span></div>
                     <div class="card-content">
@@ -92,6 +81,16 @@
                 </a>
                 {% endif %}
 
+                {% if current_user.has_permission('cadastro_usuario') %}
+                <a href="{{ url_for('cadastro_usuario') }}" class="menu-card">
+                    <div class="card-icon"><span class="icon-emoji">👤</span></div>
+                    <div class="card-content">
+                        <h3>Cadastrar Usuário</h3>
+                        <p>Adicione novos usuários ao sistema (técnicos, solicitantes, etc.)</p>
+                        <div class="card-action"><span class="action-text">Acessar</span></div>
+                    </div>
+                </a>
+                {% endif %}
             </div>
         </div>
     </div>
