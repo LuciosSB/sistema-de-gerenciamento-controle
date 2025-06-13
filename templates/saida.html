@@ -6,12 +6,24 @@
     <nav>
         <div class="container">
             <ul class="nav-list">
-                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
-                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Solicitações</a></li>
-                <li><a href="{{ url_for('cadastro_produto') }}">Cadastro de Itens</a></li>
+            {% if current_user.has_permission('dashboard') %}
+            <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
+            {% endif %}
+            {% if current_user.has_permission('gerenciar_solicitacoes') %}
+                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
+            {% endif %}
+            {% if current_user.has_permission('cadastrar_produto') %}
+                <li><a href="{{ url_for('cadastro_produto') }}">Cadastrar Item</a></li>
+            {% endif %}
+            {% if current_user.has_permission('listar_produtos') %}
                 <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
-                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Itens</a></li>
-                <li class="active"><a href="{{ url_for('saida_produto') }}">Saída de Materiais</a></li>
+            {% endif %}
+            {% if current_user.has_permission('atualizar_produto') %}
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Item</a></li>
+            {% endif %}
+            {% if current_user.has_permission('historico') %}
+                <li><a href="{{ url_for('historico') }}">Histórico</a></li>
+            {% endif %}
             </ul>
         </div>
     </nav>

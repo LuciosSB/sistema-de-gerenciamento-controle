@@ -173,6 +173,7 @@ def atualizar_produto(produto_id):
 
 # --- ROTAS DE SOLICITAÇÕES ---
 @app.route('/portal_solicitacoes', methods=['GET', 'POST'])
+@login_required
 def portal_solicitacoes():
     if request.method == 'POST':
         try:
