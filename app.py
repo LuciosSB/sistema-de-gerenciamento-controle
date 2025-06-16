@@ -203,11 +203,19 @@ def portal_solicitacoes():
 @login_required
 @permission_required('gerenciar_solicitacoes')
 def gerenciar_solicitacoes():
-    # Adicione o filtro aqui para não mostrar os excluídos
-    todas_as_solicitacoes = Solicitacao.query.filter(Solicitacao.status != 'excluido').order_by(Solicitacao.data_solicitacao.desc()).all()
-
-    limite_de_tempo = datetime.utcnow() - timedelta(days=1)
-    solicitacoes_visiveis = [s for s in todas_as_solicitacoes if not (s.status == 'entregue' and s.data_atualizacao and s.data_atualizacao < limite_de_tempo)]
+    now = datetime.utcnow()
+    limite_de_tempo = now - timedelta(minutes=1)
+    solicitacoes_visiveis = Solicitacao.query.filter(
+        db.or_(
+            Solicitacao.status.in_(['pendente', 'aprovada']),
+            db.and_(
+                Solicitacao.status.in_(['entregue', 'rejeitada', 'excluido']),
+                Solicitacao.data_atualizacao.isnot(None),
+                Solicitacao.data_atualizacao > limite_de_tempo
+            )
+        )
+    ).order_by(Solicitacao.data_solicitacao.desc()).all()
+    
     return render_template('gerenciar_solicitacoes.html', solicitacoes=solicitacoes_visiveis)
 
 @app.route('/gerenciar_solicitacoes/<int:solicitacao_id>')
@@ -550,15 +558,21 @@ def lista_solicitacoes():
     """
     Exibe uma lista pública de chamados recentes com filtros inteligentes.
     """
-
-    limite_de_tempo = datetime.utcnow() - timedelta(days=1)
-
+    now = datetime.utcnow()
+    rejeitadas_excluidas_limite = now - timedelta(hours=2)
+    concluidas_limite = now - timedelta(hours=4)
     solicitacoes_visiveis = Solicitacao.query.filter(
         db.or_(
-            Solicitacao.status.notin_(['rejeitada', 'entregue']),
+            Solicitacao.status.in_(['pendente', 'aprovada']),
             db.and_(
+                Solicitacao.status.in_(['rejeitada', 'excluido']),
                 Solicitacao.data_atualizacao.isnot(None),
-                Solicitacao.data_atualizacao > limite_de_tempo
+                Solicitacao.data_atualizacao > rejeitadas_excluidas_limite
+            ),
+            db.and_(
+                Solicitacao.status == 'entregue',
+                Solicitacao.data_atualizacao.isnot(None),
+                Solicitacao.data_atualizacao > concluidas_limite
             )
         )
     ).order_by(Solicitacao.data_solicitacao.desc()).all()
