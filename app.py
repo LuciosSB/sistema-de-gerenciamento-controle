@@ -4,6 +4,9 @@ from io import BytesIO
 from db_setup import db
 from models import Produto, Setor, Solicitacao, Usuario, SaidaMaterial, Comentario
 from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, text
+from sqlalchemy.exc import OperationalError, ProgrammingError
+from urllib.parse import urlparse
 import json
 from datetime import datetime
 import base64
@@ -30,6 +33,41 @@ login_manager.login_message_category = 'info'
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
+
+def setup_database(app):
+    """
+    Verifica se o banco de dados e as tabelas existem.
+    Se não existirem, cria o banco e as tabelas.
+    """
+    with app.app_context():
+        db_uri = app.config['SQLALCHEMY_DATABASE_URI']
+        parsed_uri = urlparse(db_uri)
+        db_name = parsed_uri.path[1:]
+        postgres_uri = f"postgresql://{parsed_uri.username}:{parsed_uri.password}@{parsed_uri.hostname}:{parsed_uri.port}/postgres"
+        
+        engine = create_engine(postgres_uri)
+
+        try:
+            with engine.connect() as connection:
+                connection.execution_options(isolation_level="AUTOCOMMIT")
+                result = connection.execute(text(f"SELECT 1 FROM pg_database WHERE datname='{db_name}'"))
+                db_exists = result.scalar() == 1
+
+                if not db_exists:
+                    print(f"O banco de dados '{db_name}' não existe. Criando...")
+                    connection.execute(text(f'CREATE DATABASE "{db_name}"'))
+                    print(f"Banco de dados '{db_name}' criado com sucesso.")
+                else:
+                    print(f"O banco de dados '{db_name}' já existe.")
+        except (OperationalError, ProgrammingError) as e:
+            print(f"ERRO: Não foi possível verificar ou criar o banco de dados.")
+            print(f"Verifique se o servidor PostgreSQL está rodando e se as credenciais em config.py estão corretas.")
+            print(f"Erro original: {e}")
+            return
+        print("Verificando e criando tabelas, se necessário...")
+        db.create_all()
+        print("Setup do banco de dados concluído. Tabelas estão prontas.")
+
 
 def permission_required(permission):
     def decorator(f):
@@ -612,6 +650,7 @@ def exibir_login():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
+    setup_database(app)
     with app.app_context():
         db.create_all()
 
