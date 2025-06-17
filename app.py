@@ -11,6 +11,7 @@ import json
 from datetime import datetime
 import base64
 import os
+import sys
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from functools import wraps
 from config import Config
@@ -22,7 +23,11 @@ app.config.from_object(Config)
 
 db.init_app(app)
 
-pdfkit_config = pdfkit.configuration(wkhtmltopdf=app.config['WKHTMLTOPDF_PATH'])
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    path_wkhtmltopdf = os.path.join(sys._MEIPASS, 'binarios_pdf', 'wkhtmltopdf.exe')
+else:
+    path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+pdfkit_config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -661,4 +666,4 @@ if __name__ == '__main__':
             db.session.commit()
             print("Usuário 'admin' criado com a senha 'Admin_ti@'")
     
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='10.108.129.70', port=8080, debug=False)

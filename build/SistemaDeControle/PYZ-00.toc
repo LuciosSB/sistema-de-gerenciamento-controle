@@ -1,0 +1,2559 @@
+('C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+ 'Copia\\build\\SistemaDeControle\\PYZ-00.pyz',
+ [('__future__',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\__future__.py',
+   'PYMODULE'),
+  ('_aix_support',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_aix_support.py',
+   'PYMODULE'),
+  ('_bootsubprocess',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_bootsubprocess.py',
+   'PYMODULE'),
+  ('_compat_pickle',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_compat_pickle.py',
+   'PYMODULE'),
+  ('_compression',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_compression.py',
+   'PYMODULE'),
+  ('_py_abc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_py_abc.py',
+   'PYMODULE'),
+  ('_pydecimal',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_pydecimal.py',
+   'PYMODULE'),
+  ('_strptime',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_strptime.py',
+   'PYMODULE'),
+  ('_threading_local',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_threading_local.py',
+   'PYMODULE'),
+  ('argparse',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\argparse.py',
+   'PYMODULE'),
+  ('ast',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ast.py',
+   'PYMODULE'),
+  ('asyncio',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\__init__.py',
+   'PYMODULE'),
+  ('asyncio.base_events',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\base_events.py',
+   'PYMODULE'),
+  ('asyncio.base_futures',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\base_futures.py',
+   'PYMODULE'),
+  ('asyncio.base_subprocess',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\base_subprocess.py',
+   'PYMODULE'),
+  ('asyncio.base_tasks',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\base_tasks.py',
+   'PYMODULE'),
+  ('asyncio.constants',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\constants.py',
+   'PYMODULE'),
+  ('asyncio.coroutines',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\coroutines.py',
+   'PYMODULE'),
+  ('asyncio.events',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\events.py',
+   'PYMODULE'),
+  ('asyncio.exceptions',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\exceptions.py',
+   'PYMODULE'),
+  ('asyncio.format_helpers',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\format_helpers.py',
+   'PYMODULE'),
+  ('asyncio.futures',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\futures.py',
+   'PYMODULE'),
+  ('asyncio.locks',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\locks.py',
+   'PYMODULE'),
+  ('asyncio.log',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\log.py',
+   'PYMODULE'),
+  ('asyncio.mixins',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\mixins.py',
+   'PYMODULE'),
+  ('asyncio.proactor_events',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\proactor_events.py',
+   'PYMODULE'),
+  ('asyncio.protocols',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\protocols.py',
+   'PYMODULE'),
+  ('asyncio.queues',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\queues.py',
+   'PYMODULE'),
+  ('asyncio.runners',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\runners.py',
+   'PYMODULE'),
+  ('asyncio.selector_events',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\selector_events.py',
+   'PYMODULE'),
+  ('asyncio.sslproto',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\sslproto.py',
+   'PYMODULE'),
+  ('asyncio.staggered',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\staggered.py',
+   'PYMODULE'),
+  ('asyncio.streams',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\streams.py',
+   'PYMODULE'),
+  ('asyncio.subprocess',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\subprocess.py',
+   'PYMODULE'),
+  ('asyncio.taskgroups',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\taskgroups.py',
+   'PYMODULE'),
+  ('asyncio.tasks',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\tasks.py',
+   'PYMODULE'),
+  ('asyncio.threads',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\threads.py',
+   'PYMODULE'),
+  ('asyncio.timeouts',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\timeouts.py',
+   'PYMODULE'),
+  ('asyncio.transports',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\transports.py',
+   'PYMODULE'),
+  ('asyncio.trsock',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\trsock.py',
+   'PYMODULE'),
+  ('asyncio.unix_events',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\unix_events.py',
+   'PYMODULE'),
+  ('asyncio.windows_events',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\windows_events.py',
+   'PYMODULE'),
+  ('asyncio.windows_utils',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\asyncio\\windows_utils.py',
+   'PYMODULE'),
+  ('base64',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\base64.py',
+   'PYMODULE'),
+  ('bdb',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\bdb.py',
+   'PYMODULE'),
+  ('bisect',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\bisect.py',
+   'PYMODULE'),
+  ('blinker',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\blinker\\__init__.py',
+   'PYMODULE'),
+  ('blinker._utilities',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\blinker\\_utilities.py',
+   'PYMODULE'),
+  ('blinker.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\blinker\\base.py',
+   'PYMODULE'),
+  ('bz2',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\bz2.py',
+   'PYMODULE'),
+  ('calendar',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\calendar.py',
+   'PYMODULE'),
+  ('click',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\__init__.py',
+   'PYMODULE'),
+  ('click._compat',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\_compat.py',
+   'PYMODULE'),
+  ('click._termui_impl',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\_termui_impl.py',
+   'PYMODULE'),
+  ('click._textwrap',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\_textwrap.py',
+   'PYMODULE'),
+  ('click._winconsole',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\_winconsole.py',
+   'PYMODULE'),
+  ('click.core',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\core.py',
+   'PYMODULE'),
+  ('click.decorators',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\decorators.py',
+   'PYMODULE'),
+  ('click.exceptions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\exceptions.py',
+   'PYMODULE'),
+  ('click.formatting',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\formatting.py',
+   'PYMODULE'),
+  ('click.globals',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\globals.py',
+   'PYMODULE'),
+  ('click.parser',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\parser.py',
+   'PYMODULE'),
+  ('click.shell_completion',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\shell_completion.py',
+   'PYMODULE'),
+  ('click.termui',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\termui.py',
+   'PYMODULE'),
+  ('click.testing',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\testing.py',
+   'PYMODULE'),
+  ('click.types',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\types.py',
+   'PYMODULE'),
+  ('click.utils',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\click\\utils.py',
+   'PYMODULE'),
+  ('cmd',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\cmd.py',
+   'PYMODULE'),
+  ('code',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\code.py',
+   'PYMODULE'),
+  ('codeop',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\codeop.py',
+   'PYMODULE'),
+  ('colorama',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\colorama\\__init__.py',
+   'PYMODULE'),
+  ('colorama.ansi',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\colorama\\ansi.py',
+   'PYMODULE'),
+  ('colorama.ansitowin32',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\colorama\\ansitowin32.py',
+   'PYMODULE'),
+  ('colorama.initialise',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\colorama\\initialise.py',
+   'PYMODULE'),
+  ('colorama.win32',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\colorama\\win32.py',
+   'PYMODULE'),
+  ('colorama.winterm',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\colorama\\winterm.py',
+   'PYMODULE'),
+  ('concurrent',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\concurrent\\__init__.py',
+   'PYMODULE'),
+  ('concurrent.futures',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\concurrent\\futures\\__init__.py',
+   'PYMODULE'),
+  ('concurrent.futures._base',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\concurrent\\futures\\_base.py',
+   'PYMODULE'),
+  ('concurrent.futures.process',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\concurrent\\futures\\process.py',
+   'PYMODULE'),
+  ('concurrent.futures.thread',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\concurrent\\futures\\thread.py',
+   'PYMODULE'),
+  ('config',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\config.py',
+   'PYMODULE'),
+  ('contextlib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\contextlib.py',
+   'PYMODULE'),
+  ('contextvars',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\contextvars.py',
+   'PYMODULE'),
+  ('copy',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\copy.py',
+   'PYMODULE'),
+  ('cryptography',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.__about__',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\__about__.py',
+   'PYMODULE'),
+  ('cryptography.exceptions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\exceptions.py',
+   'PYMODULE'),
+  ('cryptography.hazmat',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat._oid',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\_oid.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.backends',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\backends\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.backends.openssl',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\backends\\openssl\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.backends.openssl.backend',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\backends\\openssl\\backend.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.bindings',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\bindings\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.bindings.openssl',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\bindings\\openssl\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.bindings.openssl._conditional',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\bindings\\openssl\\_conditional.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.bindings.openssl.binding',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\bindings\\openssl\\binding.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.decrepit',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\decrepit\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.decrepit.ciphers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\decrepit\\ciphers\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.decrepit.ciphers.algorithms',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\decrepit\\ciphers\\algorithms.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives._asymmetric',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\_asymmetric.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives._cipheralgorithm',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\_cipheralgorithm.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives._serialization',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\_serialization.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.dh',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\dh.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.dsa',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\dsa.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.ec',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\ec.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.ed25519',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\ed25519.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.ed448',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\ed448.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.padding',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\padding.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.rsa',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\rsa.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.types',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\types.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.utils',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\utils.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.x25519',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\x25519.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.asymmetric.x448',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\asymmetric\\x448.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.ciphers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\ciphers\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.ciphers.algorithms',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\ciphers\\algorithms.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.ciphers.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\ciphers\\base.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.ciphers.modes',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\ciphers\\modes.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.constant_time',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\constant_time.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.hashes',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\hashes.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.serialization',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\serialization\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.serialization.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\serialization\\base.py',
+   'PYMODULE'),
+  ('cryptography.hazmat.primitives.serialization.ssh',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\hazmat\\primitives\\serialization\\ssh.py',
+   'PYMODULE'),
+  ('cryptography.utils',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\utils.py',
+   'PYMODULE'),
+  ('cryptography.x509',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\x509\\__init__.py',
+   'PYMODULE'),
+  ('cryptography.x509.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\x509\\base.py',
+   'PYMODULE'),
+  ('cryptography.x509.certificate_transparency',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\x509\\certificate_transparency.py',
+   'PYMODULE'),
+  ('cryptography.x509.extensions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\x509\\extensions.py',
+   'PYMODULE'),
+  ('cryptography.x509.general_name',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\x509\\general_name.py',
+   'PYMODULE'),
+  ('cryptography.x509.name',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\x509\\name.py',
+   'PYMODULE'),
+  ('cryptography.x509.oid',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\x509\\oid.py',
+   'PYMODULE'),
+  ('cryptography.x509.verification',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\cryptography\\x509\\verification.py',
+   'PYMODULE'),
+  ('csv',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\csv.py',
+   'PYMODULE'),
+  ('ctypes',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ctypes\\__init__.py',
+   'PYMODULE'),
+  ('ctypes._endian',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ctypes\\_endian.py',
+   'PYMODULE'),
+  ('ctypes.wintypes',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ctypes\\wintypes.py',
+   'PYMODULE'),
+  ('dataclasses',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\dataclasses.py',
+   'PYMODULE'),
+  ('datetime',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\datetime.py',
+   'PYMODULE'),
+  ('db_setup',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\db_setup.py',
+   'PYMODULE'),
+  ('decimal',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\decimal.py',
+   'PYMODULE'),
+  ('difflib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\difflib.py',
+   'PYMODULE'),
+  ('dis',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\dis.py',
+   'PYMODULE'),
+  ('doctest',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\doctest.py',
+   'PYMODULE'),
+  ('email',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\__init__.py',
+   'PYMODULE'),
+  ('email._encoded_words',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\_encoded_words.py',
+   'PYMODULE'),
+  ('email._header_value_parser',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\_header_value_parser.py',
+   'PYMODULE'),
+  ('email._parseaddr',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\_parseaddr.py',
+   'PYMODULE'),
+  ('email._policybase',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\_policybase.py',
+   'PYMODULE'),
+  ('email.base64mime',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\base64mime.py',
+   'PYMODULE'),
+  ('email.charset',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\charset.py',
+   'PYMODULE'),
+  ('email.contentmanager',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\contentmanager.py',
+   'PYMODULE'),
+  ('email.encoders',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\encoders.py',
+   'PYMODULE'),
+  ('email.errors',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\errors.py',
+   'PYMODULE'),
+  ('email.feedparser',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\feedparser.py',
+   'PYMODULE'),
+  ('email.generator',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\generator.py',
+   'PYMODULE'),
+  ('email.header',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\header.py',
+   'PYMODULE'),
+  ('email.headerregistry',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\headerregistry.py',
+   'PYMODULE'),
+  ('email.iterators',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\iterators.py',
+   'PYMODULE'),
+  ('email.message',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\message.py',
+   'PYMODULE'),
+  ('email.parser',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\parser.py',
+   'PYMODULE'),
+  ('email.policy',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\policy.py',
+   'PYMODULE'),
+  ('email.quoprimime',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\quoprimime.py',
+   'PYMODULE'),
+  ('email.utils',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\email\\utils.py',
+   'PYMODULE'),
+  ('flask',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\__init__.py',
+   'PYMODULE'),
+  ('flask.app',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\app.py',
+   'PYMODULE'),
+  ('flask.blueprints',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\blueprints.py',
+   'PYMODULE'),
+  ('flask.cli',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\cli.py',
+   'PYMODULE'),
+  ('flask.config',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\config.py',
+   'PYMODULE'),
+  ('flask.ctx',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\ctx.py',
+   'PYMODULE'),
+  ('flask.debughelpers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\debughelpers.py',
+   'PYMODULE'),
+  ('flask.globals',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\globals.py',
+   'PYMODULE'),
+  ('flask.helpers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\helpers.py',
+   'PYMODULE'),
+  ('flask.json',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\json\\__init__.py',
+   'PYMODULE'),
+  ('flask.json.provider',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\json\\provider.py',
+   'PYMODULE'),
+  ('flask.json.tag',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\json\\tag.py',
+   'PYMODULE'),
+  ('flask.logging',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\logging.py',
+   'PYMODULE'),
+  ('flask.sansio', '-', 'PYMODULE'),
+  ('flask.sansio.app',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\sansio\\app.py',
+   'PYMODULE'),
+  ('flask.sansio.blueprints',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\sansio\\blueprints.py',
+   'PYMODULE'),
+  ('flask.sansio.scaffold',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\sansio\\scaffold.py',
+   'PYMODULE'),
+  ('flask.sessions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\sessions.py',
+   'PYMODULE'),
+  ('flask.signals',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\signals.py',
+   'PYMODULE'),
+  ('flask.templating',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\templating.py',
+   'PYMODULE'),
+  ('flask.testing',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\testing.py',
+   'PYMODULE'),
+  ('flask.typing',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\typing.py',
+   'PYMODULE'),
+  ('flask.wrappers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask\\wrappers.py',
+   'PYMODULE'),
+  ('flask_login',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_login\\__init__.py',
+   'PYMODULE'),
+  ('flask_login.__about__',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_login\\__about__.py',
+   'PYMODULE'),
+  ('flask_login.config',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_login\\config.py',
+   'PYMODULE'),
+  ('flask_login.login_manager',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_login\\login_manager.py',
+   'PYMODULE'),
+  ('flask_login.mixins',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_login\\mixins.py',
+   'PYMODULE'),
+  ('flask_login.signals',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_login\\signals.py',
+   'PYMODULE'),
+  ('flask_login.test_client',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_login\\test_client.py',
+   'PYMODULE'),
+  ('flask_login.utils',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_login\\utils.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\__init__.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.cli',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\cli.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.extension',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\extension.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.model',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\model.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.pagination',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\pagination.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.query',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\query.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.record_queries',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\record_queries.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.session',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\session.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.table',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\table.py',
+   'PYMODULE'),
+  ('flask_sqlalchemy.track_modifications',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\track_modifications.py',
+   'PYMODULE'),
+  ('fnmatch',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\fnmatch.py',
+   'PYMODULE'),
+  ('fractions',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\fractions.py',
+   'PYMODULE'),
+  ('ftplib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ftplib.py',
+   'PYMODULE'),
+  ('getopt',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\getopt.py',
+   'PYMODULE'),
+  ('getpass',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\getpass.py',
+   'PYMODULE'),
+  ('gettext',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\gettext.py',
+   'PYMODULE'),
+  ('glob',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\glob.py',
+   'PYMODULE'),
+  ('greenlet',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\greenlet\\__init__.py',
+   'PYMODULE'),
+  ('gzip',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\gzip.py',
+   'PYMODULE'),
+  ('hashlib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\hashlib.py',
+   'PYMODULE'),
+  ('hmac',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\hmac.py',
+   'PYMODULE'),
+  ('html',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\html\\__init__.py',
+   'PYMODULE'),
+  ('html.entities',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\html\\entities.py',
+   'PYMODULE'),
+  ('http',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\http\\__init__.py',
+   'PYMODULE'),
+  ('http.client',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\http\\client.py',
+   'PYMODULE'),
+  ('http.cookiejar',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\http\\cookiejar.py',
+   'PYMODULE'),
+  ('http.server',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\http\\server.py',
+   'PYMODULE'),
+  ('importlib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\__init__.py',
+   'PYMODULE'),
+  ('importlib._abc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\_abc.py',
+   'PYMODULE'),
+  ('importlib._bootstrap',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\_bootstrap.py',
+   'PYMODULE'),
+  ('importlib._bootstrap_external',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\_bootstrap_external.py',
+   'PYMODULE'),
+  ('importlib.abc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\abc.py',
+   'PYMODULE'),
+  ('importlib.machinery',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\machinery.py',
+   'PYMODULE'),
+  ('importlib.metadata',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\metadata\\__init__.py',
+   'PYMODULE'),
+  ('importlib.metadata._adapters',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\metadata\\_adapters.py',
+   'PYMODULE'),
+  ('importlib.metadata._collections',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\metadata\\_collections.py',
+   'PYMODULE'),
+  ('importlib.metadata._functools',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\metadata\\_functools.py',
+   'PYMODULE'),
+  ('importlib.metadata._itertools',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\metadata\\_itertools.py',
+   'PYMODULE'),
+  ('importlib.metadata._meta',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\metadata\\_meta.py',
+   'PYMODULE'),
+  ('importlib.metadata._text',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\metadata\\_text.py',
+   'PYMODULE'),
+  ('importlib.readers',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\readers.py',
+   'PYMODULE'),
+  ('importlib.resources',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\resources\\__init__.py',
+   'PYMODULE'),
+  ('importlib.resources._adapters',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\resources\\_adapters.py',
+   'PYMODULE'),
+  ('importlib.resources._common',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\resources\\_common.py',
+   'PYMODULE'),
+  ('importlib.resources._itertools',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\resources\\_itertools.py',
+   'PYMODULE'),
+  ('importlib.resources._legacy',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\resources\\_legacy.py',
+   'PYMODULE'),
+  ('importlib.resources.abc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\resources\\abc.py',
+   'PYMODULE'),
+  ('importlib.resources.readers',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\resources\\readers.py',
+   'PYMODULE'),
+  ('importlib.util',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\importlib\\util.py',
+   'PYMODULE'),
+  ('inspect',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\inspect.py',
+   'PYMODULE'),
+  ('ipaddress',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ipaddress.py',
+   'PYMODULE'),
+  ('itsdangerous',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\itsdangerous\\__init__.py',
+   'PYMODULE'),
+  ('itsdangerous._json',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\itsdangerous\\_json.py',
+   'PYMODULE'),
+  ('itsdangerous.encoding',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\itsdangerous\\encoding.py',
+   'PYMODULE'),
+  ('itsdangerous.exc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\itsdangerous\\exc.py',
+   'PYMODULE'),
+  ('itsdangerous.serializer',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\itsdangerous\\serializer.py',
+   'PYMODULE'),
+  ('itsdangerous.signer',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\itsdangerous\\signer.py',
+   'PYMODULE'),
+  ('itsdangerous.timed',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\itsdangerous\\timed.py',
+   'PYMODULE'),
+  ('itsdangerous.url_safe',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\itsdangerous\\url_safe.py',
+   'PYMODULE'),
+  ('jinja2',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\__init__.py',
+   'PYMODULE'),
+  ('jinja2._identifier',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\_identifier.py',
+   'PYMODULE'),
+  ('jinja2.async_utils',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\async_utils.py',
+   'PYMODULE'),
+  ('jinja2.bccache',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\bccache.py',
+   'PYMODULE'),
+  ('jinja2.compiler',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\compiler.py',
+   'PYMODULE'),
+  ('jinja2.constants',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\constants.py',
+   'PYMODULE'),
+  ('jinja2.debug',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\debug.py',
+   'PYMODULE'),
+  ('jinja2.defaults',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\defaults.py',
+   'PYMODULE'),
+  ('jinja2.environment',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\environment.py',
+   'PYMODULE'),
+  ('jinja2.exceptions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\exceptions.py',
+   'PYMODULE'),
+  ('jinja2.ext',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\ext.py',
+   'PYMODULE'),
+  ('jinja2.filters',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\filters.py',
+   'PYMODULE'),
+  ('jinja2.idtracking',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\idtracking.py',
+   'PYMODULE'),
+  ('jinja2.lexer',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\lexer.py',
+   'PYMODULE'),
+  ('jinja2.loaders',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\loaders.py',
+   'PYMODULE'),
+  ('jinja2.nodes',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\nodes.py',
+   'PYMODULE'),
+  ('jinja2.optimizer',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\optimizer.py',
+   'PYMODULE'),
+  ('jinja2.parser',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\parser.py',
+   'PYMODULE'),
+  ('jinja2.runtime',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\runtime.py',
+   'PYMODULE'),
+  ('jinja2.sandbox',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\sandbox.py',
+   'PYMODULE'),
+  ('jinja2.tests',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\tests.py',
+   'PYMODULE'),
+  ('jinja2.utils',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\utils.py',
+   'PYMODULE'),
+  ('jinja2.visitor',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\jinja2\\visitor.py',
+   'PYMODULE'),
+  ('json',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\json\\__init__.py',
+   'PYMODULE'),
+  ('json.decoder',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\json\\decoder.py',
+   'PYMODULE'),
+  ('json.encoder',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\json\\encoder.py',
+   'PYMODULE'),
+  ('json.scanner',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\json\\scanner.py',
+   'PYMODULE'),
+  ('logging',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\logging\\__init__.py',
+   'PYMODULE'),
+  ('lzma',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\lzma.py',
+   'PYMODULE'),
+  ('markupsafe',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\markupsafe\\__init__.py',
+   'PYMODULE'),
+  ('markupsafe._native',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\markupsafe\\_native.py',
+   'PYMODULE'),
+  ('mimetypes',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\mimetypes.py',
+   'PYMODULE'),
+  ('models',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\models.py',
+   'PYMODULE'),
+  ('multiprocessing',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\__init__.py',
+   'PYMODULE'),
+  ('multiprocessing.connection',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\connection.py',
+   'PYMODULE'),
+  ('multiprocessing.context',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\context.py',
+   'PYMODULE'),
+  ('multiprocessing.dummy',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\dummy\\__init__.py',
+   'PYMODULE'),
+  ('multiprocessing.dummy.connection',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\dummy\\connection.py',
+   'PYMODULE'),
+  ('multiprocessing.forkserver',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\forkserver.py',
+   'PYMODULE'),
+  ('multiprocessing.heap',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\heap.py',
+   'PYMODULE'),
+  ('multiprocessing.managers',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\managers.py',
+   'PYMODULE'),
+  ('multiprocessing.pool',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\pool.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_fork',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\popen_fork.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_forkserver',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\popen_forkserver.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_spawn_posix',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\popen_spawn_posix.py',
+   'PYMODULE'),
+  ('multiprocessing.popen_spawn_win32',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\popen_spawn_win32.py',
+   'PYMODULE'),
+  ('multiprocessing.process',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\process.py',
+   'PYMODULE'),
+  ('multiprocessing.queues',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\queues.py',
+   'PYMODULE'),
+  ('multiprocessing.reduction',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\reduction.py',
+   'PYMODULE'),
+  ('multiprocessing.resource_sharer',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\resource_sharer.py',
+   'PYMODULE'),
+  ('multiprocessing.resource_tracker',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\resource_tracker.py',
+   'PYMODULE'),
+  ('multiprocessing.shared_memory',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\shared_memory.py',
+   'PYMODULE'),
+  ('multiprocessing.sharedctypes',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\sharedctypes.py',
+   'PYMODULE'),
+  ('multiprocessing.spawn',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\spawn.py',
+   'PYMODULE'),
+  ('multiprocessing.synchronize',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\synchronize.py',
+   'PYMODULE'),
+  ('multiprocessing.util',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\multiprocessing\\util.py',
+   'PYMODULE'),
+  ('netrc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\netrc.py',
+   'PYMODULE'),
+  ('nturl2path',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\nturl2path.py',
+   'PYMODULE'),
+  ('numbers',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\numbers.py',
+   'PYMODULE'),
+  ('opcode',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\opcode.py',
+   'PYMODULE'),
+  ('pathlib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pathlib.py',
+   'PYMODULE'),
+  ('pdb',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pdb.py',
+   'PYMODULE'),
+  ('pdfkit',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pdfkit\\__init__.py',
+   'PYMODULE'),
+  ('pdfkit.api',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pdfkit\\api.py',
+   'PYMODULE'),
+  ('pdfkit.configuration',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pdfkit\\configuration.py',
+   'PYMODULE'),
+  ('pdfkit.pdfkit',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pdfkit\\pdfkit.py',
+   'PYMODULE'),
+  ('pdfkit.source',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pdfkit\\source.py',
+   'PYMODULE'),
+  ('pickle',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pickle.py',
+   'PYMODULE'),
+  ('pkgutil',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pkgutil.py',
+   'PYMODULE'),
+  ('platform',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\platform.py',
+   'PYMODULE'),
+  ('pprint',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pprint.py',
+   'PYMODULE'),
+  ('psycopg2',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\psycopg2\\__init__.py',
+   'PYMODULE'),
+  ('psycopg2._ipaddress',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\psycopg2\\_ipaddress.py',
+   'PYMODULE'),
+  ('psycopg2._json',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\psycopg2\\_json.py',
+   'PYMODULE'),
+  ('psycopg2._range',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\psycopg2\\_range.py',
+   'PYMODULE'),
+  ('psycopg2.extensions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\psycopg2\\extensions.py',
+   'PYMODULE'),
+  ('psycopg2.extras',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\psycopg2\\extras.py',
+   'PYMODULE'),
+  ('psycopg2.sql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\psycopg2\\sql.py',
+   'PYMODULE'),
+  ('py_compile',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\py_compile.py',
+   'PYMODULE'),
+  ('pydoc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pydoc.py',
+   'PYMODULE'),
+  ('pydoc_data',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pydoc_data\\__init__.py',
+   'PYMODULE'),
+  ('pydoc_data.topics',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\pydoc_data\\topics.py',
+   'PYMODULE'),
+  ('pytz',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pytz\\__init__.py',
+   'PYMODULE'),
+  ('pytz.exceptions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pytz\\exceptions.py',
+   'PYMODULE'),
+  ('pytz.lazy',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pytz\\lazy.py',
+   'PYMODULE'),
+  ('pytz.tzfile',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pytz\\tzfile.py',
+   'PYMODULE'),
+  ('pytz.tzinfo',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\pytz\\tzinfo.py',
+   'PYMODULE'),
+  ('queue',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\queue.py',
+   'PYMODULE'),
+  ('quopri',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\quopri.py',
+   'PYMODULE'),
+  ('random',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\random.py',
+   'PYMODULE'),
+  ('rlcompleter',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\rlcompleter.py',
+   'PYMODULE'),
+  ('runpy',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\runpy.py',
+   'PYMODULE'),
+  ('secrets',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\secrets.py',
+   'PYMODULE'),
+  ('selectors',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\selectors.py',
+   'PYMODULE'),
+  ('shlex',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\shlex.py',
+   'PYMODULE'),
+  ('shutil',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\shutil.py',
+   'PYMODULE'),
+  ('signal',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\signal.py',
+   'PYMODULE'),
+  ('socket',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\socket.py',
+   'PYMODULE'),
+  ('socketserver',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\socketserver.py',
+   'PYMODULE'),
+  ('sqlalchemy',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.connectors',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\connectors\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.connectors.aioodbc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\connectors\\aioodbc.py',
+   'PYMODULE'),
+  ('sqlalchemy.connectors.asyncio',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\connectors\\asyncio.py',
+   'PYMODULE'),
+  ('sqlalchemy.connectors.pyodbc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\connectors\\pyodbc.py',
+   'PYMODULE'),
+  ('sqlalchemy.cyextension',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\cyextension\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects._typing',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\_typing.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mssql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mssql\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mssql.aioodbc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mssql\\aioodbc.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mssql.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mssql\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mssql.information_schema',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mssql\\information_schema.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mssql.json',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mssql\\json.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mssql.pymssql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mssql\\pymssql.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mssql.pyodbc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mssql\\pyodbc.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.aiomysql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\aiomysql.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.asyncmy',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\asyncmy.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.cymysql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\cymysql.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.dml',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\dml.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.enumerated',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\enumerated.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.expression',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\expression.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.json',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\json.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.mariadbconnector',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\mariadbconnector.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.mysqlconnector',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\mysqlconnector.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.mysqldb',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\mysqldb.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.pymysql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\pymysql.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.pyodbc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\pyodbc.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.reflection',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\reflection.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.reserved_words',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\reserved_words.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.mysql.types',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\mysql\\types.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.oracle',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\oracle\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.oracle.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\oracle\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.oracle.cx_oracle',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\oracle\\cx_oracle.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.oracle.dictionary',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\oracle\\dictionary.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.oracle.oracledb',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\oracle\\oracledb.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.oracle.types',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\oracle\\types.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql._psycopg_common',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\_psycopg_common.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.array',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\array.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.asyncpg',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\asyncpg.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.dml',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\dml.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.ext',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\ext.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.hstore',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\hstore.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.json',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\json.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.named_types',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\named_types.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.operators',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\operators.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.pg8000',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\pg8000.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.pg_catalog',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\pg_catalog.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.psycopg',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\psycopg.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.psycopg2',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\psycopg2.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.psycopg2cffi',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\psycopg2cffi.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.ranges',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\ranges.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.postgresql.types',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\postgresql\\types.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.sqlite',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\sqlite\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.sqlite.aiosqlite',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\sqlite\\aiosqlite.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.sqlite.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\sqlite\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.sqlite.dml',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\sqlite\\dml.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.sqlite.json',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\sqlite\\json.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.sqlite.pysqlcipher',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\sqlite\\pysqlcipher.py',
+   'PYMODULE'),
+  ('sqlalchemy.dialects.sqlite.pysqlite',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\dialects\\sqlite\\pysqlite.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine._py_processors',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\_py_processors.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine._py_row',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\_py_row.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine._py_util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\_py_util.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.characteristics',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\characteristics.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.create',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\create.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.cursor',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\cursor.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.default',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\default.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.events',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\events.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.interfaces',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\interfaces.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.mock',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\mock.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.processors',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\processors.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.reflection',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\reflection.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.result',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\result.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.row',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\row.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.url',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\url.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\util.py',
+   'PYMODULE'),
+  ('sqlalchemy.event',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\event\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.event.api',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\event\\api.py',
+   'PYMODULE'),
+  ('sqlalchemy.event.attr',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\event\\attr.py',
+   'PYMODULE'),
+  ('sqlalchemy.event.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\event\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.event.legacy',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\event\\legacy.py',
+   'PYMODULE'),
+  ('sqlalchemy.event.registry',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\event\\registry.py',
+   'PYMODULE'),
+  ('sqlalchemy.exc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\exc.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.asyncio',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\asyncio\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.asyncio.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\asyncio\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.asyncio.engine',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\asyncio\\engine.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.asyncio.exc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\asyncio\\exc.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.asyncio.result',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\asyncio\\result.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.asyncio.scoping',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\asyncio\\scoping.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.asyncio.session',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\asyncio\\session.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.baked',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\baked.py',
+   'PYMODULE'),
+  ('sqlalchemy.ext.compiler',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\ext\\compiler.py',
+   'PYMODULE'),
+  ('sqlalchemy.future',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\future\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.future.engine',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\future\\engine.py',
+   'PYMODULE'),
+  ('sqlalchemy.inspection',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\inspection.py',
+   'PYMODULE'),
+  ('sqlalchemy.log',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\log.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm._orm_constructors',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\_orm_constructors.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm._typing',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\_typing.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.attributes',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\attributes.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.bulk_persistence',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\bulk_persistence.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.clsregistry',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\clsregistry.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.collections',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\collections.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.context',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\context.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.decl_api',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\decl_api.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.decl_base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\decl_base.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.dependency',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\dependency.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.descriptor_props',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\descriptor_props.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.dynamic',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\dynamic.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.evaluator',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\evaluator.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.events',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\events.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.exc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\exc.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.identity',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\identity.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.instrumentation',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\instrumentation.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.interfaces',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\interfaces.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.loading',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\loading.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.mapped_collection',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\mapped_collection.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.mapper',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\mapper.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.path_registry',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\path_registry.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.persistence',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\persistence.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.properties',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\properties.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.query',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\query.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.relationships',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\relationships.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.scoping',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\scoping.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.session',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\session.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.state',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\state.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.state_changes',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\state_changes.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.strategies',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\strategies.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.strategy_options',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\strategy_options.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.sync',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\sync.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.unitofwork',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\unitofwork.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\util.py',
+   'PYMODULE'),
+  ('sqlalchemy.orm.writeonly',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\orm\\writeonly.py',
+   'PYMODULE'),
+  ('sqlalchemy.pool',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\pool\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.pool.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\pool\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.pool.events',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\pool\\events.py',
+   'PYMODULE'),
+  ('sqlalchemy.pool.impl',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\pool\\impl.py',
+   'PYMODULE'),
+  ('sqlalchemy.schema',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\schema.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql._dml_constructors',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\_dml_constructors.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql._elements_constructors',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\_elements_constructors.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql._orm_types',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\_orm_types.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql._py_util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\_py_util.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql._selectable_constructors',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\_selectable_constructors.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql._typing',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\_typing.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.annotation',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\annotation.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\base.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.cache_key',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\cache_key.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.coercions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\coercions.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.compiler',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\compiler.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.crud',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\crud.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.ddl',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\ddl.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.default_comparator',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\default_comparator.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.dml',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\dml.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.elements',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\elements.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.events',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\events.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.expression',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\expression.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.functions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\functions.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.lambdas',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\lambdas.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.naming',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\naming.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.operators',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\operators.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.roles',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\roles.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.schema',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\schema.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.selectable',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\selectable.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.sqltypes',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\sqltypes.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.traversals',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\traversals.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.type_api',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\type_api.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\util.py',
+   'PYMODULE'),
+  ('sqlalchemy.sql.visitors',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\sql\\visitors.py',
+   'PYMODULE'),
+  ('sqlalchemy.types',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\types.py',
+   'PYMODULE'),
+  ('sqlalchemy.util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\__init__.py',
+   'PYMODULE'),
+  ('sqlalchemy.util._collections',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\_collections.py',
+   'PYMODULE'),
+  ('sqlalchemy.util._concurrency_py3k',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\_concurrency_py3k.py',
+   'PYMODULE'),
+  ('sqlalchemy.util._has_cy',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\_has_cy.py',
+   'PYMODULE'),
+  ('sqlalchemy.util._py_collections',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\_py_collections.py',
+   'PYMODULE'),
+  ('sqlalchemy.util.compat',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\compat.py',
+   'PYMODULE'),
+  ('sqlalchemy.util.concurrency',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\concurrency.py',
+   'PYMODULE'),
+  ('sqlalchemy.util.deprecations',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\deprecations.py',
+   'PYMODULE'),
+  ('sqlalchemy.util.langhelpers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\langhelpers.py',
+   'PYMODULE'),
+  ('sqlalchemy.util.preloaded',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\preloaded.py',
+   'PYMODULE'),
+  ('sqlalchemy.util.queue',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\queue.py',
+   'PYMODULE'),
+  ('sqlalchemy.util.topological',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\topological.py',
+   'PYMODULE'),
+  ('sqlalchemy.util.typing',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\util\\typing.py',
+   'PYMODULE'),
+  ('sqlite3',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\sqlite3\\__init__.py',
+   'PYMODULE'),
+  ('sqlite3.dbapi2',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\sqlite3\\dbapi2.py',
+   'PYMODULE'),
+  ('sqlite3.dump',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\sqlite3\\dump.py',
+   'PYMODULE'),
+  ('ssl',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\ssl.py',
+   'PYMODULE'),
+  ('statistics',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\statistics.py',
+   'PYMODULE'),
+  ('string',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\string.py',
+   'PYMODULE'),
+  ('stringprep',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\stringprep.py',
+   'PYMODULE'),
+  ('subprocess',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\subprocess.py',
+   'PYMODULE'),
+  ('sysconfig',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\sysconfig.py',
+   'PYMODULE'),
+  ('tarfile',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tarfile.py',
+   'PYMODULE'),
+  ('tempfile',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tempfile.py',
+   'PYMODULE'),
+  ('textwrap',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\textwrap.py',
+   'PYMODULE'),
+  ('threading',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\threading.py',
+   'PYMODULE'),
+  ('token',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\token.py',
+   'PYMODULE'),
+  ('tokenize',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tokenize.py',
+   'PYMODULE'),
+  ('tracemalloc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tracemalloc.py',
+   'PYMODULE'),
+  ('tty',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tty.py',
+   'PYMODULE'),
+  ('typing',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\typing.py',
+   'PYMODULE'),
+  ('typing_extensions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\typing_extensions.py',
+   'PYMODULE'),
+  ('unittest',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\__init__.py',
+   'PYMODULE'),
+  ('unittest._log',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\_log.py',
+   'PYMODULE'),
+  ('unittest.async_case',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\async_case.py',
+   'PYMODULE'),
+  ('unittest.case',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\case.py',
+   'PYMODULE'),
+  ('unittest.loader',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\loader.py',
+   'PYMODULE'),
+  ('unittest.main',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\main.py',
+   'PYMODULE'),
+  ('unittest.result',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\result.py',
+   'PYMODULE'),
+  ('unittest.runner',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\runner.py',
+   'PYMODULE'),
+  ('unittest.signals',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\signals.py',
+   'PYMODULE'),
+  ('unittest.suite',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\suite.py',
+   'PYMODULE'),
+  ('unittest.util',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\unittest\\util.py',
+   'PYMODULE'),
+  ('urllib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\__init__.py',
+   'PYMODULE'),
+  ('urllib.error',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\error.py',
+   'PYMODULE'),
+  ('urllib.parse',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\parse.py',
+   'PYMODULE'),
+  ('urllib.request',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\request.py',
+   'PYMODULE'),
+  ('urllib.response',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\urllib\\response.py',
+   'PYMODULE'),
+  ('uuid',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\uuid.py',
+   'PYMODULE'),
+  ('webbrowser',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\webbrowser.py',
+   'PYMODULE'),
+  ('werkzeug',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\__init__.py',
+   'PYMODULE'),
+  ('werkzeug._internal',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\_internal.py',
+   'PYMODULE'),
+  ('werkzeug._reloader',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\_reloader.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\__init__.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.accept',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\accept.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.auth',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\auth.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.cache_control',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\cache_control.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.csp',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\csp.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.etag',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\etag.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.file_storage',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\file_storage.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.headers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\headers.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.mixins',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\mixins.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.range',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\range.py',
+   'PYMODULE'),
+  ('werkzeug.datastructures.structures',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\datastructures\\structures.py',
+   'PYMODULE'),
+  ('werkzeug.debug',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\debug\\__init__.py',
+   'PYMODULE'),
+  ('werkzeug.debug.console',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\debug\\console.py',
+   'PYMODULE'),
+  ('werkzeug.debug.repr',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\debug\\repr.py',
+   'PYMODULE'),
+  ('werkzeug.debug.tbtools',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\debug\\tbtools.py',
+   'PYMODULE'),
+  ('werkzeug.exceptions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\exceptions.py',
+   'PYMODULE'),
+  ('werkzeug.formparser',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\formparser.py',
+   'PYMODULE'),
+  ('werkzeug.http',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\http.py',
+   'PYMODULE'),
+  ('werkzeug.local',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\local.py',
+   'PYMODULE'),
+  ('werkzeug.middleware',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\middleware\\__init__.py',
+   'PYMODULE'),
+  ('werkzeug.middleware.shared_data',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\middleware\\shared_data.py',
+   'PYMODULE'),
+  ('werkzeug.routing',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\routing\\__init__.py',
+   'PYMODULE'),
+  ('werkzeug.routing.converters',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\routing\\converters.py',
+   'PYMODULE'),
+  ('werkzeug.routing.exceptions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\routing\\exceptions.py',
+   'PYMODULE'),
+  ('werkzeug.routing.map',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\routing\\map.py',
+   'PYMODULE'),
+  ('werkzeug.routing.matcher',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\routing\\matcher.py',
+   'PYMODULE'),
+  ('werkzeug.routing.rules',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\routing\\rules.py',
+   'PYMODULE'),
+  ('werkzeug.sansio',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\sansio\\__init__.py',
+   'PYMODULE'),
+  ('werkzeug.sansio.http',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\sansio\\http.py',
+   'PYMODULE'),
+  ('werkzeug.sansio.multipart',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\sansio\\multipart.py',
+   'PYMODULE'),
+  ('werkzeug.sansio.request',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\sansio\\request.py',
+   'PYMODULE'),
+  ('werkzeug.sansio.response',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\sansio\\response.py',
+   'PYMODULE'),
+  ('werkzeug.sansio.utils',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\sansio\\utils.py',
+   'PYMODULE'),
+  ('werkzeug.security',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\security.py',
+   'PYMODULE'),
+  ('werkzeug.serving',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\serving.py',
+   'PYMODULE'),
+  ('werkzeug.test',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\test.py',
+   'PYMODULE'),
+  ('werkzeug.urls',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\urls.py',
+   'PYMODULE'),
+  ('werkzeug.user_agent',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\user_agent.py',
+   'PYMODULE'),
+  ('werkzeug.utils',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\utils.py',
+   'PYMODULE'),
+  ('werkzeug.wrappers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\wrappers\\__init__.py',
+   'PYMODULE'),
+  ('werkzeug.wrappers.request',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\wrappers\\request.py',
+   'PYMODULE'),
+  ('werkzeug.wrappers.response',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\wrappers\\response.py',
+   'PYMODULE'),
+  ('werkzeug.wsgi',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\werkzeug\\wsgi.py',
+   'PYMODULE'),
+  ('xml',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\__init__.py',
+   'PYMODULE'),
+  ('xml.parsers',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\parsers\\__init__.py',
+   'PYMODULE'),
+  ('xml.parsers.expat',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\parsers\\expat.py',
+   'PYMODULE'),
+  ('xml.sax',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\sax\\__init__.py',
+   'PYMODULE'),
+  ('xml.sax._exceptions',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\sax\\_exceptions.py',
+   'PYMODULE'),
+  ('xml.sax.expatreader',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\sax\\expatreader.py',
+   'PYMODULE'),
+  ('xml.sax.handler',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\sax\\handler.py',
+   'PYMODULE'),
+  ('xml.sax.saxutils',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\sax\\saxutils.py',
+   'PYMODULE'),
+  ('xml.sax.xmlreader',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xml\\sax\\xmlreader.py',
+   'PYMODULE'),
+  ('xmlrpc',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xmlrpc\\__init__.py',
+   'PYMODULE'),
+  ('xmlrpc.client',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\xmlrpc\\client.py',
+   'PYMODULE'),
+  ('zipfile',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\zipfile.py',
+   'PYMODULE'),
+  ('zipimport',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\zipimport.py',
+   'PYMODULE')])
