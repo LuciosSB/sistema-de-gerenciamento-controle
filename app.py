@@ -617,9 +617,9 @@ if __name__ == '__main__':
 
         if not Usuario.query.filter_by(username='admin').first():
             admin = Usuario(username='admin', dados='Admin TI', tipo_usuario='admin')
-            admin.set_password('admin123')
+            admin.set_password('Admin_ti@')  # Altere para uma senha segura
             db.session.add(admin)
             db.session.commit()
-            print("Usuário 'admin' criado com a senha 'admin123'.")
+            print("Usuário 'admin' criado com a senha 'Admin_ti@'")
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
