@@ -666,4 +666,4 @@ if __name__ == '__main__':
             db.session.commit()
             print("Usuário 'admin' criado com a senha 'Admin_ti@'")
     
-    app.run(host='10.108.129.70', port=8080, debug=False)
+    app.run(host='0.0.0.0', port=8080, debug=False)
