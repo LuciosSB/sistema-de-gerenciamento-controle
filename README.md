@@ -1,6 +1,6 @@
 # Sistema de Gestão de Manutenção - DMTT
 
-Este é um sistema web desenvolvido em Flask para gerenciar chamados de manutenção, controlar o estoque de itens e ferramentas, e administrar usuários e permissões.
+Este é um sistema web desenvolvido em Flask para gerenciar chamados de manutenção, controlar o estoque de itens e ferramentas, e administrar usuários e permissões em um ambiente de rede.
 
 ## Funcionalidades Principais
 
@@ -19,118 +19,109 @@ Este é um sistema web desenvolvido em Flask para gerenciar chamados de manuten�
 * **Banco de Dados:** PostgreSQL
 * **ORM:** SQLAlchemy
 * **Frontend:** HTML, CSS, JavaScript
-* **Templates:** Jinja2
 
 ---
 
-## Opção 1: Rodando a Versão Pronta (Executável)
+## Configuração para Acesso em Rede (Cliente-Servidor)
 
-Siga estes passos se você quer apenas usar o sistema em um computador Windows sem lidar com código-fonte.
+Para que a aplicação (cliente) em um computador funcione com o banco de dados (servidor) em outro, siga estes dois passos.
 
-### Passo 1: Pré-requisitos de Ambiente
-Antes de rodar o programa, seu computador precisa ter dois softwares instalados. **O sistema não funcionará sem eles.**
+### Passo 1: Na máquina SERVIDOR (onde o PostgreSQL está instalado)
 
-1.  **PostgreSQL:** O sistema de banco de dados.
-    * Baixe e instale a partir do [site oficial](https://www.postgresql.org/download/). Durante a instalação, defina uma senha para o usuário `postgres` e guarde-a.
-2.  **wkhtmltopdf:** A ferramenta para gerar PDFs.
-    * Baixe e instale a partir do [site oficial](https://wkhtmltopdf.org/downloads.html). Mantenha o caminho de instalação padrão (em `C:\Program Files\wkhtmltopdf`).
+O objetivo é permitir que o PostgreSQL aceite conexões de outros computadores na rede.
 
-### Passo 2: Baixar e Configurar o Sistema
-1.  Vá até a [página de Releases](https://github.com/LuciosSB/sistema-de-gerenciamento-controle/releases) deste repositório.
-2.  Baixe o arquivo `app.exe` da versão mais recente.
-3.  Crie uma pasta no seu computador (ex: `C:\SistemaDMTT`) e coloque o `app.exe` dentro dela.
+1.  **Edite o arquivo `postgresql.conf`:**
+    * Procure pela linha `#listen_addresses = 'localhost'` e altere para:
+    ```ini
+    listen_addresses = '*'
+    ```
+    Isso faz o servidor "escutar" por conexões de qualquer endereço de rede, e não apenas da própria máquina.
 
-### Passo 3: Executar e Usar
-1.  Dê um duplo clique no arquivo `app.exe`.
-2.  Uma janela de terminal preta irá aparecer. **Não feche esta janela**, pois ela é o servidor do sistema.
-3.  Abra seu navegador de internet e acesse o endereço: `http://127.0.0.1:5000`
-4.  Na primeira execução, o sistema criará o usuário administrador padrão.
+2.  **Edite o arquivo `pg_hba.conf`:**
+    * Adicione a seguinte linha ao final do arquivo:
+    ```ini
+    # Exemplo para uma rede 192.168.0.x
+    host    all    all    192.168.0.0/24    md5
 
-**Login Padrão:**
-* **Usuário:** `admin`
-* **Senha:** `admin123`
+    # Exemplo para uma rede 10.108.129.x
+    host    all    all    10.108.129.0/24   md5
+    ```
+    * **Explicação:** Esta linha autoriza qualquer usuário (`all`) de qualquer banco de dados (`all`) vindo de qualquer IP na faixa de rede especificada (`10.108.129.0/24`) a se conectar, desde que forneça uma senha válida (`md5`).
+    * **IMPORTANTE:** O uso de `md5` é crucial para garantir a compatibilidade com a aplicação. O método mais moderno `scram-sha-256` pode causar erros de `UnicodeDecodeError`.
 
-> **Importante:** Altere a senha do administrador imediatamente após o primeiro login por questões de segurança!
+3.  **Reinicie o serviço do PostgreSQL** para que as alterações tenham efeito.
+
+### Passo 2: Na máquina CLIENTE (onde a aplicação `.exe` ou o código será executado)
+
+1.  **Edite o arquivo `config.py`:**
+2.  Atualize a `SQLALCHEMY_DATABASE_URI` com o endereço IP do **servidor** onde o banco de dados está.
+
+    ```python
+    # Exemplo:
+    # 'postgresql://<usuario>:<senha>@<IP_DO_SERVIDOR>:<porta>/<nome_do_banco>'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:sua_senha_aqui@10.108.129.85:5432/controle_almox'
+    ```
 
 ---
 
-## Opção 2: Ambiente de Desenvolvimento (Para Modificar o Código)
+## Como Rodar (Ambiente de Desenvolvimento)
 
-Siga estes passos se você é um desenvolvedor e deseja clonar o código-fonte para fazer alterações ou contribuir com o projeto.
+Siga estes passos se você é um desenvolvedor e deseja executar o código-fonte.
 
-### Passo 1: Pré-requisitos
+### 1. Pré-requisitos
 * **Git:** Para clonar o repositório.
 * **Python 3.10+**
-* **PostgreSQL** e **wkhtmltopdf** (siga as mesmas instruções da "Opção 1").
+* **PostgreSQL:** Instalado em uma máquina na rede (pode ser a sua localmente).
 
-### Passo 2: Preparar o Ambiente
+### 2. Preparar o Ambiente
 1.  **Clonar o Repositório**
     ```bash
-    git clone [https://github.com/LuciosSB/sistema-de-gerenciamento-controle.git](https://github.com/LuciosSB/sistema-de-gerenciamento-controle.git)
-    cd sistema-de-gerenciamento-controle
+    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+    cd seu-repositorio
     ```
 
 2.  **Criar e Ativar o Ambiente Virtual**
     ```bash
-    # Criar
     python -m venv venv
-
-    # Ativar no Windows
+    # No Windows
     .\venv\Scripts\activate
-
-    # Ativar no Linux/macOS
+    # No Linux/macOS
     source venv/bin/activate
     ```
 
-3.  **Instalar as Dependências Python**
+3.  **Instalar as Dependências**
     ```bash
     pip install -r requirements.txt
     ```
 
-### Passo 3: Configurar a Aplicação
-1.  Abra o arquivo `config.py`.
-2.  **SECRET_KEY**: Altere a chave secreta para uma frase longa e aleatória.
-3.  **SQLALCHEMY_DATABASE_URI**: Atualize com os dados do seu banco de dados PostgreSQL.
-    ```python
-    # Exemplo: 'postgresql://<usuario>:<senha>@<host>:<porta>/<nome_do_banco>'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:sua_senha_aqui@localhost:5432/controle_almox'
-    ```
-4.  **WKHTMLTOPDF_PATH**: Verifique se o caminho para o executável está correto para o seu sistema.
-
-### Passo 4: Executar o Projeto em Modo de Desenvolvimento
-1.  **Criar o Banco e o Usuário Admin (primeira vez)**
-    Com o ambiente virtual ativado, execute:
+### 3. Configurar e Executar
+1.  Siga as instruções da seção **"Configuração para Acesso em Rede"** para configurar seu `postgresql.conf`, `pg_hba.conf` (se necessário) e o arquivo `config.py`.
+2.  Execute o `app.py` para iniciar o servidor.
     ```bash
     python app.py
     ```
-    O terminal mostrará a mensagem "Usuário 'admin' criado...". Pare o servidor com `Ctrl+C`.
+3.  Abra seu navegador e acesse o endereço que aparecer no terminal (ex: `http://127.0.0.1:8080`).
 
-2.  **Rodar o Servidor de Desenvolvimento**
-    ```bash
-    flask --app app --debug run
-    ```
-    Acesse `http://127.0.0.1:5000` no seu navegador. O modo debug recarregará o servidor automaticamente a cada alteração no código.
+**Login Padrão (na primeira execução):**
+* **Usuário:** `admin`
+* **Senha:** `Admin_ti@`
+
+> **Importante:** Altere a senha do administrador imediatamente após o primeiro login!
 
 ---
 
-## Compilando um Novo Executável (Opcional)
+## Compilando um Novo Executável (`.exe`)
 
-Se você fez alterações no código e deseja gerar um novo arquivo `.exe`, siga estes passos no seu ambiente de desenvolvimento.
+Se você fez alterações no código e deseja gerar um novo arquivo `.exe` para distribuição.
 
 1.  **Instalar o PyInstaller**
     ```bash
     pip install pyinstaller
     ```
-2.  **Executar o Comando de Compilação**
-    Rode o comando apropriado para o seu sistema operacional no terminal, a partir da pasta raiz do projeto.
-
-    * **No Windows:**
-        ```bash
-        pyinstaller --onefile --add-data "templates;templates" --add-data "static;static" app.py
-        ```
-    * **No Linux/macOS:**
-        ```bash
-        pyinstaller --onefile --add-data "templates:templates" --add-data "static:static" app.py
-        ```
+2.  **Executar o Comando de Compilação (no Terminal)**
+    Este comando empacota a aplicação, as pastas `templates`, `static` e `binarios_pdf` (que contém o utilitário para gerar PDF) em um único arquivo.
+    ```bash
+    pyinstaller --name SistemaDeControle --onefile --console --add-data "templates;templates" --add-data "static;static" --add-data "binarios_pdf;binarios_pdf" app.py
+    ```
 3.  **Encontrar o Arquivo**
-    O novo executável estará na pasta `dist` que será criada no seu projeto.
+    O novo executável (`SistemaDeControle.exe`) estará na pasta `dist` que será criada.
