@@ -121,7 +121,6 @@
                             <p class="no-comments">Nenhum comentário técnico adicionado ainda.</p>
                         {% endif %}
                     </div>
-
                     <div class="comment-form-container">
                         <form method="POST" action="{{ url_for('adicionar_comentario', solicitacao_id=solicitacao.id) }}" class="comment-form">
                             <textarea name="texto_comentario" class="comment-textarea" placeholder="Adicionar um novo comentário técnico..." rows="4" required></textarea>
@@ -142,14 +141,27 @@
                                     <th>Qtd. Solicitada</th>
                                     <th>Qtd. Fornecida</th>
                                     <th>Data</th>
+                                    <!-- ===== INÍCIO DA MUDANÇA ===== -->
+                                    <th class="col-acoes">Ações</th>
+                                    <!-- ===== FIM DA MUDANÇA ===== -->
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for saida in solicitacao.materiais_usados %}
                                 <tr>
                                     <td>{{ saida.produto.nome }}</td>
-                                    <td></td><td>{{ saida.quantidade_saida }}</td>
+                                    <td>{{ saida.quantidade_solicitada }}</td>
+                                    <td>{{ saida.quantidade_saida }}</td>
                                     <td>{{ saida.data_saida|localtime }}</td>
+                                    <!-- ===== INÍCIO DA MUDANÇA ===== -->
+                                    <td class="col-acoes">
+                                        {% if not saida.retornado %}
+                                        <form method="POST" action="{{ url_for('remover_item_solicitacao', solicitacao_id=solicitacao.id, saida_id=saida.id) }}" onsubmit="return confirm('Tem certeza que deseja REMOVER este item do chamado e DEVOLVER ao estoque?')">
+                                            <button type="submit" class="btn-remover-item-tabela" title="Remover Item">🗑️</button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                    <!-- ===== FIM DA MUDANÇA ===== -->
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -214,12 +226,12 @@
                 {% elif solicitacao.status == 'entregue' %}
                 <div class="detalhes-section">
                     <h3 class="section-title"><span class="section-icon">✅</span> Chamado Concluído</h3>
-                    <p>Este chamado foi marcado como concluído. Use o formulário abaixo para registrar a devolução de itens.</p>
+                    <p>Este chamado foi finalizado. Use o formulário abaixo para registrar a devolução de itens que retornaram ao estoque.</p>
 
                     <form method="POST" action="{{ url_for('confirmar_devolucao_itens', solicitacao_id=solicitacao.id) }}" class="devolucao-form">
                         <h4 class="devolucao-header">Controle de Devolução de Itens</h4>
                         <p class="devolucao-instructions">
-                            Itens retornáveis já vêm marcados para devolução. Marque os itens de consumo caso tenham retornado ao estoque. Itens não marcados serão baixados permanentemente.
+                            Para cada item, informe a quantidade que está retornando ao estoque. Itens do tipo "Consumível" com quantidade 0 serão baixados permanentemente. Itens "Retornáveis" devem ter a quantidade de retorno especificada.
                         </p>
 
                         {% if solicitacao.materiais_usados %}
@@ -227,27 +239,16 @@
                             <table class="solicitacoes-table">
                                 <thead>
                                     <tr>
-                                        <th class="col-devolver">Devolver?</th>
                                         <th>Item</th>
-                                        <th>Qtd.</th>
+                                        <th>Qtd. Fornecida</th>
                                         <th>Tipo</th>
+                                        <th class="col-devolver">Qtd. Devolvida</th>
                                         <th>Status da Devolução</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for saida in solicitacao.materiais_usados %}
-                                    <tr>
-                                        <td class="col-checkbox">
-                                            {# Exibe o checkbox apenas se o item ainda não foi retornado #}
-                                            {% if not saida.retornado %}
-                                                <input type="checkbox"
-                                                       name="saida_id"
-                                                       value="{{ saida.id }}"
-                                                       class="devolucao-checkbox"
-                                                       {# Marca por padrão se for um item retornável #}
-                                                       {% if saida.produto.tipo_item == 'retornavel' %}checked{% endif %}>
-                                            {% endif %}
-                                        </td>
+                                    <tr class="{% if saida.retornado %}item-devolvido{% endif %}">
                                         <td>{{ saida.produto.nome }}</td>
                                         <td>{{ saida.quantidade_saida }}</td>
                                         <td>
@@ -255,19 +256,21 @@
                                                 {{ saida.produto.tipo_item|capitalize }}
                                             </div>
                                         </td>
-                                        <td class="col-status-devolucao">
-                                            {% if saida.produto.tipo_item == 'retornavel' %}
-                                                {% if saida.retornado %}
-                                                    <span class="status-devolucao status-retornado">✔ Retornado</span>
-                                                {% else %}
-                                                    <span class="status-devolucao status-pendente">Pendente</span>
-                                                {% endif %}
+                                        <td class="col-input-devolucao">
+                                            {% if not saida.retornado %}
+                                                <input type="number" name="quantidade_retornada_{{ saida.id }}"
+                                                       class="devolucao-input"
+                                                       value="{% if saida.produto.tipo_item == 'retornavel' %}{{ saida.quantidade_saida }}{% else %}0{% endif %}"
+                                                       min="0" max="{{ saida.quantidade_saida }}">
                                             {% else %}
-                                                 {% if saida.retornado %}
-                                                    <span class="status-devolucao status-retornado">✔ Retornado</span>
-                                                {% else %}
-                                                    <span class="status-devolucao status-consumido">- Consumido -</span>
-                                                {% endif %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                        <td class="col-status-devolucao">
+                                            {% if saida.retornado %}
+                                                <span class="status-devolucao status-retornado">✔ Retornado</span>
+                                            {% else %}
+                                                <span class="status-devolucao status-pendente">Pendente</span>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -278,7 +281,7 @@
 
                         <div class="form-actions devolucao-actions">
                             <button type="submit" class="btn btn-primary">
-                                🔁 Confirmar Devolução de Itens Marcados
+                                🔁 Confirmar Devoluções e Fechar Chamado
                             </button>
                         </div>
 
@@ -291,9 +294,11 @@
 
                 <div class="page-actions">
                     <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn btn-secondary">⬅️ Voltar para Lista</a>
-                    <form method="POST" action="{{ url_for('excluir_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('ATENÇÃO: Deseja EXCLUIR permanentemente este chamado? Esta ação NÃO pode ser desfeita!')">
-                        <button type="submit" class="btn btn-danger">🗑️ Excluir Chamado</button>
+                    {% if solicitacao.status != 'excluido' %}
+                    <form method="POST" action="{{ url_for('excluir_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('ATENÇÃO: Deseja mover este chamado para a lixeira?')">
+                        <button type="submit" class="btn btn-danger">🗑️ Mover para Lixeira</button>
                     </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -301,18 +306,14 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Adiciona um listener apenas se o botão existir na página
             const addItemBtn = document.getElementById('add-item-btn');
             if(addItemBtn) {
                 addItemBtn.addEventListener('click', function() {
                     const container = document.getElementById('itens-container');
                     const novoItemRow = container.querySelector('.item-row').cloneNode(true);
-
-                    // Limpa os valores dos inputs clonados
                     novoItemRow.querySelector('select[name="produto_id[]"]').value = '';
                     novoItemRow.querySelector('input[name="quantidade_solicitada[]"]').value = '';
                     novoItemRow.querySelector('input[name="quantidade_saida[]"]').value = '';
-
                     const removeBtn = novoItemRow.querySelector('.btn-remove-item');
                     removeBtn.style.display = 'flex';
                     container.appendChild(novoItemRow);
@@ -322,7 +323,6 @@
 
         function removerItem(button) {
             const itemRow = button.closest('.item-row');
-            // Só remove se não for a última linha
             if (document.querySelectorAll('.item-row').length > 1) {
                 itemRow.remove();
             }

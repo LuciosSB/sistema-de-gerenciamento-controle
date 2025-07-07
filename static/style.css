@@ -4548,3 +4548,401 @@ select option {
     cursor: not-allowed;
     opacity: 0.5;
 }
+
+/* ===== ESTILOS PARA O BOTÃO DE REMOVER ITEM DA TABELA (PASSO 3.1) ===== */
+.btn-remover-item-tabela {
+    background-color: #ffebee; /* Vermelho bem claro */
+    color: #c62828; /* Vermelho escuro para o ícone */
+    border: 2px solid #ef9a9a; /* Borda vermelha clara */
+    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem; /* Tamanho do ícone da lixeira */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease-in-out;
+    padding: 0;
+}
+
+.btn-remover-item-tabela:hover {
+    background-color: #c62828; /* Fundo vermelho escuro */
+    color: white; /* Ícone branco */
+    border-color: #c62828;
+    transform: translateY(-2px) scale(1.05); /* Efeito de levantar */
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); /* Sombra vermelha */
+}
+
+/* ===== BOTÃO DE REMOVER ITEM NA TABELA (STATUS APROVADO) ===== */
+.btn-remover-item-tabela {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 2px solid #ef9a9a;
+    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease-in-out;
+    padding: 0;
+}
+
+.btn-remover-item-tabela:hover {
+    background-color: #c62828;
+    color: white;
+    border-color: #c62828;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+}
+
+/* ===== MELHORIAS NO FORMULÁRIO DE DEVOLUÇÃO (STATUS ENTREGUE) ===== */
+.devolucao-form {
+    margin-top: 2rem;
+    padding: 25px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.devolucao-header {
+    font-size: 1.2rem;
+    color: #003366;
+    margin-bottom: 0.5rem;
+}
+
+.devolucao-instructions {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.col-devolver, .col-input-devolucao {
+    width: 15%;
+    text-align: center;
+}
+
+.devolucao-input {
+    width: 80px;
+    padding: 8px;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
+/* Remove as setas do input number */
+.devolucao-input::-webkit-outer-spin-button,
+.devolucao-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.devolucao-input:focus {
+    outline: none;
+    border-color: #003366;
+    box-shadow: 0 0 5px rgba(0, 51, 102, 0.3);
+}
+
+.col-status-devolucao {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.status-devolucao {
+    font-weight: bold;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.status-retornado {
+    color: #155724;
+    background-color: #d4edda;
+}
+
+.status-pendente {
+    color: #856404;
+    background-color: #fff3cd;
+}
+
+.item-devolvido {
+    background-color: #f1f8e9; /* Um verde bem suave para indicar que a linha foi processada */
+    opacity: 0.7;
+}
+
+.devolucao-actions {
+    justify-content: flex-end !important;
+    padding-top: 1rem !important;
+    border-top: 1px solid #dee2e6;
+}
+
+/* ===== ESTILOS PARA A PÁGINA DE DETALHES DO HISTÓRICO ===== */
+
+/* Grade principal que divide a página em duas colunas */
+.historic-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas de largura igual */
+    gap: 30px; /* Espaço entre as colunas */
+}
+
+/* Coluna da esquerda para as informações principais */
+.main-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Coluna da direita para a linha do tempo */
+.timeline-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card de informações (para Detalhes, Materiais, Comentários) */
+.info-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.info-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.info-card-icon {
+    font-size: 22px;
+    color: #003366;
+}
+
+.info-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #003366;
+    margin: 0;
+}
+
+.info-card-body p {
+    margin-bottom: 10px;
+    color: #495057;
+    line-height: 1.5;
+}
+
+.info-card-body p strong {
+    color: #343a40;
+}
+
+.description-box {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 10px;
+    font-style: italic;
+    white-space: pre-wrap; /* Mantém quebras de linha */
+}
+
+.info-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.info-list li {
+    padding: 8px;
+    border-bottom: 1px solid #e9ecef;
+    color: #495057;
+}
+
+.info-list li:last-child {
+    border-bottom: none;
+}
+
+.empty-info {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 15px;
+}
+
+/* ===== ESTILOS PARA A LINHA DO TEMPO (TRILHA DE AUDITORIA) ===== */
+.timeline-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 25px;
+    border: 1px solid #dee2e6;
+    height: 100%; /* Faz ocupar toda a altura da coluna */
+}
+
+.timeline-title {
+    text-align: center;
+    color: #003366;
+    font-size: 20px;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.timeline {
+    list-style-type: none;
+    padding-left: 20px;
+    margin: 0;
+    position: relative;
+    border-left: 3px solid #e0e8f0;
+}
+
+.timeline-item {
+    margin-bottom: 25px;
+    position: relative;
+    padding-left: 45px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-icon {
+    position: absolute;
+    left: -24px;
+    top: 0;
+    background-color: #003366;
+    color: #feed00;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    border: 3px solid white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1;
+}
+
+.timeline-content {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.timeline-text {
+    font-size: 15px;
+    color: #343a40;
+    margin: 0 0 8px 0;
+    line-height: 1.5;
+}
+
+.timeline-meta {
+    font-size: 12px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.timeline-meta strong {
+    color: #495057;
+    font-style: normal;
+}
+
+/* Responsividade para a página de detalhes do histórico */
+@media (max-width: 992px) {
+    .historic-details-grid {
+        grid-template-columns: 1fr; /* Coluna única em telas menores */
+    }
+}
+
+/* ===== ESTILOS PARA PÁGINA DE SUPERVISÃO ===== */
+
+/* Estiliza a tabela de auditoria, aproveitando classes existentes */
+.auditoria-table {
+    font-size: 14px; /* Tamanho de fonte bom para densidade de informações */
+}
+
+.auditoria-table th {
+    text-align: left;
+    background-color: #f8f9fa; /* Um cinza claro para diferenciar o cabeçalho */
+    color: #343a40;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.auditoria-table td {
+    vertical-align: middle; /* Alinha o conteúdo das células verticalmente no centro */
+    padding: 12px 10px;
+}
+
+.auditoria-row:hover {
+    background-color: #e9f5ff; /* Um azul bem claro para o hover, indicando seleção */
+    cursor: pointer;
+}
+
+/* Larguras específicas para as colunas da tabela de auditoria para melhor layout */
+.auditoria-table .col-data { width: 16%; }
+.auditoria-table .col-usuario { width: 14%; }
+.auditoria-table .col-acao { width: 18%; }
+.auditoria-table .col-detalhes { width: 42%; }
+.auditoria-table .col-objeto { width: 10%; }
+
+/* Estilo para a coluna de detalhes ser mais legível */
+.auditoria-table .col-detalhes {
+    text-align: left;
+    line-height: 1.4;
+    word-break: break-word; /* Quebra palavras longas para não estourar o layout */
+    font-size: 13px;
+    color: #555;
+}
+
+/* Estilo para o tipo de ação, para fácil identificação */
+.auditoria-table .col-acao {
+    font-weight: 500;
+    font-family: 'Courier New', monospace;
+    text-transform: capitalize;
+    color: #003366;
+}
+
+/* Estilo para o link do objeto relacionado (link para o chamado) */
+.auditoria-table .col-objeto a {
+    text-decoration: none;
+    color: #0056b3;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: rgba(0, 123, 255, 0.1);
+    transition: all 0.2s ease;
+    font-size: 12px;
+    border: 1px solid rgba(0, 123, 255, 0.2);
+}
+
+.auditoria-table .col-objeto a:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+/* Garante que os seletores de filtro usem os estilos já existentes */
+.supervisao-panel .select-styled {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #f7f9fc;
+    cursor: pointer;
+}
+
+.supervisao-panel .select-styled:focus {
+    border-color: #003366;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
+    background-color: white;
+}

@@ -1,6 +1,6 @@
 # Sistema de Gestão de Manutenção - DMTT
 
-Este é um sistema web desenvolvido em Flask para gerenciar chamados de manutenção, controlar o estoque de itens e ferramentas, e administrar usuários e permissões em um ambiente de rede.
+Este é um sistema web que desenvolvi em Flask para gerenciar chamados de manutenção, controlar o estoque de itens e ferramentas, e administrar usuários e permissões em um ambiente de rede.
 
 ## Funcionalidades Principais
 
@@ -12,6 +12,13 @@ Este é um sistema web desenvolvido em Flask para gerenciar chamados de manuten�
 * **Controle de Acesso:** Sistema de permissões baseado em cargos (Admin, Manutenção, Gerenciador).
 * **Histórico Completo:** Uma visão geral de todos os chamados já criados, incluindo os finalizados e excluídos.
 * **Geração de PDF:** Emissão de relatórios de requisição de material em PDF.
+
+### Funcionalidades de Administração e Supervisão
+
+* **Trilha de Auditoria Completa:** Uma página de Supervisão, exclusiva para administradores, que registra todas as ações importantes no sistema: login, criação/atualização/exclusão de usuários e produtos, mudanças de status de chamados, etc.
+* **Filtros Avançados:** A página de Supervisão permite filtrar os registros por usuário, tipo de ação e data.
+* **Relatório de Movimentação de Estoque:** Geração de um relatório detalhado em PDF, mostrando para cada item a quantidade inicial, a quantidade atual, o percentual de uso e todo o histórico de movimentações.
+* **Setup Automatizado:** Na primeira execução, a aplicação verifica se o banco de dados e as tabelas existem no servidor PostgreSQL e os cria automaticamente, facilitando a implantação.
 
 ## Tecnologias Utilizadas
 
@@ -43,11 +50,12 @@ O objetivo é permitir que o PostgreSQL aceite conexões de outros computadores 
     # Exemplo para uma rede 192.168.0.x
     host    all    all    192.168.0.0/24    md5
 
-    # Exemplo para uma rede 10.108.129.x
-    host    all    all    10.108.129.0/24   md5
+    # Exemplo para uma rede 10.124.129.x
+    host    all    all    10.124.129.0/24   md5
     ```
-    * **Explicação:** Esta linha autoriza qualquer usuário (`all`) de qualquer banco de dados (`all`) vindo de qualquer IP na faixa de rede especificada (`10.108.129.0/24`) a se conectar, desde que forneça uma senha válida (`md5`).
-    * **IMPORTANTE:** O uso de `md5` é crucial para garantir a compatibilidade com a aplicação. O método mais moderno `scram-sha-256` pode causar erros de `UnicodeDecodeError`.
+    * **Explicação:** Esta linha autoriza qualquer usuário (`all`) de qualquer banco de dados (`all`) vindo de qualquer IP na faixa de rede especificada (`10.124.129.0/24`) a se conectar, desde que forneça uma senha válida (`md5`).
+    * **IMPORTANTE:** O uso de `md5` é crucial para garantir a compatibilidade com a aplicação. O método mais moderno `scram-sha-256` pode talvez causar erros de `UnicodeDecodeError`. 
+    * **DETALHE IMPORTANTE** Caso ainda esteja dando o problema de UnicodeDecodeError, provavelmente é melhor colocar tudo para scram-sha-256
 
 3.  **Reinicie o serviço do PostgreSQL** para que as alterações tenham efeito.
 
@@ -59,7 +67,7 @@ O objetivo é permitir que o PostgreSQL aceite conexões de outros computadores 
     ```python
     # Exemplo:
     # 'postgresql://<usuario>:<senha>@<IP_DO_SERVIDOR>:<porta>/<nome_do_banco>'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:sua_senha_aqui@10.108.129.85:5432/controle_almox'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:sua_senha_aqui@10.108.129.100:5432/controle_almox'
     ```
 
 ---
@@ -104,7 +112,7 @@ Siga estes passos se você é um desenvolvedor e deseja executar o código-fonte
 
 **Login Padrão (na primeira execução):**
 * **Usuário:** `admin`
-* **Senha:** `Admin_ti@`
+* **Senha:** `senha_interessante`
 
 > **Importante:** Altere a senha do administrador imediatamente após o primeiro login!
 
@@ -119,9 +127,11 @@ Se você fez alterações no código e deseja gerar um novo arquivo `.exe` para 
     pip install pyinstaller
     ```
 2.  **Executar o Comando de Compilação (no Terminal)**
-    Este comando empacota a aplicação, as pastas `templates`, `static` e `binarios_pdf` (que contém o utilitário para gerar PDF) em um único arquivo.
+Se você fez alterações no código e deseja gerar um novo arquivo `.exe` para distribuição, use o comando abaixo. Ele foi atualizado para incluir a pasta `migrations` e o módulo `logging.config`, que são essenciais para o funcionamento correto do executável.
+
+1.  **Garanta que o PyInstaller está instalado:** `pip install pyinstaller`.
+2.  **Execute o Comando de Compilação (no Terminal):**
     ```bash
-    pyinstaller --name SistemaDeControle --onefile --console --add-data "templates;templates" --add-data "static;static" --add-data "binarios_pdf;binarios_pdf" app.py
+    pyinstaller --console --onefile --name="SistemaDeControle" --add-data="templates;templates" --add-data="static;static" --add-data="migrations;migrations" --add-binary="binarios_pdf;binarios_pdf" --hidden-import "logging.config" app.py
     ```
-3.  **Encontrar o Arquivo**
-    O novo executável (`SistemaDeControle.exe`) estará na pasta `dist` que será criada.
+3.  **Encontrar o Arquivo:** O novo executável (`SistemaDeControle.exe`) estará na pasta `dist`.

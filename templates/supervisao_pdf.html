@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Supervisão de Itens</title>
+    <style>
+        /* CSS embutido para o PDF */
+        @page { size: A4; margin: 2cm 1.5cm; }
+        body { font-family: 'Helvetica', Arial, sans-serif; font-size: 10pt; color: #333; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #003366; padding-bottom: 10px; }
+        .logo { max-width: 150px; }
+        h1 { color: #003366; text-align: center; font-size: 18pt; }
+        .footer { text-align: center; font-size: 8pt; color: #777; position: fixed; bottom: -1.5cm; left: 0; right: 0; }
+        
+        .item-card {
+            border: 1px solid #003366;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+        
+        .item-header {
+            background-color: #003366;
+            color: white;
+            padding: 8px 12px;
+            font-size: 12pt;
+            font-weight: bold;
+        }
+        .item-header .item-code {
+            font-size: 9pt;
+            font-weight: normal;
+            opacity: 0.8;
+        }
+
+        /* --- INÍCIO DAS MUDANÇAS NO LAYOUT --- */
+        
+        /* Tabela principal para criar o layout de 2 colunas */
+        .content-grid-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .content-grid-table td {
+            vertical-align: top; /* Alinha o conteúdo das duas colunas no topo */
+            padding: 12px;
+        }
+        
+        /* Coluna da Esquerda (Resumos) */
+        .summary-column {
+            width: 35%;
+            background-color: #f7f9fc;
+            border-right: 1px solid #ddd;
+        }
+
+        /* Coluna da Direita (Histórico) */
+        .history-column {
+            width: 65%;
+        }
+
+        /* Ajustes nos boxes de resumo para empilhar verticalmente */
+        .summary-box {
+            width: auto; /* Largura automática para preencher a coluna */
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 5px;
+            background-color: #fff;
+            margin-bottom: 8px; /* Espaço entre os boxes */
+        }
+        .summary-box:last-child {
+            margin-bottom: 0;
+        }
+        
+        .summary-box .value {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #003366;
+        }
+        
+        .summary-box .label {
+            font-size: 8pt;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        /* --- FIM DAS MUDANÇAS NO LAYOUT --- */
+
+        .history-title {
+            font-size: 10pt;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+        }
+        .history-table th, .history-table td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: left;
+        }
+        .history-table th {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        {% if logo_base64 %}
+            <img src="data:image/png;base64,{{ logo_base64 }}" alt="Logo" class="logo">
+        {% endif %}
+        <h1>Relatório de Supervisão de Itens</h1>
+    </div>
+
+    {% for item in report_data %}
+    <div class="item-card">
+        <div class="item-header">
+            {{ item.nome }} 
+            {% if item.codigo_barras %}<span class="item-code">({{ item.codigo_barras }})</span>{% endif %}
+        </div>
+        
+        <table class="content-grid-table">
+            <tr>
+                <td class="summary-column">
+                    <div class="summary-box">
+                        <div class="value">{{ item.qtd_inicial }}</div>
+                        <div class="label">Qtd. Inicial</div>
+                    </div>
+                    <div class="summary-box">
+                        <div class="value">{{ item.qtd_atual }}</div>
+                        <div class="label">Qtd. Atual</div>
+                    </div>
+                    <div class="summary-box">
+                        <div class="value">{{ item.percentual_uso }}%</div>
+                        <div class="label">Uso / Variação</div>
+                    </div>
+                </td>
+                <td class="history-column">
+                    <div class="history-title">Histórico de Movimentações:</div>
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th style="width:18%;">Data</th>
+                                <th style="width:20%;">Tipo Ação</th>
+                                <th>Detalhes</th>
+                                <th style="width:15%;">Usuário</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for movimento in item.movimentos %}
+                            <tr>
+                                <td>{{ movimento.data_acao.strftime('%d/%m/%y %H:%M') }}</td>
+                                <td>{{ movimento.tipo_acao.replace('_', ' ')|title }}</td>
+                                <td>{{ movimento.detalhes }}</td>
+                                <td>{{ movimento.usuario.username }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" style="text-align:center; font-style:italic;">Nenhuma movimentação registrada.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% else %}
+        <p style="text-align:center;">Nenhum item encontrado para gerar o relatório.</p>
+    {% endfor %}
+
+    <div class="footer">
+        Relatório gerado em {{ data_emissao }} por {{ current_user.username }}
+    </div>
+</body>
+</html>

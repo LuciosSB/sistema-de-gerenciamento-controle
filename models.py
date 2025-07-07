@@ -21,16 +21,19 @@ class Usuario(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
     
     def has_permission(self, permission):
+
+        if self.tipo_usuario == 'admin':
+            return True
         
         permissions_map = {
             'admin': [
                 'gerenciar_solicitacoes', 'dashboard', 'cadastrar_produto', 'listar_produtos', 
                 'atualizar_produto', 'saida_produto', 'cadastro_usuario', 'atualizar',
                 'listar_usuarios', 'atualizar_cadastro', 'excluir_usuario', 'historico', 'portal_solocitacoes', 
-                'gerenciar_solicitacoes', 'listar_solicitacoes'
+                'gerenciar_solicitacoes', 'listar_solicitacoes','supervisao'
             ],
             'manutencao': [
-                'gerenciar_solicitacoes', 'listar_produtos', 'portal_solocitacoes'
+                'gerenciar_solicitacoes', 'listar_produtos', 'portal_solocitacoes', 'saida_produto'
             ],
             'usuario_gerenciador': [
                 'cadastrar_produto', 'listar_produtos',
@@ -80,7 +83,6 @@ class Solicitacao(db.Model):
     motivo_rejeicao = db.Column(db.Text, nullable=True)
 
     def get_ultimo_comentario(self):
-        # Este método busca e retorna o último comentário associado a este chamado
         return self.comentarios.order_by(Comentario.id.desc()).first()
     
     def __repr__(self):
@@ -94,6 +96,8 @@ class SaidaMaterial(db.Model):
     solicitacao_id = db.Column(db.Integer, db.ForeignKey('solicitacoes.id'), nullable=False)
     produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=False)
     
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+
     quantidade_solicitada = db.Column(db.Integer, nullable=False, default=1) 
     
     quantidade_saida = db.Column(db.Integer, nullable=False)
@@ -103,11 +107,10 @@ class SaidaMaterial(db.Model):
     
     solicitacao = db.relationship('Solicitacao', backref=db.backref('materiais_usados', lazy=True, cascade="all, delete-orphan"))
     produto = db.relationship('Produto')
+    usuario = db.relationship('Usuario')
 
     def __repr__(self):
         return f'<SaidaMaterial {self.quantidade_saida}x {self.produto.nome} para Chamado {self.solicitacao_id}>'
-
-    
 
 class Comentario(db.Model):
     __tablename__ = 'comentarios'
@@ -124,3 +127,20 @@ class Comentario(db.Model):
 
     def __repr__(self):
         return f'<Comentario {self.id} para Chamado {self.solicitacao_id}>'
+    
+class HistoricoAcoes(db.Model):
+    __tablename__ = 'historico_acoes'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    data_acao = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    tipo_acao = db.Column(db.String(100), nullable=False)
+    detalhes = db.Column(db.Text, nullable=True)
+    
+    solicitacao_id = db.Column(db.Integer, db.ForeignKey('solicitacoes.id'), nullable=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=True)
+    solicitacao = db.relationship('Solicitacao', backref=db.backref('historico', lazy='dynamic', cascade="all, delete-orphan"))
+    usuario = db.relationship('Usuario')
+
+    def __repr__(self):
+        return f'<HistoricoAcoes {self.id}: {self.tipo_acao} na Solicitacao {self.solicitacao_id}>'

@@ -36,6 +36,166 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\_threading_local.py',
    'PYMODULE'),
+  ('alembic',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\__init__.py',
+   'PYMODULE'),
+  ('alembic.autogenerate',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\autogenerate\\__init__.py',
+   'PYMODULE'),
+  ('alembic.autogenerate.api',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\autogenerate\\api.py',
+   'PYMODULE'),
+  ('alembic.autogenerate.compare',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\autogenerate\\compare.py',
+   'PYMODULE'),
+  ('alembic.autogenerate.render',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\autogenerate\\render.py',
+   'PYMODULE'),
+  ('alembic.autogenerate.rewriter',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\autogenerate\\rewriter.py',
+   'PYMODULE'),
+  ('alembic.command',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\command.py',
+   'PYMODULE'),
+  ('alembic.config',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\config.py',
+   'PYMODULE'),
+  ('alembic.context',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\context.py',
+   'PYMODULE'),
+  ('alembic.ddl',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\__init__.py',
+   'PYMODULE'),
+  ('alembic.ddl._autogen',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\_autogen.py',
+   'PYMODULE'),
+  ('alembic.ddl.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\base.py',
+   'PYMODULE'),
+  ('alembic.ddl.impl',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\impl.py',
+   'PYMODULE'),
+  ('alembic.ddl.mssql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\mssql.py',
+   'PYMODULE'),
+  ('alembic.ddl.mysql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\mysql.py',
+   'PYMODULE'),
+  ('alembic.ddl.oracle',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\oracle.py',
+   'PYMODULE'),
+  ('alembic.ddl.postgresql',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\postgresql.py',
+   'PYMODULE'),
+  ('alembic.ddl.sqlite',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\ddl\\sqlite.py',
+   'PYMODULE'),
+  ('alembic.op',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\op.py',
+   'PYMODULE'),
+  ('alembic.operations',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\operations\\__init__.py',
+   'PYMODULE'),
+  ('alembic.operations.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\operations\\base.py',
+   'PYMODULE'),
+  ('alembic.operations.batch',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\operations\\batch.py',
+   'PYMODULE'),
+  ('alembic.operations.ops',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\operations\\ops.py',
+   'PYMODULE'),
+  ('alembic.operations.schemaobj',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\operations\\schemaobj.py',
+   'PYMODULE'),
+  ('alembic.operations.toimpl',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\operations\\toimpl.py',
+   'PYMODULE'),
+  ('alembic.runtime',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\runtime\\__init__.py',
+   'PYMODULE'),
+  ('alembic.runtime.environment',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\runtime\\environment.py',
+   'PYMODULE'),
+  ('alembic.runtime.migration',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\runtime\\migration.py',
+   'PYMODULE'),
+  ('alembic.script',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\script\\__init__.py',
+   'PYMODULE'),
+  ('alembic.script.base',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\script\\base.py',
+   'PYMODULE'),
+  ('alembic.script.revision',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\script\\revision.py',
+   'PYMODULE'),
+  ('alembic.script.write_hooks',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\script\\write_hooks.py',
+   'PYMODULE'),
+  ('alembic.util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\util\\__init__.py',
+   'PYMODULE'),
+  ('alembic.util.compat',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\util\\compat.py',
+   'PYMODULE'),
+  ('alembic.util.editor',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\util\\editor.py',
+   'PYMODULE'),
+  ('alembic.util.exc',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\util\\exc.py',
+   'PYMODULE'),
+  ('alembic.util.langhelpers',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\util\\langhelpers.py',
+   'PYMODULE'),
+  ('alembic.util.messaging',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\util\\messaging.py',
+   'PYMODULE'),
+  ('alembic.util.pyfiles',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\util\\pyfiles.py',
+   'PYMODULE'),
+  ('alembic.util.sqla_compat',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\alembic\\util\\sqla_compat.py',
+   'PYMODULE'),
   ('argparse',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\argparse.py',
@@ -327,6 +487,10 @@
   ('config',
    'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
    'Copia\\config.py',
+   'PYMODULE'),
+  ('configparser',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\configparser.py',
    'PYMODULE'),
   ('contextlib',
    'C:\\Program '
@@ -781,6 +945,14 @@
    'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
    'Copia\\venv\\Lib\\site-packages\\flask_login\\utils.py',
    'PYMODULE'),
+  ('flask_migrate',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_migrate\\__init__.py',
+   'PYMODULE'),
+  ('flask_migrate.cli',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\flask_migrate\\cli.py',
+   'PYMODULE'),
   ('flask_sqlalchemy',
    'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
    'Copia\\venv\\Lib\\site-packages\\flask_sqlalchemy\\__init__.py',
@@ -1129,9 +1301,85 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\logging\\__init__.py',
    'PYMODULE'),
+  ('logging.config',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\logging\\config.py',
+   'PYMODULE'),
+  ('logging.handlers',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\logging\\handlers.py',
+   'PYMODULE'),
   ('lzma',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\lzma.py',
+   'PYMODULE'),
+  ('mako',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\__init__.py',
+   'PYMODULE'),
+  ('mako._ast_util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\_ast_util.py',
+   'PYMODULE'),
+  ('mako.ast',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\ast.py',
+   'PYMODULE'),
+  ('mako.cache',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\cache.py',
+   'PYMODULE'),
+  ('mako.codegen',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\codegen.py',
+   'PYMODULE'),
+  ('mako.compat',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\compat.py',
+   'PYMODULE'),
+  ('mako.exceptions',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\exceptions.py',
+   'PYMODULE'),
+  ('mako.ext',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\ext\\__init__.py',
+   'PYMODULE'),
+  ('mako.ext.pygmentplugin',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\ext\\pygmentplugin.py',
+   'PYMODULE'),
+  ('mako.filters',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\filters.py',
+   'PYMODULE'),
+  ('mako.lexer',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\lexer.py',
+   'PYMODULE'),
+  ('mako.parsetree',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\parsetree.py',
+   'PYMODULE'),
+  ('mako.pygen',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\pygen.py',
+   'PYMODULE'),
+  ('mako.pyparser',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\pyparser.py',
+   'PYMODULE'),
+  ('mako.runtime',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\runtime.py',
+   'PYMODULE'),
+  ('mako.template',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\template.py',
+   'PYMODULE'),
+  ('mako.util',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\mako\\util.py',
    'PYMODULE'),
   ('markupsafe',
    'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
@@ -1404,6 +1652,10 @@
   ('signal',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\signal.py',
+   'PYMODULE'),
+  ('smtplib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\smtplib.py',
    'PYMODULE'),
   ('socket',
    'C:\\Program '
@@ -1728,6 +1980,10 @@
   ('sqlalchemy.engine.row',
    'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
    'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\row.py',
+   'PYMODULE'),
+  ('sqlalchemy.engine.strategies',
+   'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
+   'Copia\\venv\\Lib\\site-packages\\sqlalchemy\\engine\\strategies.py',
    'PYMODULE'),
   ('sqlalchemy.engine.url',
    'C:\\Users\\andre\\OneDrive\\Área de Trabalho\\controleAlmox-main - '
@@ -2225,6 +2481,10 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\threading.py',
    'PYMODULE'),
+  ('timeit',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\timeit.py',
+   'PYMODULE'),
   ('token',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\token.py',
@@ -2232,6 +2492,22 @@
   ('tokenize',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tokenize.py',
+   'PYMODULE'),
+  ('tomllib',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tomllib\\__init__.py',
+   'PYMODULE'),
+  ('tomllib._parser',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tomllib\\_parser.py',
+   'PYMODULE'),
+  ('tomllib._re',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tomllib\\_re.py',
+   'PYMODULE'),
+  ('tomllib._types',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\tomllib\\_types.py',
    'PYMODULE'),
   ('tracemalloc',
    'C:\\Program '
@@ -2556,4 +2832,20 @@
   ('zipimport',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\zipimport.py',
+   'PYMODULE'),
+  ('zoneinfo',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\zoneinfo\\__init__.py',
+   'PYMODULE'),
+  ('zoneinfo._common',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\zoneinfo\\_common.py',
+   'PYMODULE'),
+  ('zoneinfo._tzpath',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\zoneinfo\\_tzpath.py',
+   'PYMODULE'),
+  ('zoneinfo._zoneinfo',
+   'C:\\Program '
+   'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\zoneinfo\\_zoneinfo.py',
    'PYMODULE')])
