@@ -22,6 +22,7 @@ import re
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError, ProgrammingError
 from flask_migrate import upgrade
+from flask_apscheduler import APScheduler
 
 if getattr(sys, 'frozen', False):
     # Se estiver rodando como .exe (congelado pelo PyInstaller)
@@ -48,6 +49,22 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Faça login para acessar esta página.'
 login_manager.login_message_category = 'info'
+
+@app.before_request
+def before_request():
+    """Define o tempo de vida da sessão e a renova a cada requisição."""
+    # Define o tempo de vida da sessão para 36 horas
+    app.permanent_session_lifetime = timedelta(hours=36)
+    # Marca a sessão como permanente para que o tempo de vida seja aplicado
+    session.permanent = True
+    # A cada requisição, a sessão é "renovada", reiniciando o timer de inatividade.
+    # Esta linha é opcional, mas recomendada para não deslogar usuários ativos.
+    session.modified = True
+
+
+scheduler = APScheduler()
+scheduler.init_app(app)
+scheduler.start()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -850,6 +867,56 @@ def exibir_index():
 def exibir_login():
     return redirect(url_for('login'))
 
+@scheduler.task('cron', id='job_limpeza_itens_zerados', hour=3, minute=30)
+def limpeza_itens_zerados():
+    """
+    Esta tarefa é executada todos os dias às 03:30 da manhã.
+    Ela busca por produtos com quantidade 0 que foram atualizados
+    há mais de 7 dias e os exclui permanentemente.
+    """
+    with app.app_context():
+        print("\n--- EXECUTANDO TAREFA AGENDADA: Limpeza de Itens Zerados ---")
+        try:
+            # Define o limite de tempo (7 dias atrás)
+            limite_de_tempo = datetime.utcnow() - timedelta(days=7)
+
+            # Busca por produtos com quantidade 0
+            produtos_zerados = Produto.query.filter(Produto.quantidade <= 0).all()
+            
+            produtos_excluidos_count = 0
+            for produto in produtos_zerados:
+                # Para cada produto, busca a última ação de atualização no histórico
+                ultima_atualizacao = HistoricoAcoes.query.filter_by(produto_id=produto.id)\
+                                                         .order_by(HistoricoAcoes.data_acao.desc())\
+                                                         .first()
+
+                # Se a última atualização existe e foi há mais de 7 dias, exclui o produto
+                if ultima_atualizacao and ultima_atualizacao.data_acao < limite_de_tempo:
+                    nome_produto_excluido = produto.nome
+                    id_produto_excluido = produto.id
+                    print(f"-> Preparando para excluir produto '{nome_produto_excluido}' (ID: {id_produto_excluido})...")
+                    
+                    # Cria um log da exclusão automática
+                    log_exclusao = HistoricoAcoes(
+                        usuario_id=1, # Assume que o usuário 'admin' tem ID 1
+                        tipo_acao='exclusao_automatica',
+                        detalhes=f"Produto '{nome_produto_excluido}' excluído automaticamente por ter estoque 0 há mais de 7 dias.",
+                        produto_id=id_produto_excluido
+                    )
+                    db.session.add(log_exclusao)
+                    db.session.delete(produto)
+                    produtos_excluidos_count += 1
+            
+            if produtos_excluidos_count > 0:
+                db.session.commit()
+                print(f"--- TAREFA CONCLUÍDA: {produtos_excluidos_count} produto(s) foram excluídos. ---\n")
+            else:
+                print("--- TAREFA CONCLUÍDA: Nenhum produto para excluir. ---\n")
+
+        except Exception as e:
+            db.session.rollback()
+            print(f"--- ERRO NA TAREFA AGENDADA 'limpeza_itens_zerados': {e} ---\n")
+            
 def setup_database(app):
     """Garante que o banco de dados e as tabelas existam."""
     with app.app_context():
