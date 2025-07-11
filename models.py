@@ -53,6 +53,7 @@ class Produto(db.Model):
     codigo_barras = db.Column(db.String(20), unique=True, nullable=False)
     nome = db.Column(db.String(100), nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
+    quantidade_inicial = db.Column(db.Integer, nullable=False, default=0)
     tipo_item = db.Column(db.String(50), nullable=False, default='consumivel')
     
     def __repr__(self):

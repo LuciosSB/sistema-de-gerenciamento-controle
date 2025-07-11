@@ -158,7 +158,13 @@ def cadastro_produto():
             return render_template('cadastro.html')
         
         try:
-            produto = Produto(codigo_barras=codigo_barras, nome=nome, quantidade=int(quantidade), tipo_item=tipo_item) #
+            produto = Produto(
+                codigo_barras=codigo_barras, 
+                nome=nome, 
+                quantidade=int(quantidade), 
+                quantidade_inicial=int(quantidade),
+                tipo_item=tipo_item
+            )
             db.session.add(produto) 
 
             historico_cadastro = HistoricoAcoes(
@@ -817,20 +823,8 @@ def gerar_relatorio_supervisao_pdf():
 
     for produto in produtos:
         qtd_atual = produto.quantidade
+        qtd_inicial = produto.quantidade_inicial
 
-        acao_criacao = HistoricoAcoes.query.filter_by(
-            produto_id=produto.id, 
-            tipo_acao='produto_criado'
-        ).first()
-
-        qtd_inicial = 0
-        if acao_criacao and acao_criacao.detalhes:
-            # Extrai o número da string de detalhes. Ex: "...de 50." -> 50
-            match = re.search(r'(\d+)\.?$', acao_criacao.detalhes)
-            if match:
-                qtd_inicial = int(match.group(1))
-
-        # Calcula o percentual de uso
         if qtd_inicial > 0:
             percentual_uso = ((qtd_inicial - qtd_atual) / qtd_inicial) * 100
         else:
@@ -847,17 +841,17 @@ def gerar_relatorio_supervisao_pdf():
             'movimentos': movimentos
         })
 
-    logo_path = os.path.join(basedir, 'static', 'dmttlogo.png') #
-    logo_base64 = convert_logo_to_base64(logo_path) #
+    logo_path = os.path.join(basedir, 'static', 'dmttlogo.png')
+    logo_base64 = convert_logo_to_base64(logo_path)
     data_emissao = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
 
-    rendered = render_template('supervisao_pdf.html', 
-                               report_data=report_data, 
+    rendered = render_template('supervisao_pdf.html',
+                               report_data=report_data,
                                logo_base64=logo_base64,
                                data_emissao=data_emissao)
-    
-    pdf = pdfkit.from_string(rendered, False, configuration=pdfkit_config, options={'enable-local-file-access': True}) #
-    return send_file(BytesIO(pdf), download_name=f'Relatorio_Supervisao_Itens.pdf', as_attachment=True) #
+
+    pdf = pdfkit.from_string(rendered, False, configuration=pdfkit_config, options={'enable-local-file-access': True})
+    return send_file(BytesIO(pdf), download_name=f'Relatorio_Supervisao_Itens.pdf', as_attachment=True)
 
 @app.route('/exibir_index')
 def exibir_index():
