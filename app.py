@@ -427,7 +427,6 @@ def adicionar_item_solicitacao(solicitacao_id):
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
 
     try:
-        nomes_itens_adicionados = []
         for item in itens_para_adicionar:
             produto = item['produto']
             produto.quantidade -= item['quantidade_saida']
@@ -440,15 +439,14 @@ def adicionar_item_solicitacao(solicitacao_id):
                 usuario_id=current_user.id 
             )
             db.session.add(nova_saida)
-            nomes_itens_adicionados.append(f"{item['quantidade_saida']}x {produto.nome}")
-
-        if nomes_itens_adicionados:
-            detalhes_adicao = "Itens adicionados ao chamado: " + ", ".join(nomes_itens_adicionados) + "."
+            
+            detalhes_adicao = f"{item['quantidade_saida']}x {produto.nome} adicionado(s) ao chamado #{solicitacao_id}."
             historico_adicao = HistoricoAcoes(
                 solicitacao_id=solicitacao_id,
                 usuario_id=current_user.id,
                 tipo_acao='item_adicionado',
-                detalhes=detalhes_adicao
+                detalhes=detalhes_adicao,
+                produto_id=produto.id
             )
             db.session.add(historico_adicao)
             
@@ -485,7 +483,8 @@ def remover_item_solicitacao(solicitacao_id, saida_id):
             solicitacao_id=solicitacao_id,
             usuario_id=current_user.id,
             tipo_acao='item_removido',
-            detalhes=f'Item removido do chamado: {quantidade_removida}x {nome_produto}.'
+            detalhes=f'Item removido do chamado: {quantidade_removida}x {nome_produto}.',
+            produto_id=produto.id
         )
         db.session.add(novo_historico)
 
@@ -538,9 +537,9 @@ def gerar_requisicao_pdf(solicitacao_id):
 @login_required
 @permission_required('saida_produto')
 def confirmar_devolucao_itens(solicitacao_id):
-    itens_processados_nomes = []
     try:
         saidas_pendentes = SaidaMaterial.query.filter_by(solicitacao_id=solicitacao_id, retornado=False).all()
+        itens_devolvidos_count = 0
 
         for saida in saidas_pendentes:
             qtd_retornada_str = request.form.get(f'quantidade_retornada_{saida.id}')
@@ -549,25 +548,41 @@ def confirmar_devolucao_itens(solicitacao_id):
                 continue
 
             qtd_retornada = int(qtd_retornada_str)
+            produto = saida.produto
 
             if qtd_retornada > 0:
-                produto = saida.produto
                 produto.quantidade += qtd_retornada
                 db.session.add(produto)
-                itens_processados_nomes.append(f"{qtd_retornada}x {produto.nome}")
+                
+                detalhes_devolucao = f"{qtd_retornada}x {produto.nome} devolvido(s) ao estoque do chamado #{solicitacao_id}."
+                historico_devolucao = HistoricoAcoes(
+                    solicitacao_id=solicitacao_id,
+                    usuario_id=current_user.id,
+                    tipo_acao='item_devolvido',
+                    detalhes=detalhes_devolucao,
+                    produto_id=produto.id
+                )
+                db.session.add(historico_devolucao)
+                itens_devolvidos_count += 1
+
+            qtd_saida = saida.quantidade_saida
+            qtd_consumida = qtd_saida - qtd_retornada
+            if qtd_consumida > 0:
+                detalhes_consumo = f"{qtd_consumida}x {produto.nome} foi/foram consumido(s) no chamado #{solicitacao_id}."
+                historico_consumo = HistoricoAcoes(
+                    solicitacao_id=solicitacao_id,
+                    usuario_id=current_user.id,
+                    tipo_acao='item_consumido',
+                    detalhes=detalhes_consumo,
+                    produto_id=produto.id
+                )
+                db.session.add(historico_consumo)
+
             saida.retornado = True
             db.session.add(saida)
 
-        if itens_processados_nomes:
-            detalhes_devolucao = "Itens devolvidos ao estoque: " + ", ".join(itens_processados_nomes) + "."
-            historico_devolucao = HistoricoAcoes(
-                solicitacao_id=solicitacao_id,
-                usuario_id=current_user.id,
-                tipo_acao='item_devolvido',
-                detalhes=detalhes_devolucao
-            )
-            db.session.add(historico_devolucao)
-            flash(f'{len(itens_processados_nomes)} tipo(s) de item(ns) tiveram sua devolução processada!', 'success')
+        if itens_devolvidos_count > 0:
+            flash(f'{itens_devolvidos_count} tipo(s) de item(ns) tiveram sua devolução processada!', 'success')
         else:
             flash('Nenhuma nova devolução foi registrada. O chamado foi fechado.', 'info')
 
