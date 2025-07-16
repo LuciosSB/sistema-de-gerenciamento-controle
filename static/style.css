@@ -3826,12 +3826,12 @@ select option {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.tipo-consumivel {
+.tipo-consumo {
     background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
     border-color: #6c757d;
 }
 
-.tipo-retornavel {
+.tipo-permanente {
     background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
     border-color: #17a2b8;
 }
@@ -4407,6 +4407,12 @@ select option {
     color: white;
     border: 1px solid #5a6268;
 }
+.status-badge.status-em-analise {
+    background-color: #d1ecf1; /* Azul claro */
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
 
 /* Adicione este estilo ao final do seu style.css */
 
@@ -4945,4 +4951,118 @@ select option {
     outline: none;
     box-shadow: 0 0 10px rgba(0, 51, 102, 0.2);
     background-color: white;
+}
+.btn-toggle-filter {
+    background-color: #e9ecef;
+    color: #495057;
+    border: 1px solid #ced4da;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-toggle-filter:hover {
+    background-color: #dee2e6;
+    border-color: #adb5bd;
+}
+/* ===== ESTILOS PARA SEÇÃO DE ANEXOS ===== */
+.anexos-container {
+    margin-top: 2rem;
+    padding: 25px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.anexos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.anexo-coluna h4 {
+    font-size: 16px;
+    color: #003366;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #feed00;
+}
+
+.anexo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    min-height: 110px; /* Garante uma altura mínima mesmo vazia */
+}
+
+.anexo-item img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.anexo-item img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.no-anexos {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 13px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.anexo-form {
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+}
+
+.anexo-input {
+    width: 100%;
+    font-size: 14px;
+}
+
+/* Classe para botões menores */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+    margin-top: 5px;
+}
+/* --- Estilos para o botão de excluir foto --- */
+.anexo-item {
+    position: relative; /* Necessário para posicionar o botão dentro dele */
+}
+
+.btn-delete-foto {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0; /* Começa invisível */
+    transition: opacity 0.2s ease;
+}
+
+.anexo-item:hover .btn-delete-foto {
+    opacity: 1; /* Fica visível no hover */
+}
+
+.btn-delete-foto:hover {
+    background-color: #dc3545; /* Vermelho no hover do botão */
 }

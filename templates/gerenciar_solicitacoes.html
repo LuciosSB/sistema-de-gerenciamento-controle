@@ -33,16 +33,49 @@
             <div class="panel-header">
                 <div class="header-row">
                     <h2>Gerenciar Chamados</h2>
+                    <button id="toggleFilterBtn" class="btn-toggle-filter" title="Mostrar/Ocultar filtros">🔎 Filtrar</button>
+                    
                     <button id="autoRefreshBtn" class="btn-auto-refresh" title="Ativar/Desativar atualização automática">
                         🔄
                     </button>
-                    <span class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
+                    <span id="solicitacao-count-span" class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
                 </div>
                  <div class="refresh-status" style="text-align: right; margin-top: -15px; height: 15px;">
                     <span id="countdown" class="countdown" style="display: none;"></span>
                 </div>
             </div>
             <div class="panel-content">
+                
+                <div id="filterContainer" class="form-container" style="margin-bottom: 2rem; padding: 20px; display: none;">
+                    <div class="form-section" style="margin-bottom: 0;">
+                        <h3 class="section-title"><span class="section-icon">🚦</span> Filtrar por Status</h3>
+                        <div class="radio-group-container" style="margin-top: 10px;">
+                            <div id="statusFilter" class="radio-options">
+                                <label class="radio-label">
+                                    <input type="radio" name="status_filter" value="todos" checked>
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">Todos</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="status_filter" value="pendente">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">Pendente</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="status_filter" value="em_analise">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">Em Análise</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="status_filter" value="aprovada">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">Aprovada</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="table-container">
                     {% if solicitacoes %}
                     <div class="table-wrapper">
@@ -61,7 +94,7 @@
                             </thead>
                             <tbody>
                                 {% for solicitacao in solicitacoes %}
-                                <tr class="solicitacao-row">
+                                <tr class="solicitacao-row" data-status="{{ solicitacao.status }}">
                                     <td class="solicitacao-numero">#{{ solicitacao.id }}</td>
                                     <td class="solicitacao-titulo">{{ solicitacao.titulo }}</td>
                                     <td class="solicitacao-nome">{{ solicitacao.nome_solicitante }}</td>
@@ -75,19 +108,21 @@
                                     <td class="solicitacao-status">
                                         <div class="status-badge 
                                         {% if solicitacao.status == 'pendente' %}status-pendente
+                                        {% elif solicitacao.status == 'em_analise' %}status-em-analise
                                         {% elif solicitacao.status == 'aprovada' %}status-aprovada
                                         {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
                                         {% elif solicitacao.status == 'entregue' %}status-entregue
                                         {% elif solicitacao.status == 'excluido' %}status-excluido
                                         {% endif %}">
 
-                                        {# LÓGICA DE TEXTO ATUALIZADA #}
                                         {% if solicitacao.status == 'aprovada' %}
                                             ✅ Aprovada/Em Atendimento
                                         {% elif solicitacao.status == 'entregue' %}
                                             📦 Finalizada
                                         {% elif solicitacao.status == 'pendente' %}
                                             🔄 Pendente
+                                        {% elif solicitacao.status == 'em_analise' %}
+                                            🔎 Em Análise
                                         {% elif solicitacao.status == 'rejeitada' %}
                                             ❌ Rejeitada
                                         {% else %}
@@ -132,25 +167,59 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Variáveis para o Filtro ---
+            const toggleFilterBtn = document.getElementById('toggleFilterBtn');
+            const filterContainer = document.getElementById('filterContainer');
+            const statusFilters = document.querySelectorAll('input[name="status_filter"]');
+            const tableRows = document.querySelectorAll('.solicitacoes-table tbody tr');
+            const countSpan = document.getElementById('solicitacao-count-span');
+            const totalSolicitacoes = tableRows.length;
+
+            // --- Lógica para o botão de MOSTRAR/OCULTAR ---
+            if (toggleFilterBtn) {
+                toggleFilterBtn.addEventListener('click', function() {
+                    const isVisible = filterContainer.style.display === 'block';
+                    filterContainer.style.display = isVisible ? 'none' : 'block';
+                });
+            }
+
+            // --- Lógica para APLICAR o filtro ---
+            function applyFilter() {
+                const selectedStatus = document.querySelector('input[name="status_filter"]:checked').value;
+                let visibleRows = 0;
+
+                tableRows.forEach(row => {
+                    const rowStatus = row.getAttribute('data-status');
+                    
+                    if (selectedStatus === 'todos' || rowStatus === selectedStatus) {
+                        row.style.display = '';
+                        visibleRows++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                countSpan.textContent = `${visibleRows} chamado(s) encontrado(s)`;
+            }
+
+            statusFilters.forEach(filter => {
+                filter.addEventListener('change', applyFilter);
+            });
+
+            // --- Lógica para o Auto-Refresh (já existente) ---
             const autoRefreshBtn = document.getElementById('autoRefreshBtn');
             const countdownSpan = document.getElementById('countdown');
-            const REFRESH_INTERVAL_SECONDS = 60; // 1 minuto
-
+            const REFRESH_INTERVAL_SECONDS = 60;
             let countdownTimer;
 
-            // Função para iniciar o processo de auto-refresh
             function startAutoRefresh() {
-                // Marca o botão como ativo
+                if (!autoRefreshBtn || !countdownSpan) return;
                 autoRefreshBtn.classList.add('active');
                 countdownSpan.style.display = 'inline-block';
-
                 let secondsRemaining = REFRESH_INTERVAL_SECONDS;
-
-                // Atualiza o contador visual a cada segundo
                 countdownTimer = setInterval(() => {
                     secondsRemaining--;
                     countdownSpan.textContent = `Atualizando em ${secondsRemaining}s...`;
-
                     if (secondsRemaining <= 0) {
                         clearInterval(countdownTimer);
                         location.reload();
@@ -158,26 +227,21 @@
                 }, 1000);
             }
 
-            // Verifica o estado no localStorage quando a página carrega
             if (localStorage.getItem('autoRefreshActive') === 'true') {
                 startAutoRefresh();
             }
 
-            // Adiciona o evento de clique ao botão
-            autoRefreshBtn.addEventListener('click', function() {
-                // Limpa qualquer timer existente para evitar duplicação
-                clearInterval(countdownTimer);
-
-                if (localStorage.getItem('autoRefreshActive') === 'true') {
-                    // Se estava ativo, desativa
-                    localStorage.setItem('autoRefreshActive', 'false');
-                } else {
-                    // Se estava inativo, ativa
-                    localStorage.setItem('autoRefreshActive', 'true');
-                }
-                // Recarrega a página para aplicar o novo estado
-                location.reload();
-            });
+            if (autoRefreshBtn) {
+                autoRefreshBtn.addEventListener('click', function() {
+                    clearInterval(countdownTimer);
+                    if (localStorage.getItem('autoRefreshActive') === 'true') {
+                        localStorage.setItem('autoRefreshActive', 'false');
+                    } else {
+                        localStorage.setItem('autoRefreshActive', 'true');
+                    }
+                    location.reload();
+                });
+            }
         });
     </script>
 {% endblock %}

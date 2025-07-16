@@ -25,10 +25,25 @@
                 <h1>Chamados de Manutenção Recentes</h1>
             </div>
 
+            <div class="search-container">
+                <div class="search-field">
+                    <label for="idSearchInput">Pesquisar por ID:</label>
+                    <input type="text" id="idSearchInput" placeholder="#123...">
+                </div>
+                <div class="search-field">
+                    <label for="dateSearchInput">Pesquisar por Data:</label>
+                    <input type="date" id="dateSearchInput">
+                </div>
+                <div class="search-actions">
+                    <button id="searchBtn" class="btn-search">🔎 Pesquisar</button>
+                    <button id="clearBtn" class="btn-clear">Limpar Filtros</button>
+                </div>
+            </div>
+
             <div class="acompanhamento-lista">
                 {% if solicitacoes %}
                     {% for solicitacao in solicitacoes %}
-                    <article class="chamado-card status-{{ solicitacao.status }}">
+                    <article class="chamado-card status-{{ solicitacao.status }}" data-id="{{ solicitacao.id }}" data-date="{{ solicitacao.data_solicitacao.strftime('%Y-%m-%d') }}">
                         <div class="card-header">
                             <h2 class="card-titulo">#{{ solicitacao.id }} - {{ solicitacao.titulo }}</h2>
                             <span class="card-status">
@@ -36,16 +51,40 @@
                                     Aprovada/Em Atendimento
                                 {% elif solicitacao.status == 'entregue' %}
                                     Finalizada
+                                {% elif solicitacao.status == 'em_analise' %}
+                                    Em Análise
                                 {% else %}
                                     {{ solicitacao.status|replace('_', ' ')|capitalize }}
                                 {% endif %}
-                            </span>
+                                </span>
                         </div>
                         <div class="card-body">
                             <p><strong>Solicitante:</strong> {{ solicitacao.nome_solicitante }}</p>
                             <p><strong>Setor:</strong> {{ solicitacao.setor }}</p>
                             <p><strong>Abertura:</strong> {{ solicitacao.data_solicitacao|localtime }}</p>
                         </div>
+                        
+                        {% if solicitacao.anexos.first() %}
+                        <div class="public-gallery">
+                            {% for anexo in solicitacao.anexos.filter_by(tipo_anexo='antes').all() %}
+                                <div class="public-gallery-item">
+                                    <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank" title="Ver imagem ampliada">
+                                        <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" loading="lazy" alt="Anexo do chamado">
+                                        <span class="anexo-label">{{ anexo.tipo_anexo|capitalize }}</span>
+                                    </a>
+                                </div>
+                            {% endfor %}
+
+                            {% for anexo in solicitacao.anexos.filter_by(tipo_anexo='depois').all() %}
+                                <div class="public-gallery-item">
+                                    <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank" title="Ver imagem ampliada">
+                                        <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" loading="lazy" alt="Anexo do chamado">
+                                        <span class="anexo-label">{{ anexo.tipo_anexo|capitalize }}</span>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
 
                         <div class="card-extra-details">
                             {% set ultimo_comentario = solicitacao.get_ultimo_comentario() %}
@@ -100,6 +139,45 @@
             </div>
         </div>
     </main>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pega a referência dos elementos do formulário e dos cards
+            const idInput = document.getElementById('idSearchInput');
+            const dateInput = document.getElementById('dateSearchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const chamadoCards = document.querySelectorAll('.chamado-card');
 
+            function performSearch() {
+                const idQuery = idInput.value.trim();
+                const dateQuery = dateInput.value;
+
+                // Passa por cada card de chamado
+                chamadoCards.forEach(card => {
+                    const cardId = card.getAttribute('data-id');
+                    const cardDate = card.getAttribute('data-date');
+
+                    // Verifica se o card corresponde aos filtros
+                    const idMatch = idQuery === '' || cardId.includes(idQuery);
+                    const dateMatch = dateQuery === '' || cardDate === dateQuery;
+
+                    // Mostra ou esconde o card
+                    if (idMatch && dateMatch) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            // Adiciona os eventos aos botões
+            searchBtn.addEventListener('click', performSearch);
+            clearBtn.addEventListener('click', function() {
+                idInput.value = '';
+                dateInput.value = '';
+                performSearch(); // Roda a pesquisa novamente para mostrar todos
+            });
+        });
+    </script>
 </body>
 </html>

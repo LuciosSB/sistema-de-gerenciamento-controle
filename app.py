@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, send_file, session
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, send_file, session, send_from_directory
 import pdfkit
 from io import BytesIO
 from db_setup import db
-from models import Produto, Setor, Solicitacao, Usuario, SaidaMaterial, Comentario, HistoricoAcoes
+from models import Produto, Setor, Solicitacao, Usuario, SaidaMaterial, Comentario, HistoricoAcoes, Anexo
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError, ProgrammingError
@@ -23,17 +23,27 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError, ProgrammingError
 from flask_migrate import upgrade
 from flask_apscheduler import APScheduler
+from werkzeug.utils import secure_filename
+import uuid 
 
 if getattr(sys, 'frozen', False):
-    # Se estiver rodando como .exe (congelado pelo PyInstaller)
     basedir = sys._MEIPASS
 else:
-    # Se estiver rodando como um script .py normal
     basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 app = Flask(__name__)
+
 app.config.from_object(Config)
+
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 db.init_app(app)
 migrate = Migrate(app, db)
@@ -239,7 +249,6 @@ def atualizar_produto(produto_id):
     return render_template('atualizar.html', produto=produto)
 
 @app.route('/portal_solicitacoes', methods=['GET', 'POST'])
-@login_required
 def portal_solicitacoes():
     if request.method == 'POST':
         try:
@@ -248,7 +257,6 @@ def portal_solicitacoes():
                 setor=request.form.get('setor', '').strip(),
                 titulo=request.form.get('titulo', '').strip(),
                 categoria=request.form.get('categoria', 'Geral').strip(),
-                urgencia=request.form.get('urgencia', 'baixa').strip(),
                 descricao=request.form.get('descricao', '').strip(),
                 status='pendente',
                 data_solicitacao=datetime.utcnow() 
@@ -261,16 +269,21 @@ def portal_solicitacoes():
             
             db.session.flush()
 
+            autor_id = current_user.id if current_user.is_authenticated else 1
+            detalhes_acao = (f"Chamado criado pelo solicitante '{novo_chamado.nome_solicitante}' através do portal público."
+                           if not current_user.is_authenticated 
+                           else f'Chamado criado com o título "{novo_chamado.titulo}".')
+
             historico_criacao = HistoricoAcoes(
                 solicitacao_id=novo_chamado.id,
-                usuario_id=current_user.id,
+                usuario_id=autor_id,
                 tipo_acao='chamado_criado',
-                detalhes=f'Chamado criado com o título "{novo_chamado.titulo}".'
+                detalhes=detalhes_acao
             )
             db.session.add(historico_criacao)
             
             db.session.commit()
-            flash('Chamado de manutenção aberto com sucesso!', 'success')
+            flash(f'Chamado de manutenção aberto com sucesso! O ID do chamado é #{novo_chamado.id}, confira no Portal', 'success')
             return redirect(url_for('portal_solicitacoes'))
         except Exception as e:
             db.session.rollback()
@@ -285,7 +298,7 @@ def gerenciar_solicitacoes():
     limite_de_tempo = now - timedelta(minutes=1)
     solicitacoes_visiveis = Solicitacao.query.filter(
         db.or_(
-            Solicitacao.status.in_(['pendente', 'aprovada']),
+            Solicitacao.status.in_(['pendente','em_analise','aprovada']),
             db.and_(
                 Solicitacao.status.in_(['entregue', 'rejeitada', 'excluido']),
                 Solicitacao.data_atualizacao.isnot(None),
@@ -312,7 +325,11 @@ def atualizar_status_solicitacao(solicitacao_id):
     status_antigo = solicitacao.status
     novo_status = request.form.get('status')
 
-    if novo_status not in ['pendente', 'aprovada', 'rejeitada', 'entregue']:
+    if novo_status == 'aprovada' and current_user.tipo_usuario not in ['manutencao', 'admin']:
+        flash('Você não tem permissão para aprovar um chamado.', 'error')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+    if novo_status not in ['pendente', 'em_analise', 'aprovada', 'rejeitada', 'entregue']:
         flash('Status inválido.', 'error')
         return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
     
@@ -372,6 +389,37 @@ def excluir_solicitacao(solicitacao_id):
         db.session.rollback()
         flash(f'Erro ao excluir chamado: {e}', 'error')
     return redirect(url_for('gerenciar_solicitacoes'))
+
+@app.route('/solicitacao/<int:solicitacao_id>/definir_urgencia', methods=['POST'])
+@login_required
+@permission_required('gerenciar_solicitacoes') 
+def definir_urgencia(solicitacao_id):
+    solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
+    nova_urgencia = request.form.get('nova_urgencia')
+
+    if not nova_urgencia in ['baixa', 'media', 'alta', 'critica']:
+        flash('Nível de urgência inválido.', 'error')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id))
+
+    urgencia_antiga = solicitacao.urgencia
+    solicitacao.urgencia = nova_urgencia
+    
+    historico_urgencia = HistoricoAcoes(
+        solicitacao_id=solicitacao.id,
+        usuario_id=current_user.id,
+        tipo_acao='urgencia_alterada',
+        detalhes=f"Nível de urgência alterado de '{urgencia_antiga.capitalize()}' para '{nova_urgencia.capitalize()}'."
+    )
+    db.session.add(historico_urgencia)
+    
+    try:
+        db.session.commit()
+        flash('Nível de urgência atualizado com sucesso!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao atualizar urgência: {e}', 'error')
+        
+    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id))
 
 @app.route('/solicitacao/<int:solicitacao_id>/adicionar_item', methods=['POST'])
 @login_required
@@ -778,7 +826,7 @@ def lista_solicitacoes():
     concluidas_limite = now - timedelta(hours=4)
     solicitacoes_visiveis = Solicitacao.query.filter(
         db.or_(
-            Solicitacao.status.in_(['pendente', 'aprovada']),
+            Solicitacao.status.in_(['pendente', 'aprovada', 'em_analise']),
             db.and_(
                 Solicitacao.status.in_(['rejeitada', 'excluido']),
                 Solicitacao.data_atualizacao.isnot(None),
@@ -970,9 +1018,94 @@ def setup_database(app):
             
     return True
 
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/solicitacao/<int:solicitacao_id>/upload_foto', methods=['POST'])
+@login_required
+@permission_required('gerenciar_solicitacoes')
+def upload_foto(solicitacao_id):
+    solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
+
+    if 'foto' not in request.files:
+        flash('Nenhum arquivo enviado.', 'error')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id))
+
+    file = request.files['foto']
+    tipo_anexo = request.form.get('tipo_anexo') 
+
+    if file.filename == '':
+        flash('Nenhum arquivo selecionado.', 'warning')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id))
+
+    if file and allowed_file(file.filename):
+        original_filename = secure_filename(file.filename)
+        unique_filename = f"{uuid.uuid4().hex}_{original_filename}"
+
+        try:
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], unique_filename))
+
+            novo_anexo = Anexo(
+                nome_arquivo=unique_filename,
+                tipo_anexo=tipo_anexo,
+                solicitacao_id=solicitacao.id
+            )
+            db.session.add(novo_anexo)
+
+            historico_upload = HistoricoAcoes(
+                solicitacao_id=solicitacao.id,
+                usuario_id=current_user.id,
+                tipo_acao='foto_adicionada',
+                detalhes=f"Foto de '{tipo_anexo}' adicionada ao chamado: {original_filename}"
+            )
+            db.session.add(historico_upload)
+
+            db.session.commit()
+            flash(f'Foto de "{tipo_anexo}" enviada com sucesso!', 'success')
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao salvar a foto ou registrar no banco: {e}', 'error')
+
+    else:
+        flash('Tipo de arquivo não permitido. Apenas PNG, JPG, JPEG e GIF.', 'error')
+
+    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id))
+
+@app.route('/anexo/<int:anexo_id>/excluir', methods=['POST'])
+@login_required
+@permission_required('gerenciar_solicitacoes')
+def excluir_anexo(anexo_id):
+    anexo = Anexo.query.get_or_404(anexo_id)
+    solicitacao_id = anexo.solicitacao_id
+    
+    try:
+        caminho_arquivo = os.path.join(app.config['UPLOAD_FOLDER'], anexo.nome_arquivo)
+        if os.path.exists(caminho_arquivo):
+            os.remove(caminho_arquivo)
+        
+        historico_exclusao = HistoricoAcoes(
+            solicitacao_id=solicitacao_id,
+            usuario_id=current_user.id,
+            tipo_acao='foto_excluida',
+            detalhes=f"Foto de '{anexo.tipo_anexo}' excluída do chamado: {anexo.nome_arquivo}"
+        )
+        db.session.add(historico_exclusao)
+        
+        db.session.delete(anexo)
+        
+        db.session.commit()
+        flash('Foto excluída com sucesso!', 'success')
+        
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao excluir a foto: {e}', 'error')
+        
+    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
 
 if __name__ == '__main__':
-    # Executa a configuração do banco de dados antes de rodar a aplicação
     if setup_database(app):
         # Cria o usuário admin padrão, se não existir
         with app.app_context():

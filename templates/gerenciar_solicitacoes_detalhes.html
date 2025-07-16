@@ -33,13 +33,21 @@
             <div class="panel-header">
                 <h2>Central de Trabalho - Chamado #{{ solicitacao.id }}</h2>
                 <div class="header-actions">
-                    <div class="status-badge
+                    <div class="status-badge 
                         {% if solicitacao.status == 'pendente' %}status-pendente
+                        {% elif solicitacao.status == 'em_analise' %}status-em-analise
                         {% elif solicitacao.status == 'aprovada' %}status-aprovada
                         {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
                         {% elif solicitacao.status == 'entregue' %}status-entregue
+                        {% elif solicitacao.status == 'excluido' %}status-excluido
                         {% endif %}">
-                        {{ solicitacao.status|replace('_', ' ')|capitalize }}
+                        
+                        {% if solicitacao.status == 'aprovada' %}✅ Aprovada/Em Atendimento
+                        {% elif solicitacao.status == 'entregue' %}📦 Finalizada
+                        {% elif solicitacao.status == 'pendente' %}🔄 Pendente
+                        {% elif solicitacao.status == 'em_analise' %}🔎 Em Análise
+                        {% elif solicitacao.status == 'rejeitada' %}❌ Rejeitada
+                        {% else %}{{ solicitacao.status|capitalize }}{% endif %}
                     </div>
                 </div>
             </div>
@@ -63,6 +71,20 @@
                             <div class="detalhe-item"><label class="detalhe-label">Categoria:</label><span class="detalhe-valor">{{ solicitacao.categoria }}</span></div>
                             <div class="detalhe-item"><label class="detalhe-label">Urgência:</label><div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">{{ solicitacao.urgencia|capitalize }}</div></div>
                         </div>
+                        {% if solicitacao.status in ['pendente', 'em_analise', 'aprovada'] and current_user.tipo_usuario in ['manutencao', 'admin'] %}
+                        <form method="POST" action="{{ url_for('definir_urgencia', solicitacao_id=solicitacao.id) }}" style="margin-top: 1.5rem; border-top: 1px solid #eee; padding-top: 1rem; display: flex; align-items: center; gap: 15px;">
+                            <div class="form-group" style="margin-bottom: 0; flex-grow: 1;">
+                                <label for="nova_urgencia" class="detalhe-label">Definir/Alterar Nível de Urgência:</label>
+                                <select id="nova_urgencia" name="nova_urgencia" class="setor-select">
+                                    <option value="baixa" {% if solicitacao.urgencia == 'baixa' %}selected{% endif %}>Baixa</option>
+                                    <option value="media" {% if solicitacao.urgencia == 'media' %}selected{% endif %}>Média</option>
+                                    <option value="alta" {% if solicitacao.urgencia == 'alta' %}selected{% endif %}>Alta</option>
+                                    <option value="critica" {% if solicitacao.urgencia == 'critica' %}selected{% endif %}>Crítica</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="align-self: flex-end;">Salvar Urgência</button>
+                        </form>
+                        {% endif %}
                     </div>
                     <div class="detalhes-section">
                         <h3 class="section-title"><span class="section-icon">👤</span> Dados do Solicitante</h3>
@@ -80,12 +102,25 @@
 
                 {% if solicitacao.status == 'pendente' %}
                 <div class="acoes-container">
+                    <h3 class="section-title"><span class="section-icon">⚙️</span> Ações Iniciais</h3>
+                    <div class="acoes-buttons">
+                        <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}">
+                            <input type="hidden" name="status" value="em_analise">
+                            <button type="submit" class="btn btn-primary">🔎 Colocar em Análise</button>
+                        </form>
+                    </div>
+                </div>
+
+                {% elif solicitacao.status == 'em_analise' %}
+                <div class="acoes-container">
                     <h3 class="section-title"><span class="section-icon">⚙️</span> Ações de Atendimento</h3>
                     <div class="acoes-buttons">
+                        {% if current_user.tipo_usuario in ['manutencao', 'admin'] %}
                         <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado?')">
                             <input type="hidden" name="status" value="aprovada">
                             <button type="submit" class="btn btn-atender">✅ Aprovar Chamado</button>
                         </form>
+                        {% endif %}
                         <button type="button" class="btn btn-rejeitar" onclick="toggleRejeitarForm()">❌ Rejeitar Chamado</button>
                     </div>
                     <div id="rejeitarFormContainer" class="rejeitar-form-container" style="display:none;">
@@ -99,6 +134,7 @@
                             </div>
                         </form>
                     </div>
+                </div>
 
                 {% elif solicitacao.status == 'aprovada' %}
                 <div class="comments-section">
@@ -141,9 +177,7 @@
                                     <th>Qtd. Solicitada</th>
                                     <th>Qtd. Fornecida</th>
                                     <th>Data</th>
-                                    <!-- ===== INÍCIO DA MUDANÇA ===== -->
                                     <th class="col-acoes">Ações</th>
-                                    <!-- ===== FIM DA MUDANÇA ===== -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -153,7 +187,6 @@
                                     <td>{{ saida.quantidade_solicitada }}</td>
                                     <td>{{ saida.quantidade_saida }}</td>
                                     <td>{{ saida.data_saida|localtime }}</td>
-                                    <!-- ===== INÍCIO DA MUDANÇA ===== -->
                                     <td class="col-acoes">
                                         {% if not saida.retornado %}
                                         <form method="POST" action="{{ url_for('remover_item_solicitacao', solicitacao_id=solicitacao.id, saida_id=saida.id) }}" onsubmit="return confirm('Tem certeza que deseja REMOVER este item do chamado e DEVOLVER ao estoque?')">
@@ -161,7 +194,6 @@
                                         </form>
                                         {% endif %}
                                     </td>
-                                    <!-- ===== FIM DA MUDANÇA ===== -->
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -231,7 +263,7 @@
                     <form method="POST" action="{{ url_for('confirmar_devolucao_itens', solicitacao_id=solicitacao.id) }}" class="devolucao-form">
                         <h4 class="devolucao-header">Controle de Devolução de Itens</h4>
                         <p class="devolucao-instructions">
-                            Para cada item, informe a quantidade que está retornando ao estoque. Itens do tipo "Consumível" com quantidade 0 serão baixados permanentemente. Itens "Retornáveis" devem ter a quantidade de retorno especificada.
+                            Para cada item, informe a quantidade que está retornando ao estoque. Itens do tipo "Consumo" com quantidade 0 serão baixados permanentemente. Itens "Permanente" devem ter a quantidade de retorno especificada.
                         </p>
 
                         {% if solicitacao.materiais_usados %}
@@ -260,7 +292,7 @@
                                             {% if not saida.retornado %}
                                                 <input type="number" name="quantidade_retornada_{{ saida.id }}"
                                                        class="devolucao-input"
-                                                       value="{% if saida.produto.tipo_item == 'retornavel' %}{{ saida.quantidade_saida }}{% else %}0{% endif %}"
+                                                       value="{% if saida.produto.tipo_item == 'permanente' %}{{ saida.quantidade_saida }}{% else %}0{% endif %}"
                                                        min="0" max="{{ saida.quantidade_saida }}">
                                             {% else %}
                                                 -
@@ -284,11 +316,80 @@
                                 🔁 Confirmar Devoluções e Fechar Chamado
                             </button>
                         </div>
-
                         {% else %}
                         <p class="empty-list-message">Nenhum material foi utilizado neste chamado.</p>
                         {% endif %}
                     </form>
+                </div>
+                {% endif %}
+
+                {% if solicitacao.status in ['em_analise', 'aprovada', 'entregue'] %}
+                <div class="anexos-container">
+                    <h3 class="section-title"><span class="section-icon">🖼️</span> Anexos e Evidências</h3>
+                    <div class="anexos-grid">
+                
+                        <div class="anexo-coluna">
+                            <h4>Fotos do Antes</h4>
+                            <div class="anexo-gallery">
+                                {% set fotos_antes = solicitacao.anexos.filter_by(tipo_anexo='antes').all() %}
+                                {% if fotos_antes %}
+                                    {% for anexo in fotos_antes %}
+                                        <div class="anexo-item">
+                                        <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank">
+                                            <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" alt="Foto do {{ anexo.tipo_anexo }}">
+                                        </a>
+                                        <form method="POST" action="{{ url_for('excluir_anexo', anexo_id=anexo.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir esta foto permanentemente?')">
+                                            <button type="submit" class="btn-delete-foto" title="Excluir Foto">❌</button>
+                                        </form>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="no-anexos">Nenhuma foto do "antes" foi enviada.</p>
+                                {% endif %}
+                            </div>
+                
+                            {% if current_user.tipo_usuario in ['manutencao', 'admin'] and solicitacao.status != 'entregue' %}
+                            <form class="anexo-form" method="POST" action="{{ url_for('upload_foto', solicitacao_id=solicitacao.id) }}" enctype="multipart/form-data">
+                                <input type="hidden" name="tipo_anexo" value="antes">
+                                <div class="form-group">
+                                    <label for="foto_antes">Adicionar Foto do "Antes":</label>
+                                    <input type="file" name="foto" id="foto_antes" class="anexo-input" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Enviar Foto</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                
+                        <div class="anexo-coluna">
+                            <h4>Fotos do Depois</h4>
+                            <div class="anexo-gallery">
+                                {% set fotos_depois = solicitacao.anexos.filter_by(tipo_anexo='depois').all() %}
+                                {% if fotos_depois %}
+                                    {% for anexo in fotos_depois %}
+                                        <div class="anexo-item">
+                                            <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank">
+                                                <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" alt="Foto do Depois">
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="no-anexos">Nenhuma foto do "depois" foi enviada.</p>
+                                {% endif %}
+                            </div>
+                
+                            {% if current_user.tipo_usuario in ['manutencao', 'admin'] and solicitacao.status != 'entregue' %}
+                            <form class="anexo-form" method="POST" action="{{ url_for('upload_foto', solicitacao_id=solicitacao.id) }}" enctype="multipart/form-data">
+                                <input type="hidden" name="tipo_anexo" value="depois">
+                                <div class="form-group">
+                                    <label for="foto_depois">Adicionar Foto do "Depois":</label>
+                                    <input type="file" name="foto" id="foto_depois" class="anexo-input" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Enviar Foto</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                
+                    </div>
                 </div>
                 {% endif %}
 

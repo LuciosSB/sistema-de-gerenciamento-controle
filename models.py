@@ -54,7 +54,7 @@ class Produto(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
     quantidade_inicial = db.Column(db.Integer, nullable=False, server_default='0')
-    tipo_item = db.Column(db.String(50), nullable=False, default='consumivel')
+    tipo_item = db.Column(db.String(50), nullable=False, default='consumo')
     
     def __repr__(self):
         return f'<Produto {self.nome}>'
@@ -82,6 +82,7 @@ class Solicitacao(db.Model):
     categoria = db.Column(db.String(100), nullable=False, default="Geral")
     urgencia = db.Column(db.String(50), nullable=False, default='baixa')
     motivo_rejeicao = db.Column(db.Text, nullable=True)
+    anexos = db.relationship('Anexo', backref='solicitacao', lazy='dynamic', cascade="all, delete-orphan")
 
     def get_ultimo_comentario(self):
         return self.comentarios.order_by(Comentario.id.desc()).first()
@@ -145,3 +146,15 @@ class HistoricoAcoes(db.Model):
 
     def __repr__(self):
         return f'<HistoricoAcoes {self.id}: {self.tipo_acao} na Solicitacao {self.solicitacao_id}>'
+
+class Anexo(db.Model):
+    __tablename__ = 'anexos'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    nome_arquivo = db.Column(db.String(255), nullable=False)
+    tipo_anexo = db.Column(db.String(10), nullable=False)  # Será 'antes' ou 'depois'
+    
+    solicitacao_id = db.Column(db.Integer, db.ForeignKey('solicitacoes.id'), nullable=False)
+    
+    def __repr__(self):
+        return f'<Anexo {self.nome_arquivo} para Chamado {self.solicitacao_id}>'

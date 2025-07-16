@@ -10,3 +10,5 @@ class Config:
 
     # Caminho para o executável wkhtmltopdf.
     WKHTMLTOPDF_PATH = 'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'
+
+    UPLOAD_FOLDER = 'static/uploads' 
