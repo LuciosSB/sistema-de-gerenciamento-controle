@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Ativo por Patrimônio{% endblock %}
+
+{% block content %}
+    <nav>
+        <div class="container">
+            <ul class="nav-list">
+            {% if current_user.has_permission('dashboard') %}
+            <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
+            {% endif %}
+            {% if current_user.has_permission('gerenciar_solicitacoes') %}
+                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
+            {% endif %}
+            {% if current_user.has_permission('cadastrar_produto') %}
+                <li><a href="{{ url_for('cadastro_produto') }}">Cadastrar Item</a></li>
+            {% endif %}
+            {% if current_user.has_permission('listar_produtos') %}
+                <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
+            {% endif %}
+            {% if current_user.has_permission('atualizar_produto') %}
+                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Item</a></li>
+            {% endif %}
+            {% if current_user.has_permission('historico') %}
+                <li><a href="{{ url_for('historico') }}">Histórico</a></li>
+            {% endif %}
+            {% if current_user.has_permission('historico_ativo') %}
+                <li class="active"><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
+            {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="panel active">
+            <div class="panel-header">
+                <h2>Histórico de Ativo por Patrimônio</h2>
+            </div>
+            <div class="panel-content">
+                
+                <form method="GET" action="{{ url_for('historico_ativo') }}" class="supervisao-filter-container">
+                    <div class="form-row">
+                        <div class="form-group" style="flex-grow: 2;">
+                            <label for="patrimonio">Digite o Número do Patrimônio ou Código de Barras:</label>
+                            <input type="text" id="patrimonio" name="patrimonio" class="cadastro-input" placeholder="Digite parte do código para buscar..." value="{{ patrimonio_query or '' }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="per_page">Mostrar por Página:</label>
+                            <select id="per_page" name="per_page" class="select-styled" onchange="this.form.submit()">
+                                <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+                                <option value="25" {% if per_page == 25 %}selected{% endif %}>25</option>
+                                <option value="50" {% if per_page == 50 %}selected{% endif %}>50</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="display: flex; align-items: flex-end; gap: 10px;">
+                             <button type="submit" class="btn btn-primary">🔎 Buscar Histórico</button>
+                             <a href="{{ url_for('historico_ativo') }}" class="btn btn-secondary">Limpar</a>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="results-container" style="margin-top: 2rem;">
+                    {% if patrimonio_query %}
+                        {% if solicitacoes %}
+                            <h3>Histórico para Ativo contendo "<strong>{{ patrimonio_query }}</strong>" ({{ pagination.total }} chamado(s) encontrado(s))</h3>
+                            <div class="acompanhamento-lista" style="margin-top: 1rem;">
+                                {% for solicitacao in solicitacoes %}
+                                    <article class="chamado-card status-{{ solicitacao.status }}">
+                                        <div class="card-header">
+                                            <h2 class="card-titulo">#{{ solicitacao.id }} - {{ solicitacao.titulo }}</h2>
+                                            <span class="card-status">{{ solicitacao.status|replace('_', ' ')|capitalize }}</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <p><strong>Abertura:</strong> {{ solicitacao.data_solicitacao|localtime }}</p>
+                                            <p>
+                                                <strong>Ativo:</strong> 
+                                                <span class="patrimonio-badge">{{ solicitacao.patrimonio_ativo or 'Item de Estoque' }}</span>
+                                            </p>
+                                            <p><strong>Descrição:</strong> {{ solicitacao.descricao|truncate(100) }}</p>
+                                        </div>
+                                        <div class="page-actions" style="border-top: none; padding-top: 10px; justify-content: flex-end;">
+                                            <a href="{{ url_for('historico_detalhes', solicitacao_id=solicitacao.id) }}" class="btn-acao btn-visualizar">Ver Detalhes do Histórico</a>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="empty-state" style="padding: 40px;">
+                                <div class="empty-icon">🤷</div>
+                                <h3>Nenhum chamado encontrado</h3>
+                                <p>Não há nenhum registro de manutenção para o ativo "<strong>{{ patrimonio_query }}</strong>".</p>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="empty-state" style="padding: 40px;">
+                            <div class="empty-icon">⌨️</div>
+                            <h3>Aguardando Pesquisa</h3>
+                            <p>Digite um número de patrimônio ou código de barras e clique em "Buscar".</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if pagination and pagination.pages > 1 %}
+                <div class="pagination">
+                    <a href="{{ url_for('historico_ativo', page=1, **request.args) }}" class="page-link {% if not pagination.has_prev %}disabled{% endif %}">« Primeira</a>
+                    <a href="{{ url_for('historico_ativo', page=pagination.prev_num, **request.args) }}" class="page-link {% if not pagination.has_prev %}disabled{% endif %}">‹ Anterior</a>
+                    <span class="page-info">Página {{ pagination.page }} de {{ pagination.pages }}</span>
+                    <a href="{{ url_for('historico_ativo', page=pagination.next_num, **request.args) }}" class="page-link {% if not pagination.has_next %}disabled{% endif %}">Próxima ›</a>
+                    <a href="{{ url_for('historico_ativo', page=pagination.pages, **request.args) }}" class="page-link {% if not pagination.has_next %}disabled{% endif %}">Última »</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -24,6 +24,9 @@
             {% if current_user.has_permission('historico') %}
                 <li class="active"><a href="{{ url_for('historico') }}">Histórico</a></li>
             {% endif %}
+            {% if current_user.has_permission('historico_ativo') %}
+                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
+            {% endif %}
             </ul>
         </div>
     </nav>
@@ -69,7 +72,7 @@
                                     <td class="solicitacao-status">
                                         <div class="status-badge 
                                         {% if solicitacao.status == 'pendente' %}status-pendente
-                                        {% elif solicitacao.status == 'aprovada' %}status-aprovada
+                                        {% elif solicitacao.status == 'em_analise' %}status-em-analise  {% elif solicitacao.status == 'aprovada' %}status-aprovada
                                         {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
                                         {% elif solicitacao.status == 'entregue' %}status-entregue
                                         {% elif solicitacao.status == 'excluido' %}status-excluido
@@ -82,6 +85,8 @@
                                             📦 Finalizada
                                         {% elif solicitacao.status == 'pendente' %}
                                             🔄 Pendente
+                                        {% elif solicitacao.status == 'em_analise' %} 
+                                            🔎 Em Análise
                                         {% elif solicitacao.status == 'rejeitada' %}
                                             ❌ Rejeitada
                                         {% else %}

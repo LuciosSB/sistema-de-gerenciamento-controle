@@ -24,6 +24,9 @@
             {% if current_user.has_permission('historico') %}
                 <li><a href="{{ url_for('historico') }}">Histórico</a></li>
             {% endif %}
+            {% if current_user.has_permission('historico_ativo') %}
+                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
+            {% endif %}
             </ul>
         </div>
     </nav>
@@ -57,12 +60,12 @@
                                     <label class="radio-label">
                                         <input type="radio" name="tipo_item_filter" value="consumivel">
                                         <span class="radio-custom"></span>
-                                        <span class="radio-text">Apenas Consumíveis</span>
+                                        <span class="radio-text">Apenas de Consumo</span>
                                     </label>
                                     <label class="radio-label">
                                         <input type="radio" name="tipo_item_filter" value="retornavel">
                                         <span class="radio-custom"></span>
-                                        <span class="radio-text">Apenas Retornáveis</span>
+                                        <span class="radio-text">Apenas Permanentes</span>
                                     </label>
                                 </div>
                             </div>

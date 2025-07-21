@@ -24,6 +24,9 @@
             {% if current_user.has_permission('historico') %}
                 <li><a href="{{ url_for('historico') }}">Histórico</a></li>
             {% endif %}
+            {% if current_user.has_permission('historico_ativo') %}
+                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
+            {% endif %}
             </ul>
         </div>
     </nav>
@@ -33,16 +36,59 @@
             <div class="panel-header">
                 <div class="header-row">
                     <h2>Gerenciar Chamados</h2>
-                    <button id="autoRefreshBtn" class="btn-auto-refresh" title="Ativar/Desativar atualização automática">
-                        🔄
-                    </button>
-                    <span class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
+                    <button id="toggleFilterBtn" class="btn-toggle-filter" title="Mostrar/Ocultar filtros">🔎 Filtrar</button>
+                    <button id="autoRefreshBtn" class="btn-auto-refresh" title="Ativar/Desativar atualização automática">🔄</button>
+                    <span id="solicitacao-count-span" class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
                 </div>
                  <div class="refresh-status" style="text-align: right; margin-top: -15px; height: 15px;">
                     <span id="countdown" class="countdown" style="display: none;"></span>
                 </div>
             </div>
             <div class="panel-content">
+                
+                <div id="filterContainer" class="form-container" style="margin-bottom: 2rem; padding: 20px; display: none;">
+                    <div class="form-section" style="margin-bottom: 0;">
+                        <h3 class="section-title"><span class="section-icon">🚦</span> Filtrar por Status</h3>
+                        <div class="radio-group-container" style="margin-top: 10px;">
+                            <div id="statusFilter" class="radio-options">
+                                <label class="radio-label">
+                                    <input type="radio" name="status_filter" value="todos" checked>
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">Todos</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="status_filter" value="pendente">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">Pendente</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="status_filter" value="em_analise">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">Em Análise</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="status_filter" value="aprovada">
+                                    <span class="radio-custom"></span>
+                                    <span class="radio-text">Aprovada</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <h3 class="section-title" style="margin-top: 20px;"><span class="section-icon">📂</span> Filtrar por Categoria</h3>
+                        <div class="form-group">
+                            <select id="categoryFilter" class="select-styled">
+                                <option value="todas">Todas as Categorias</option>
+                                <option value="Ar-Condicionado">Ar-Condicionado</option>
+                                <option value="Elétrica">Elétrica (Tomadas, Fios, Iluminação)</option>
+                                <option value="Hidráulica">Hidráulica (Banheiros, Copas, Vazamentos)</option>
+                                <option value="Pintura e Alvenaria">Pintura e Alvenaria (Paredes, Reparos)</option>
+                                <option value="Estrutural">Estrutural (Mobiliário, Portas, Janelas)</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="table-container">
                     {% if solicitacoes %}
                     <div class="table-wrapper">
@@ -61,9 +107,14 @@
                             </thead>
                             <tbody>
                                 {% for solicitacao in solicitacoes %}
-                                <tr class="solicitacao-row">
+                                <tr class="solicitacao-row" data-status="{{ solicitacao.status }}" data-categoria="{{ solicitacao.categoria }}">
                                     <td class="solicitacao-numero">#{{ solicitacao.id }}</td>
-                                    <td class="solicitacao-titulo">{{ solicitacao.titulo }}</td>
+                                    <td class="solicitacao-titulo">
+                                        {{ solicitacao.titulo }}
+                                        {% if solicitacao.patrimonio_ativo %}
+                                            <span class="patrimonio-badge">Patrimônio: {{ solicitacao.patrimonio_ativo }}</span>
+                                        {% endif %}
+                                    </td>
                                     <td class="solicitacao-nome">{{ solicitacao.nome_solicitante }}</td>
                                     <td class="solicitacao-setor">{{ solicitacao.setor }}</td>
                                     <td class="solicitacao-urgencia">
@@ -75,19 +126,21 @@
                                     <td class="solicitacao-status">
                                         <div class="status-badge 
                                         {% if solicitacao.status == 'pendente' %}status-pendente
+                                        {% elif solicitacao.status == 'em_analise' %}status-em-analise
                                         {% elif solicitacao.status == 'aprovada' %}status-aprovada
                                         {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
                                         {% elif solicitacao.status == 'entregue' %}status-entregue
                                         {% elif solicitacao.status == 'excluido' %}status-excluido
                                         {% endif %}">
 
-                                        {# LÓGICA DE TEXTO ATUALIZADA #}
                                         {% if solicitacao.status == 'aprovada' %}
                                             ✅ Aprovada/Em Atendimento
                                         {% elif solicitacao.status == 'entregue' %}
                                             📦 Finalizada
                                         {% elif solicitacao.status == 'pendente' %}
                                             🔄 Pendente
+                                        {% elif solicitacao.status == 'em_analise' %}
+                                            🔎 Em Análise
                                         {% elif solicitacao.status == 'rejeitada' %}
                                             ❌ Rejeitada
                                         {% else %}
@@ -132,25 +185,63 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Variáveis para os Filtros ---
+            const toggleFilterBtn = document.getElementById('toggleFilterBtn');
+            const filterContainer = document.getElementById('filterContainer');
+            const statusFilters = document.querySelectorAll('input[name="status_filter"]');
+            const categoryFilter = document.getElementById('categoryFilter'); // Filtro de Categoria
+            const tableRows = document.querySelectorAll('.solicitacoes-table tbody tr');
+            const countSpan = document.getElementById('solicitacao-count-span');
+            
+            // --- Lógica para o botão de MOSTRAR/OCULTAR ---
+            if (toggleFilterBtn) {
+                toggleFilterBtn.addEventListener('click', function() {
+                    const isVisible = filterContainer.style.display === 'block';
+                    filterContainer.style.display = isVisible ? 'none' : 'block';
+                });
+            }
+
+            // --- Lógica para APLICAR os filtros combinados ---
+            function applyFilters() {
+                const selectedStatus = document.querySelector('input[name="status_filter"]:checked').value;
+                const selectedCategory = categoryFilter.value;
+                let visibleRows = 0;
+
+                tableRows.forEach(row => {
+                    const rowStatus = row.getAttribute('data-status');
+                    const rowCategory = row.getAttribute('data-categoria');
+
+                    const statusMatch = (selectedStatus === 'todos' || rowStatus === selectedStatus);
+                    const categoryMatch = (selectedCategory === 'todas' || rowCategory === selectedCategory);
+                    
+                    if (statusMatch && categoryMatch) {
+                        row.style.display = '';
+                        visibleRows++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                countSpan.textContent = `${visibleRows} chamado(s) encontrado(s)`;
+            }
+
+            statusFilters.forEach(filter => filter.addEventListener('change', applyFilters));
+            categoryFilter.addEventListener('change', applyFilters);
+
+            // --- Lógica para o Auto-Refresh (já existente) ---
             const autoRefreshBtn = document.getElementById('autoRefreshBtn');
             const countdownSpan = document.getElementById('countdown');
-            const REFRESH_INTERVAL_SECONDS = 60; // 1 minuto
-
+            const REFRESH_INTERVAL_SECONDS = 60;
             let countdownTimer;
 
-            // Função para iniciar o processo de auto-refresh
             function startAutoRefresh() {
-                // Marca o botão como ativo
+                if (!autoRefreshBtn || !countdownSpan) return;
                 autoRefreshBtn.classList.add('active');
                 countdownSpan.style.display = 'inline-block';
-
                 let secondsRemaining = REFRESH_INTERVAL_SECONDS;
-
-                // Atualiza o contador visual a cada segundo
                 countdownTimer = setInterval(() => {
                     secondsRemaining--;
                     countdownSpan.textContent = `Atualizando em ${secondsRemaining}s...`;
-
                     if (secondsRemaining <= 0) {
                         clearInterval(countdownTimer);
                         location.reload();
@@ -158,26 +249,21 @@
                 }, 1000);
             }
 
-            // Verifica o estado no localStorage quando a página carrega
             if (localStorage.getItem('autoRefreshActive') === 'true') {
                 startAutoRefresh();
             }
 
-            // Adiciona o evento de clique ao botão
-            autoRefreshBtn.addEventListener('click', function() {
-                // Limpa qualquer timer existente para evitar duplicação
-                clearInterval(countdownTimer);
-
-                if (localStorage.getItem('autoRefreshActive') === 'true') {
-                    // Se estava ativo, desativa
-                    localStorage.setItem('autoRefreshActive', 'false');
-                } else {
-                    // Se estava inativo, ativa
-                    localStorage.setItem('autoRefreshActive', 'true');
-                }
-                // Recarrega a página para aplicar o novo estado
-                location.reload();
-            });
+            if (autoRefreshBtn) {
+                autoRefreshBtn.addEventListener('click', function() {
+                    clearInterval(countdownTimer);
+                    if (localStorage.getItem('autoRefreshActive') === 'true') {
+                        localStorage.setItem('autoRefreshActive', 'false');
+                    } else {
+                        localStorage.setItem('autoRefreshActive', 'true');
+                    }
+                    location.reload();
+                });
+            }
         });
     </script>
 {% endblock %}

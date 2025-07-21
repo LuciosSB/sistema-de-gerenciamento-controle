@@ -24,6 +24,9 @@
         {% if current_user.has_permission('historico') %}
             <li class="active"><a href="{{ url_for('historico') }}">Histórico</a></li>
         {% endif %}
+        {% if current_user.has_permission('historico_ativo') %}
+                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
+            {% endif %}
         </ul>
     </div>
 </nav>
