@@ -6,12 +6,12 @@
     <nav>
         <div class="container">
             <ul class="nav-list">
-            <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
+                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
                 <li><a href="{{ url_for('cadastro_usuario') }}">Cadastro de Usuário</a></li>
                 <li><a href="{{ url_for('lista_usuarios') }}">Lista de Usuários</a></li>
-            {% if current_user.tipo_usuario == 'admin' %}
-                <li class="active"><a href="{{ url_for('supervisao') }}">Supervisão</a></li>
-            {% endif %}
+                {% if current_user.tipo_usuario == 'admin' %}
+                    <li class="active"><a href="{{ url_for('supervisao') }}">Supervisão</a></li>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -21,76 +21,73 @@
             <div class="panel-header">
                 <h2>Trilha de Auditoria do Sistema</h2>
                 <div class="header-actions">
-                    <span id="registro-count" class="produto-count">{{ acoes|length }} registro(s) no total</span>
+                    <span class="produto-count">{{ pagination.total }} registro(s) no total</span>
                 </div>
             </div>
             <div class="panel-content">
-                <div class="form-container" style="margin-bottom: 2rem; padding: 20px;">
-                    <div class="form-section" style="margin-bottom: 0;">
-                        <h3 class="section-title"><span class="section-icon">🔍</span> Filtrar Registros</h3>
+                <form method="GET" action="{{ url_for('supervisao') }}" class="supervisao-filter-container">
+                    <div class="form-row">
                         <div class="form-group">
-                            <label for="searchInput" class="cadastro-label">Buscar nos Detalhes:</label>
-                            <input type="text" id="searchInput" class="cadastro-input" placeholder="Digite um termo para buscar...">
+                            <label for="chamado_id">Filtrar por ID do Chamado:</label>
+                            <input type="text" id="chamado_id" name="chamado_id" class="cadastro-input" placeholder="#123..." value="{{ chamado_id_filter or '' }}">
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="userFilter" class="cadastro-label">Filtrar por Usuário:</label>
-                                <select id="userFilter" class="select-styled">
-                                    <option value="todos">Todos os Usuários</option>
-                                    {% for usuario in usuarios %}
-                                    <option value="{{ usuario.username }}">{{ usuario.username }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="actionFilter" class="cadastro-label">Filtrar por Ação:</label>
-                                <select id="actionFilter" class="select-styled">
-                                    <option value="todos">Todos os Tipos</option>
-                                    {% for tipo in tipos_de_acao %}
-                                    <option value="{{ tipo }}">{{ tipo.replace('_', ' ')|title }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="codigo_item">Filtrar por Código do Item:</label>
+                            <input type="text" id="codigo_item" name="codigo_item" class="cadastro-input" placeholder="Código de barras..." value="{{ codigo_item_filter or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="usuario_id">Filtrar por Usuário:</label>
+                            <select id="usuario_id" name="usuario_id" class="select-styled">
+                                <option value="">Todos os Usuários</option>
+                                {% for usuario in usuarios %}
+                                <option value="{{ usuario.id }}" {% if usuario.id|string == usuario_id_filter %}selected{% endif %}>
+                                    {{ usuario.username }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="per_page">Mostrar por Página:</label>
+                            <select id="per_page" name="per_page" class="select-styled">
+                                <option value="20" {% if per_page == 20 %}selected{% endif %}>20</option>
+                                <option value="50" {% if per_page == 50 %}selected{% endif %}>50</option>
+                                <option value="100" {% if per_page == 100 %}selected{% endif %}>100</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: flex-end; gap: 10px;">
+                             <button type="submit" class="btn btn-primary">🔎 Filtrar</button>
+                             <a href="{{ url_for('supervisao') }}" class="btn btn-secondary">Limpar</a>
                         </div>
                     </div>
-                </div>
+                </form>
 
                 <div class="table-container">
                     {% if acoes %}
-                    <div class="table-controls">
-                        <label for="rowsPerPage">Mostrar</label>
-                        <select id="rowsPerPage">
-                            <option value="10">10</option>
-                            <option value="25" selected>25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                        <span>registros por página</span>
-                    </div>
-
                     <div class="table-wrapper">
                         <table class="solicitacoes-table auditoria-table">
                             <thead>
                                 <tr>
-                                    <th>Data/Hora</th>
-                                    <th>Usuário</th>
-                                    <th>Tipo da Ação</th>
-                                    <th>Detalhes</th>
-                                    <th>Objeto Relacionado</th>
+                                    <th class="col-data">Data/Hora</th>
+                                    <th class="col-usuario">Usuário</th>
+                                    <th class="col-acao">Tipo da Ação</th>
+                                    <th class="col-detalhes">Detalhes</th>
+                                    <th class="col-objeto">Objeto Relacionado</th>
                                 </tr>
                             </thead>
-                            <tbody id="auditoria-tbody">
+                            <tbody>
                                 {% for acao in acoes %}
                                 <tr class="auditoria-row">
-                                    <td class="col-data" data-timestamp="{{ acao.data_acao.isoformat() }}">{{ acao.data_acao|localtime }}</td>
+                                    <td class="col-data">{{ acao.data_acao|localtime }}</td>
                                     <td class="col-usuario">{{ acao.usuario.username }}</td>
-                                    <td class="col-acao">{{ acao.tipo_acao }}</td>
+                                    <td class="col-acao">{{ acao.tipo_acao.replace('_', ' ')|title }}</td>
                                     <td class="col-detalhes">{{ acao.detalhes }}</td>
                                     <td class="col-objeto">
                                         {% if acao.solicitacao_id %}
                                             <a href="{{ url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=acao.solicitacao_id) }}">
                                                 Chamado #{{ acao.solicitacao_id }}
                                             </a>
+                                        {% elif acao.produto_id %}
+                                            Item #{{ acao.produto_id }}
                                         {% else %}
                                             N/A
                                         {% endif %}
@@ -99,160 +96,33 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <div id="empty-search-result" class="empty-state" style="display: none; padding: 40px;">
-                            <div class="empty-icon">🤷</div>
-                            <h3>Nenhum registro encontrado</h3>
-                            <p>Sua busca não correspondeu a nenhuma atividade no sistema.</p>
-                        </div>
-                    </div>
-                    <div class="pagination-container">
-                        <span id="pagination-info"></span>
-                        <div id="pagination-controls"></div>
                     </div>
                     {% else %}
-                    <div class="empty-state">
-                        <div class="empty-icon">🕵️</div>
-                        <h3>Nenhum Registro de Atividade</h3>
-                        <p>Ainda não há nenhuma atividade de usuário registrada no sistema.</p>
+                    <div class="empty-state" style="padding: 40px;">
+                        <div class="empty-icon">🤷</div>
+                        <h3>Nenhum registro encontrado</h3>
+                        <p>Sua busca não correspondeu a nenhuma atividade no sistema.</p>
                     </div>
                     {% endif %}
                 </div>
+
+                {% if pagination and pagination.pages > 1 %}
+                <div class="pagination">
+                    <a href="{{ url_for('supervisao', page=1, **request.args) }}" class="page-link {% if not pagination.has_prev %}disabled{% endif %}">« Primeira</a>
+                    <a href="{{ url_for('supervisao', page=pagination.prev_num, **request.args) }}" class="page-link {% if not pagination.has_prev %}disabled{% endif %}">‹ Anterior</a>
+                    
+                    <span class="page-info">Página {{ pagination.page }} de {{ pagination.pages }}</span>
+                    
+                    <a href="{{ url_for('supervisao', page=pagination.next_num, **request.args) }}" class="page-link {% if not pagination.has_next %}disabled{% endif %}">Próxima ›</a>
+                    <a href="{{ url_for('supervisao', page=pagination.pages, **request.args) }}" class="page-link {% if not pagination.has_next %}disabled{% endif %}">Última »</a>
+                </div>
+                {% endif %}
 
                 <div class="page-actions" style="margin-top: 30px;">
                     <a href="{{ url_for('gerar_relatorio_supervisao_pdf') }}" class="btn btn-primary" target="_blank">📄 Gerar Relatório de Itens</a>
                     <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">🏠 Painel Principal</a>
                 </div>
-
             </div>
         </div>
     </div>
-
-<script>
-// O SCRIPT CONTINUA IGUAL AO ANTERIOR, SEM MUDANÇAS
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const userFilter = document.getElementById('userFilter');
-    const actionFilter = document.getElementById('actionFilter');
-    const tableBody = document.getElementById('auditoria-tbody');
-    const allRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
-    const countSpan = document.getElementById('registro-count');
-    const emptySearchResult = document.getElementById('empty-search-result');
-    const rowsPerPageSelect = document.getElementById('rowsPerPage');
-    const paginationControls = document.getElementById('pagination-controls');
-    const paginationInfo = document.getElementById('pagination-info');
-
-    let currentPage = 1;
-    let filteredRows = [...allRows];
-
-    function applyFilters() {
-        const searchText = searchInput.value.toLowerCase().trim();
-        const userValue = userFilter.value;
-        const actionValue = actionFilter.value;
-
-        filteredRows = allRows.filter(row => {
-            const detalhes = row.querySelector('.col-detalhes').textContent.toLowerCase();
-            const usuario = row.querySelector('.col-usuario').textContent;
-            const acao = row.querySelector('.col-acao').textContent;
-
-            const textMatch = detalhes.includes(searchText);
-            const userMatch = (userValue === 'todos') || (usuario === userValue);
-            const actionMatch = (actionValue === 'todos') || (acao === actionValue);
-
-            return textMatch && userMatch && actionMatch;
-        });
-
-        currentPage = 1;
-        updateTable();
-    }
-
-    function updateTable() {
-        const rowsPerPage = parseInt(rowsPerPageSelect.value, 10);
-        const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
-
-        allRows.forEach(row => row.style.display = 'none');
-        
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const rowsToShow = filteredRows.slice(start, end);
-        
-        rowsToShow.forEach(row => row.style.display = '');
-
-        setupPagination(totalPages);
-        updateInfo(start, end);
-
-        if (filteredRows.length === 0 && allRows.length > 0) {
-            emptySearchResult.style.display = 'block';
-        } else {
-            emptySearchResult.style.display = 'none';
-        }
-    }
-
-    function setupPagination(totalPages) {
-        paginationControls.innerHTML = '';
-
-        if (totalPages <= 1) {
-            paginationInfo.textContent = '';
-            return;
-        }
-
-        const prevButton = document.createElement('button');
-        prevButton.textContent = '« Anterior';
-        prevButton.disabled = currentPage === 1;
-        prevButton.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                updateTable();
-            }
-        });
-        paginationControls.appendChild(prevButton);
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = i;
-            if (i === currentPage) {
-                pageButton.classList.add('active');
-            }
-            pageButton.addEventListener('click', () => {
-                currentPage = i;
-                updateTable();
-            });
-            paginationControls.appendChild(pageButton);
-        }
-
-        const nextButton = document.createElement('button');
-        nextButton.textContent = 'Próximo »';
-        nextButton.disabled = currentPage === totalPages;
-        nextButton.addEventListener('click', () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateTable();
-            }
-        });
-        paginationControls.appendChild(nextButton);
-    }
-
-    function updateInfo(start, end) {
-        const totalFiltered = filteredRows.length;
-        const endOfPage = Math.min(end, totalFiltered);
-        if (totalFiltered > 0) {
-            paginationInfo.textContent = `Mostrando ${start + 1} a ${endOfPage} de ${totalFiltered} registros`;
-        } else {
-            paginationInfo.textContent = '';
-        }
-        countSpan.textContent = `${totalFiltered} registro(s) filtrado(s) de ${allRows.length} no total`;
-    }
-
-    // Adiciona os "listeners" de eventos
-    searchInput.addEventListener('input', applyFilters);
-    userFilter.addEventListener('change', applyFilters);
-    actionFilter.addEventListener('change', applyFilters);
-    rowsPerPageSelect.addEventListener('change', applyFilters);
-
-    // Inicializa a tabela
-    if (tableBody) {
-        applyFilters();
-    }
-});
-</script>
-
 {% endblock %}

@@ -3,7 +3,7 @@ import pdfkit
 from io import BytesIO
 from db_setup import db
 from models import Produto, Setor, Solicitacao, Usuario, SaidaMaterial, Comentario, HistoricoAcoes, Anexo
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import OperationalError, ProgrammingError
 from urllib.parse import urlparse
@@ -63,8 +63,8 @@ login_manager.login_message_category = 'info'
 @app.before_request
 def before_request():
     """Define o tempo de vida da sessão e a renova a cada requisição."""
-    # Define o tempo de vida da sessão para 36 horas
-    app.permanent_session_lifetime = timedelta(hours=36)
+    # Define o tempo de vida da sessão para 24 horas
+    app.permanent_session_lifetime = timedelta(hours=24)
     # Marca a sessão como permanente para que o tempo de vida seja aplicado
     session.permanent = True
     # A cada requisição, a sessão é "renovada", reiniciando o timer de inatividade.
@@ -78,7 +78,7 @@ scheduler.start()
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Usuario.query.get(int(user_id))
+    return db.session.get(Usuario, int(user_id))
 
 def permission_required(permission):
     def decorator(f):
@@ -258,15 +258,14 @@ def portal_solicitacoes():
                 titulo=request.form.get('titulo', '').strip(),
                 categoria=request.form.get('categoria', 'Geral').strip(),
                 descricao=request.form.get('descricao', '').strip(),
-                status='pendente',
-                data_solicitacao=datetime.utcnow() 
+                status='pendente'
             )
-            if not novo_chamado.nome_solicitante or not novo_chamado.setor or not novo_chamado.titulo:
-                flash('Os campos Nome, Setor e Título são obrigatórios.', 'error')
-                return render_template('portal_solicitacoes.html')
             
+            if not all([novo_chamado.nome_solicitante, novo_chamado.setor, novo_chamado.titulo, novo_chamado.categoria]):
+                 flash('Todos os campos obrigatórios devem ser preenchidos.', 'error')
+                 return render_template('portal_solicitacoes.html')
+
             db.session.add(novo_chamado)
-            
             db.session.flush()
 
             autor_id = current_user.id if current_user.is_authenticated else 1
@@ -285,10 +284,59 @@ def portal_solicitacoes():
             db.session.commit()
             flash(f'Chamado de manutenção aberto com sucesso! O ID do chamado é #{novo_chamado.id}, confira no Portal', 'success')
             return redirect(url_for('portal_solicitacoes'))
+
         except Exception as e:
             db.session.rollback()
             flash(f'Erro ao abrir chamado: {e}', 'error')
+            
     return render_template('portal_solicitacoes.html')
+
+@app.route('/portal_arcondicionado', methods=['GET', 'POST'])
+def portal_arcondicionado():
+    if request.method == 'POST':
+        try:
+            # Pega os dados do formulário
+            patrimonio = request.form.get('patrimonio_ativo', '').strip()
+            nome_solicitante = request.form.get('nome_solicitante', '').strip()
+            setor = request.form.get('setor', '').strip()
+            titulo = request.form.get('titulo', '').strip()
+            descricao = request.form.get('descricao', '').strip()
+            if not all([patrimonio, nome_solicitante, setor, titulo]):
+                flash('Todos os campos obrigatórios devem ser preenchidos.', 'error')
+                return redirect(url_for('portal_arcondicionado'))
+
+            novo_chamado = Solicitacao(
+                nome_solicitante=nome_solicitante,
+                setor=setor,
+                titulo=titulo,
+                categoria='Ar-Condicionado',  # Categoria é fixa
+                patrimonio_ativo=patrimonio,
+                descricao=descricao,
+                status='pendente'
+            )
+            db.session.add(novo_chamado)
+            db.session.flush()
+
+            autor_id = current_user.id if current_user.is_authenticated else 1
+            detalhes_acao = f"Chamado de Ar-Condicionado criado para o patrimônio '{patrimonio}' pelo solicitante '{nome_solicitante}'."
+            
+            historico_criacao = HistoricoAcoes(
+                solicitacao_id=novo_chamado.id,
+                usuario_id=autor_id,
+                tipo_acao='chamado_criado',
+                detalhes=detalhes_acao
+            )
+            db.session.add(historico_criacao)
+            
+            db.session.commit()
+            flash(f'Chamado de Ar-Condicionado aberto com sucesso! O ID do chamado é #{novo_chamado.id}, confira no Portal', 'success')
+            return redirect(url_for('portal_arcondicionado'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao abrir chamado: {e}', 'error')
+            
+    return render_template('portal_arcondicionado.html')
 
 @app.route('/gerenciar_solicitacoes')
 @login_required
@@ -864,19 +912,76 @@ def historico_detalhes(solicitacao_id):
 
     return render_template('historico_detalhes.html', solicitacao=solicitacao, HistoricoAcoes=HistoricoAcoes)
 
+@app.route('/historico_ativo', methods=['GET'])
+@login_required
+@permission_required('gerenciar_solicitacoes')
+def historico_ativo():
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int) 
+    patrimonio_query = request.args.get('patrimonio', '').strip()
+    
+    solicitacoes = []
+    pagination = None
+
+    if patrimonio_query:
+        chamados_via_produto = db.session.query(SaidaMaterial.solicitacao_id)\
+                                           .join(Produto)\
+                                           .filter(Produto.codigo_barras.ilike(f'%{patrimonio_query}%'))
+
+        query = Solicitacao.query.filter(
+            db.or_(
+                Solicitacao.patrimonio_ativo.ilike(f'%{patrimonio_query}%'),
+                Solicitacao.id.in_(chamados_via_produto)
+            )
+        ).order_by(Solicitacao.data_solicitacao.desc())
+        
+        pagination = db.paginate(query, per_page=per_page, page=page) 
+        solicitacoes = pagination.items
+    
+    return render_template('historico_ativo.html', 
+                           solicitacoes=solicitacoes, 
+                           pagination=pagination,
+                           patrimonio_query=patrimonio_query,
+                           per_page=per_page) 
+
 @app.route('/supervisao')
 @login_required
 @permission_required('admin')
 def supervisao():
-    todas_as_acoes = HistoricoAcoes.query.order_by(HistoricoAcoes.data_acao.desc()).all()
-    todos_os_usuarios = Usuario.query.order_by(Usuario.username).all()
-    tipos_de_acao_unicos = db.session.query(HistoricoAcoes.tipo_acao).distinct().all()
-    tipos_de_acao = [item[0] for item in tipos_de_acao_unicos]
-    return render_template('supervisao.html', 
-                           acoes=todas_as_acoes, 
-                           usuarios=todos_os_usuarios,
-                           tipos_de_acao=tipos_de_acao)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    chamado_id_filter = request.args.get('chamado_id', '').strip()
+    codigo_item_filter = request.args.get('codigo_item', '').strip()
+    usuario_id_filter = request.args.get('usuario_id', '').strip()
 
+    query = HistoricoAcoes.query.options(
+        joinedload(HistoricoAcoes.usuario), 
+        joinedload(HistoricoAcoes.produto)
+    )
+
+    if chamado_id_filter:
+        query = query.filter(HistoricoAcoes.solicitacao_id == chamado_id_filter)
+    if usuario_id_filter:
+        query = query.filter(HistoricoAcoes.usuario_id == usuario_id_filter)
+    if codigo_item_filter:
+        query = query.join(HistoricoAcoes.produto).filter(Produto.codigo_barras.ilike(f'%{codigo_item_filter}%'))
+    pagination = db.paginate(
+        query.order_by(HistoricoAcoes.data_acao.desc()), 
+        per_page=per_page, 
+        page=page
+    )
+    acoes = pagination.items
+
+    usuarios = Usuario.query.order_by(Usuario.username).all()
+
+    return render_template('supervisao.html', 
+                           acoes=acoes, 
+                           usuarios=usuarios, 
+                           pagination=pagination,
+                           chamado_id_filter=chamado_id_filter,
+                           codigo_item_filter=codigo_item_filter,
+                           usuario_id_filter=usuario_id_filter,
+                           per_page=per_page)
 @app.route('/supervisao/relatorio_pdf')
 @login_required
 @permission_required('admin')
@@ -937,23 +1042,19 @@ def limpeza_itens_zerados():
             # Define o limite de tempo (7 dias atrás)
             limite_de_tempo = datetime.utcnow() - timedelta(days=7)
 
-            # Busca por produtos com quantidade 0
             produtos_zerados = Produto.query.filter(Produto.quantidade <= 0).all()
             
             produtos_excluidos_count = 0
             for produto in produtos_zerados:
-                # Para cada produto, busca a última ação de atualização no histórico
                 ultima_atualizacao = HistoricoAcoes.query.filter_by(produto_id=produto.id)\
                                                          .order_by(HistoricoAcoes.data_acao.desc())\
                                                          .first()
 
-                # Se a última atualização existe e foi há mais de 7 dias, exclui o produto
                 if ultima_atualizacao and ultima_atualizacao.data_acao < limite_de_tempo:
                     nome_produto_excluido = produto.nome
                     id_produto_excluido = produto.id
                     print(f"-> Preparando para excluir produto '{nome_produto_excluido}' (ID: {id_produto_excluido})...")
                     
-                    # Cria um log da exclusão automática
                     log_exclusao = HistoricoAcoes(
                         usuario_id=1, # Assume que o usuário 'admin' tem ID 1
                         tipo_acao='exclusao_automatica',

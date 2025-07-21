@@ -24,6 +24,9 @@
             {% if current_user.has_permission('historico') %}
                 <li><a href="{{ url_for('historico') }}">Histórico</a></li>
             {% endif %}
+            {% if current_user.has_permission('historico_ativo') %}
+                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
+            {% endif %}
             </ul>
         </div>
     </nav>
@@ -69,6 +72,17 @@
                         <div class="detalhes-grid">
                             <div class="detalhe-item detalhe-full"><label class="detalhe-label">Título:</label><span class="detalhe-valor titulo-principal">{{ solicitacao.titulo }}</span></div>
                             <div class="detalhe-item"><label class="detalhe-label">Categoria:</label><span class="detalhe-valor">{{ solicitacao.categoria }}</span></div>
+                            
+                            <div class="detalhe-item">
+                                <label class="detalhe-label">Patrimônio do Ativo:</label>
+                                <span class="detalhe-valor">
+                                    {% if solicitacao.patrimonio_ativo %}
+                                        {{ solicitacao.patrimonio_ativo }}
+                                    {% else %}
+                                        <em style="color: #6c757d;">Nenhum patrimônio associado</em>
+                                    {% endif %}
+                                </span>
+                            </div>
                             <div class="detalhe-item"><label class="detalhe-label">Urgência:</label><div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">{{ solicitacao.urgencia|capitalize }}</div></div>
                         </div>
                         {% if solicitacao.status in ['pendente', 'em_analise', 'aprovada'] and current_user.tipo_usuario in ['manutencao', 'admin'] %}
@@ -366,12 +380,15 @@
                                 {% set fotos_depois = solicitacao.anexos.filter_by(tipo_anexo='depois').all() %}
                                 {% if fotos_depois %}
                                     {% for anexo in fotos_depois %}
-                                        <div class="anexo-item">
-                                            <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank">
-                                                <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" alt="Foto do Depois">
-                                            </a>
-                                        </div>
-                                    {% endfor %}
+                                    <div class="anexo-item">
+                                        <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank">
+                                            <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" alt="Foto do {{ anexo.tipo_anexo }}">
+                                        </a>
+                                        <form method="POST" action="{{ url_for('excluir_anexo', anexo_id=anexo.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir esta foto permanentemente?')">
+                                            <button type="submit" class="btn-delete-foto" title="Excluir Foto">❌</button>
+                                        </form>
+                                    </div>
+                                {% endfor %}
                                 {% else %}
                                     <p class="no-anexos">Nenhuma foto do "depois" foi enviada.</p>
                                 {% endif %}

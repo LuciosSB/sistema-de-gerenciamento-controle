@@ -82,6 +82,7 @@ class Solicitacao(db.Model):
     categoria = db.Column(db.String(100), nullable=False, default="Geral")
     urgencia = db.Column(db.String(50), nullable=False, default='baixa')
     motivo_rejeicao = db.Column(db.Text, nullable=True)
+    patrimonio_ativo = db.Column(db.String(100), nullable=True)
     anexos = db.relationship('Anexo', backref='solicitacao', lazy='dynamic', cascade="all, delete-orphan")
 
     def get_ultimo_comentario(self):
@@ -143,6 +144,7 @@ class HistoricoAcoes(db.Model):
     produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=True)
     solicitacao = db.relationship('Solicitacao', backref=db.backref('historico', lazy='dynamic', cascade="all, delete-orphan"))
     usuario = db.relationship('Usuario')
+    produto = db.relationship('Produto')
 
     def __repr__(self):
         return f'<HistoricoAcoes {self.id}: {self.tipo_acao} na Solicitacao {self.solicitacao_id}>'

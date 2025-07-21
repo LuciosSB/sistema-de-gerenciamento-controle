@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Chamados - Ar-Condicionado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">DMTT - Portal de Chamados</div>
+                <div class="header-info">
+                    <span class="header-text">Sistema de Manutenção</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="portal-switcher-top">
+             <a href="{{ url_for('portal_solicitacoes') }}" class="btn-arcondicionado" style="background: #6c757d; color: white; border-color: #6c757d;">🛠️ Ir para Portal Geral</a>
+        </div>
+
+
+        <div class="department-section">
+            <div class="department-info">
+                <div class="department-icon">❄️</div>
+                <div class="department-text">
+                    <h2>Abertura de Chamado para Ar-Condicionado</h2>
+                    <p>Preencha o formulário abaixo. O número de patrimônio do equipamento é obrigatório.</p>
+                </div>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <span class="alert-icon">
+                        {% if category == 'success' %}✅
+                        {% elif category == 'error' %}❌
+                        {% else %}ℹ️
+                        {% endif %}
+                    </span>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="solicitation-container">
+            <form id="solicitationForm" method="POST" action="{{ url_for('portal_arcondicionado') }}">
+                
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <span class="section-icon">👤</span>
+                        Dados do Solicitante
+                    </h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nome_solicitante">Seu Nome <span class="required-indicator">*</span></label>
+                            <input type="text" id="nome_solicitante" name="nome_solicitante" required 
+                                   placeholder="Digite seu nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="setor">Seu Setor <span class="required-indicator">*</span></label>
+                            <input type="text" id="setor" name="setor" required 
+                                   placeholder="Digite o nome do seu setor">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <span class="section-icon">📋</span>
+                        Detalhes do Chamado
+                    </h3>
+                    <div class="form-group">
+                        <label for="titulo">Título do Problema <span class="required-indicator">*</span></label>
+                        <input type="text" id="titulo" name="titulo" required 
+                               placeholder="Ex: Ar-condicionado não gela, Está pingando, Barulho estranho">
+                    </div>
+                    <div class="form-group">
+                        <label for="patrimonio_ativo">Número de Patrimônio do Equipamento <span class="required-indicator">*</span></label>
+                        <input type="text" id="patrimonio_ativo" name="patrimonio_ativo" required 
+                               placeholder="Digite o número de patrimônio localizado no aparelho">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <span class="section-icon">📝</span>
+                        Descrição Detalhada do Problema
+                    </h3>
+                    <div class="form-group">
+                        <label for="descricao">Descreva o que está acontecendo</label>
+                        <textarea id="descricao" name="descricao" rows="5" 
+                                  placeholder="Forneça detalhes que ajudem a equipe de manutenção a entender o problema."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions-container">
+                    <button type="submit" class="btn btn-submit">
+                        <span class="btn-icon">📤</span>
+                        Abrir Chamado
+                    </button>
+                    <a href="{{ url_for('lista_solicitacoes') }}" class="btn btn-view-requests">
+                        <span class="btn-icon">📊</span>
+                        Acompanhar Chamados
+                    </a>
+                    <a href="{{ url_for('exibir_login') }}" class="btn btn-back">
+                        <span class="btn-icon">🏠</span>
+                        Voltar ao Início
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('solicitationForm');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    if (!confirm('Deseja realmente abrir este chamado de manutenção?')) {
+                        e.preventDefault();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

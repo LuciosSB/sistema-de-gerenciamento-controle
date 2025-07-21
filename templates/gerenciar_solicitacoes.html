@@ -24,6 +24,9 @@
             {% if current_user.has_permission('historico') %}
                 <li><a href="{{ url_for('historico') }}">Histórico</a></li>
             {% endif %}
+            {% if current_user.has_permission('historico_ativo') %}
+                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
+            {% endif %}
             </ul>
         </div>
     </nav>
@@ -34,10 +37,7 @@
                 <div class="header-row">
                     <h2>Gerenciar Chamados</h2>
                     <button id="toggleFilterBtn" class="btn-toggle-filter" title="Mostrar/Ocultar filtros">🔎 Filtrar</button>
-                    
-                    <button id="autoRefreshBtn" class="btn-auto-refresh" title="Ativar/Desativar atualização automática">
-                        🔄
-                    </button>
+                    <button id="autoRefreshBtn" class="btn-auto-refresh" title="Ativar/Desativar atualização automática">🔄</button>
                     <span id="solicitacao-count-span" class="solicitacao-count">{{ solicitacoes|length }} chamado(s) encontrado(s)</span>
                 </div>
                  <div class="refresh-status" style="text-align: right; margin-top: -15px; height: 15px;">
@@ -73,6 +73,19 @@
                                 </label>
                             </div>
                         </div>
+
+                        <h3 class="section-title" style="margin-top: 20px;"><span class="section-icon">📂</span> Filtrar por Categoria</h3>
+                        <div class="form-group">
+                            <select id="categoryFilter" class="select-styled">
+                                <option value="todas">Todas as Categorias</option>
+                                <option value="Ar-Condicionado">Ar-Condicionado</option>
+                                <option value="Elétrica">Elétrica (Tomadas, Fios, Iluminação)</option>
+                                <option value="Hidráulica">Hidráulica (Banheiros, Copas, Vazamentos)</option>
+                                <option value="Pintura e Alvenaria">Pintura e Alvenaria (Paredes, Reparos)</option>
+                                <option value="Estrutural">Estrutural (Mobiliário, Portas, Janelas)</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -94,9 +107,14 @@
                             </thead>
                             <tbody>
                                 {% for solicitacao in solicitacoes %}
-                                <tr class="solicitacao-row" data-status="{{ solicitacao.status }}">
+                                <tr class="solicitacao-row" data-status="{{ solicitacao.status }}" data-categoria="{{ solicitacao.categoria }}">
                                     <td class="solicitacao-numero">#{{ solicitacao.id }}</td>
-                                    <td class="solicitacao-titulo">{{ solicitacao.titulo }}</td>
+                                    <td class="solicitacao-titulo">
+                                        {{ solicitacao.titulo }}
+                                        {% if solicitacao.patrimonio_ativo %}
+                                            <span class="patrimonio-badge">Patrimônio: {{ solicitacao.patrimonio_ativo }}</span>
+                                        {% endif %}
+                                    </td>
                                     <td class="solicitacao-nome">{{ solicitacao.nome_solicitante }}</td>
                                     <td class="solicitacao-setor">{{ solicitacao.setor }}</td>
                                     <td class="solicitacao-urgencia">
@@ -167,14 +185,14 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Variáveis para o Filtro ---
+            // --- Variáveis para os Filtros ---
             const toggleFilterBtn = document.getElementById('toggleFilterBtn');
             const filterContainer = document.getElementById('filterContainer');
             const statusFilters = document.querySelectorAll('input[name="status_filter"]');
+            const categoryFilter = document.getElementById('categoryFilter'); // Filtro de Categoria
             const tableRows = document.querySelectorAll('.solicitacoes-table tbody tr');
             const countSpan = document.getElementById('solicitacao-count-span');
-            const totalSolicitacoes = tableRows.length;
-
+            
             // --- Lógica para o botão de MOSTRAR/OCULTAR ---
             if (toggleFilterBtn) {
                 toggleFilterBtn.addEventListener('click', function() {
@@ -183,15 +201,20 @@
                 });
             }
 
-            // --- Lógica para APLICAR o filtro ---
-            function applyFilter() {
+            // --- Lógica para APLICAR os filtros combinados ---
+            function applyFilters() {
                 const selectedStatus = document.querySelector('input[name="status_filter"]:checked').value;
+                const selectedCategory = categoryFilter.value;
                 let visibleRows = 0;
 
                 tableRows.forEach(row => {
                     const rowStatus = row.getAttribute('data-status');
+                    const rowCategory = row.getAttribute('data-categoria');
+
+                    const statusMatch = (selectedStatus === 'todos' || rowStatus === selectedStatus);
+                    const categoryMatch = (selectedCategory === 'todas' || rowCategory === selectedCategory);
                     
-                    if (selectedStatus === 'todos' || rowStatus === selectedStatus) {
+                    if (statusMatch && categoryMatch) {
                         row.style.display = '';
                         visibleRows++;
                     } else {
@@ -202,9 +225,8 @@
                 countSpan.textContent = `${visibleRows} chamado(s) encontrado(s)`;
             }
 
-            statusFilters.forEach(filter => {
-                filter.addEventListener('change', applyFilter);
-            });
+            statusFilters.forEach(filter => filter.addEventListener('change', applyFilters));
+            categoryFilter.addEventListener('change', applyFilters);
 
             // --- Lógica para o Auto-Refresh (já existente) ---
             const autoRefreshBtn = document.getElementById('autoRefreshBtn');

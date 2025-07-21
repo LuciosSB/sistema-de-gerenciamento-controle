@@ -5066,3 +5066,146 @@ select option {
 .btn-delete-foto:hover {
     background-color: #dc3545; /* Vermelho no hover do botão */
 }
+/* --- Estilos para o container de filtros da Supervisão --- */
+.supervisao-filter-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.supervisao-filter-container .form-row {
+    margin-bottom: 0;
+    align-items: flex-end; /* Alinha os itens na base */
+}
+
+.supervisao-filter-container .form-group {
+    margin-bottom: 0;
+}
+
+.supervisao-filter-container .cadastro-input,
+.supervisao-filter-container .select-styled {
+    font-size: 14px;
+}
+/* --- Estilos para a Paginação --- */
+.pagination {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e8f0;
+    text-align: center;
+}
+
+.page-link {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 0 4px;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    color: #0056b3;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.page-link.disabled {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #f8f9fa;
+}
+
+.page-info {
+    display: inline-block;
+    padding: 8px 12px;
+    color: #495057;
+    font-weight: 600;
+}
+/* --- Estilo para a etiqueta de patrimônio na lista --- */
+.patrimonio-badge {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #004080;
+    background-color: #e6f3ff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid #cce5ff;
+    display: inline-block; /* Faz com que o fundo se ajuste ao texto */
+}
+/* --- ESTILOS PARA OS CARDS DE RESULTADO NA PÁGINA DE HISTÓRICO DE ATIVO --- */
+.acompanhamento-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chamado-card {
+    border: 1px solid #ddd;
+    border-left-width: 6px;
+    border-radius: 8px; /* << Suavidade nas bordas */
+    background-color: #fdfdfd;
+    padding: 15px 20px;
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra suave */
+}
+
+.chamado-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.card-titulo {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.card-status {
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.card-body {
+    font-size: 14px;
+    color: #555;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.card-body p {
+    margin: 5px 0;
+}
+
+/* Cores das bordas e dos status dos cards (consistente com o resto do sistema) */
+.chamado-card.status-pendente { border-left-color: #ffc107; }
+.chamado-card.status-pendente .card-status { background-color: #ffc107; color: #333; }
+.chamado-card.status-em_analise { border-left-color: #0d6efd; }
+.chamado-card.status-em_analise .card-status { background-color: #0d6efd; }
+.chamado-card.status-aprovada { border-left-color: #28a745; }
+.chamado-card.status-aprovada .card-status { background-color: #28a745; }
+.chamado-card.status-rejeitada { border-left-color: #dc3545; }
+.chamado-card.status-rejeitada .card-status { background-color: #dc3545; }
+.chamado-card.status-entregue { border-left-color: #17a2b8; }
+.chamado-card.status-entregue .card-status { background-color: #17a2b8; }
+.chamado-card.status-excluido { border-left-color: #6c757d; }
+.chamado-card.status-excluido .card-status { background-color: #6c757d; }

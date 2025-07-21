@@ -416,6 +416,8 @@ header {
 
 /* Container do formulário de solicitação */
 .solicitation-container {
+    max-width: 950px; /* <<< ADICIONADO: Define uma largura máxima */
+    margin: 0 auto 30px auto; /* <<< ADICIONADO: Centraliza o formulário */
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
     border: 3px solid #003366;
     border-radius: 16px;
@@ -431,9 +433,6 @@ header {
     background: rgba(255, 255, 255, 0.8);
     border-radius: 12px;
     border: 1px solid #e0e6ed;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s ease;
 }
 
 .section-title {
@@ -502,9 +501,6 @@ header {
     background: rgba(254, 237, 0, 0.1);
     border-radius: 12px;
     border: 1px solid #feed00;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s ease;
 }
 
 /* Botões específicos do formulário */
@@ -1385,4 +1381,72 @@ header {
 
 .btn-clear:hover {
     background-color: #5a6268;
+}
+/* --- Estilos para o botão de ir para o portal de ar-condicionado --- */
+ .portal-switcher-top {
+    display: flex;
+    justify-content: flex-end; /* Alinha o botão à direita */
+    margin-bottom: 20px;
+ }
+
+ .btn-arcondicionado {
+    display: inline-block; /* Garante que o botão não ocupe a linha toda */
+    background-color: #f8f9fa;
+    color: #007bff;
+    border: 2px solid #007bff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+ }
+
+ .btn-arcondicionado:hover {
+    background-color: #007bff;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+ }
+ /* --- Estilos para o Seletor de Portais --- */
+.portal-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 12px;
+}
+
+.portal-switch-btn {
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    color: #495057;
+    background-color: #fff;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.portal-switch-btn:hover {
+    border-color: #003366;
+    color: #003366;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.portal-switch-btn.active {
+    background-color: #003366;
+    color: #feed00;
+    border-color: #003366;
+    pointer-events: none; /* Desativa o clique no botão que já está ativo */
+    box-shadow: 0 5px 15px rgba(0, 51, 102, 0.2);
 }
