@@ -1,4 +1,12 @@
-# Ambientes Virtuais do Python
+# --- Arquivos Pesados do Projeto (Adicionados agora) ---
+binarios_pdf/
+build/
+dist/
+*.spec
+*.exe
+*.pkg
+
+# --- Ambientes Virtuais do Python ---
 /venv/
 /.venv/
 /env/
@@ -8,30 +16,32 @@ ENV/
 env.bak/
 venv.bak/
 
-# Arquivos de cache e compilados do Python
+# --- Arquivos de cache e compilados do Python ---
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Pasta de instância do Flask
+# --- Pasta de instância do Flask e Banco de Dados ---
 /instance/
 instance/
+*.db
+*.sqlite3
 
-# Arquivos de configuração de ambiente
+# --- Arquivos de configuração de ambiente ---
 .env
 .flaskenv
 *.env
 
-# Arquivos do sistema operacional
+# --- Arquivos do sistema operacional ---
 .DS_Store
 Thumbs.db
 
-# Arquivos de log
+# --- Arquivos de log ---
 *.log
 logs/
 
-# Arquivos de configuração do editor/IDE
+# --- Arquivos de configuração do editor/IDE ---
 .vscode/
 .idea/
 *.suo
