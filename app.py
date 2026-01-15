@@ -1413,7 +1413,7 @@ if __name__ == '__main__':
         with app.app_context():
             if not Usuario.query.filter_by(username='admin').first():
                 admin = Usuario(username='admin', dados='Admin TI', tipo_usuario='admin')
-                admin.set_password('Admin_ti@')
+                admin.set_password('dmtt2026ti')
                 db.session.add(admin)
                 db.session.commit()
                 print("✅ Usuário 'admin' padrão criado com sucesso.")
