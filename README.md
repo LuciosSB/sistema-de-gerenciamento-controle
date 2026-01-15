@@ -1,137 +1,162 @@
-# Sistema de Gestão de Manutenção - DMTT
+# 📦 Sistema de Gerenciamento e Controle de Almoxarifado
 
-Este é um sistema web que desenvolvi em Flask para gerenciar chamados de manutenção, controlar o estoque de itens e ferramentas, e administrar usuários e permissões em um ambiente de rede.
+Sistema web desenvolvido em **Python (Flask)** para gestão completa de almoxarifado, controle de estoque, fluxo de solicitações e histórico de movimentações.
 
-## Funcionalidades Principais
-
-* **Portal de Solicitações:** Uma página pública para qualquer pessoa abrir um novo chamado de manutenção.
-* **Acompanhamento Público:** Uma tela para consultar o status de chamados recentes sem a necessidade de login.
-* **Gestão de Chamados:** Painel interno para a equipe de manutenção aprovar, rejeitar, comentar e finalizar chamados.
-* **Controle de Estoque:** Cadastro e atualização de itens e ferramentas (consumíveis ou retornáveis).
-* **Saída de Materiais:** Associação de itens do estoque a um chamado específico.
-* **Controle de Acesso:** Sistema de permissões baseado em cargos (Admin, Manutenção, Gerenciador).
-* **Histórico Completo:** Uma visão geral de todos os chamados já criados, incluindo os finalizados e excluídos.
-* **Geração de PDF:** Emissão de relatórios de requisição de material em PDF.
-
-### Funcionalidades de Administração e Supervisão
-
-* **Trilha de Auditoria Completa:** Uma página de Supervisão, exclusiva para administradores, que registra todas as ações importantes no sistema: login, criação/atualização/exclusão de usuários e produtos, mudanças de status de chamados, etc.
-* **Filtros Avançados:** A página de Supervisão permite filtrar os registros por usuário, tipo de ação e data.
-* **Relatório de Movimentação de Estoque:** Geração de um relatório detalhado em PDF, mostrando para cada item a quantidade inicial, a quantidade atual, o percentual de uso e todo o histórico de movimentações.
-* **Setup Automatizado:** Na primeira execução, a aplicação verifica se o banco de dados e as tabelas existem no servidor PostgreSQL e os cria automaticamente, facilitando a implantação.
-
-## Tecnologias Utilizadas
-
-* **Backend:** Python 3 com Flask
-* **Banco de Dados:** PostgreSQL
-* **ORM:** SQLAlchemy
-* **Frontend:** HTML, CSS, JavaScript
+O sistema permite que funcionários abram chamados para requisição de materiais e que administradores gerenciem o estoque, aprovem/recusem pedidos e visualizem relatórios gerenciais através de um dashboard interativo.
 
 ---
 
-## Configuração para Acesso em Rede (Cliente-Servidor)
+## 🚀 Funcionalidades Principais
 
-Para que a aplicação (cliente) em um computador funcione com o banco de dados (servidor) em outro, siga estes dois passos.
-
-### Passo 1: Na máquina SERVIDOR (onde o PostgreSQL está instalado)
-
-O objetivo é permitir que o PostgreSQL aceite conexões de outros computadores na rede.
-
-1.  **Edite o arquivo `postgresql.conf`:**
-    * Procure pela linha `#listen_addresses = 'localhost'` e altere para:
-    ```ini
-    listen_addresses = '*'
-    ```
-    Isso faz o servidor "escutar" por conexões de qualquer endereço de rede, e não apenas da própria máquina.
-
-2.  **Edite o arquivo `pg_hba.conf`:**
-    * Adicione a seguinte linha ao final do arquivo:
-    ```ini
-    # Exemplo para uma rede 192.168.0.x
-    host    all    all    192.168.0.0/24    md5
-
-    # Exemplo para uma rede 10.124.129.x
-    host    all    all    10.124.129.0/24   md5
-    ```
-    * **Explicação:** Esta linha autoriza qualquer usuário (`all`) de qualquer banco de dados (`all`) vindo de qualquer IP na faixa de rede especificada (`10.124.129.0/24`) a se conectar, desde que forneça uma senha válida (`md5`).
-    * **IMPORTANTE:** O uso de `md5` é crucial para garantir a compatibilidade com a aplicação. O método mais moderno `scram-sha-256` pode talvez causar erros de `UnicodeDecodeError`. 
-    * **DETALHE IMPORTANTE** Caso ainda esteja dando o problema de UnicodeDecodeError, provavelmente é melhor colocar tudo para scram-sha-256
-
-3.  **Reinicie o serviço do PostgreSQL** para que as alterações tenham efeito.
-
-### Passo 2: Na máquina CLIENTE (onde a aplicação `.exe` ou o código será executado)
-
-1.  **Edite o arquivo `config.py`:**
-2.  Atualize a `SQLALCHEMY_DATABASE_URI` com o endereço IP do **servidor** onde o banco de dados está.
-
-    ```python
-    # Exemplo:
-    # 'postgresql://<usuario>:<senha>@<IP_DO_SERVIDOR>:<porta>/<nome_do_banco>'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:sua_senha_aqui@10.108.129.100:5432/controle_almox'
-    ```
+* **Dashboard Gerencial:** Visão geral com indicadores de estoque baixo, chamados pendentes e gráficos de atividade.
+* **Controle de Estoque:** Cadastro, edição e exclusão de produtos com níveis mínimos de alerta.
+* **Mural de Solicitações:** Acompanhamento global de pedidos em tempo real (Visão Pública).
+* **Gestão de Chamados:** Fluxo de aprovação (Pendente -> Aprovado -> Concluído/Recusado) com conferência de devolução de materiais.
+* **Histórico Completo:** Auditoria de todas as ações (Login, Criação, Edição, Baixa de material).
+* **Níveis de Acesso:**
+    * *Admin:* Acesso total ao sistema.
+    * *Gerente:* Gestão de aprovações.
+    * *Comum:* Apenas visualização e abertura de chamados.
 
 ---
 
-## Como Rodar (Ambiente de Desenvolvimento)
+## 🛠️ Pré-requisitos (Softwares Obrigatórios)
 
-Siga estes passos se você é um desenvolvedor e deseja executar o código-fonte.
+Para o sistema funcionar, você precisa instalar os softwares abaixo na máquina (o `requirements.txt` não instala estes itens):
 
-### 1. Pré-requisitos
-* **Git:** Para clonar o repositório.
-* **Python 3.10+**
-* **PostgreSQL:** Instalado em uma máquina na rede (pode ser a sua localmente).
+1.  **Python 3.10+:** [Baixar Python](https://www.python.org/downloads/)
+    * ⚠️ **Importante:** Marque a opção **"Add Python to PATH"** no início da instalação.
 
-### 2. Preparar o Ambiente
-1.  **Clonar o Repositório**
-    ```bash
-    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
-    cd seu-repositorio
-    ```
+2.  **PostgreSQL 14+:** [Baixar PostgreSQL](https://www.postgresql.org/download/)
+    * Anote a senha que você criar para o usuário `postgres` (padrão sugerida: `suasenha`).
 
-2.  **Criar e Ativar o Ambiente Virtual**
-    ```bash
-    python -m venv venv
-    # No Windows
-    .\venv\Scripts\activate
-    # No Linux/macOS
-    source venv/bin/activate
-    ```
+3.  **WKHTMLTOPDF (Gerador de Relatórios):** [Baixar wkhtmltopdf](https://wkhtmltopdf.org/downloads.html)
+    * Baixe a versão para Windows (MinGW-w64).
+    * Instale o programa.
+    * **Crucial:** Após instalar, verifique se a pasta `bin` dele (ex: `C:\Program Files\wkhtmltopdf\bin`) foi adicionada às Variáveis de Ambiente (PATH) do Windows. Se não, adicione manualmente, ou o Python não conseguirá gerar os PDFs.
 
-3.  **Instalar as Dependências**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-### 3. Configurar e Executar
-1.  Siga as instruções da seção **"Configuração para Acesso em Rede"** para configurar seu `postgresql.conf`, `pg_hba.conf` (se necessário) e o arquivo `config.py`.
-2.  Execute o `app.py` para iniciar o servidor.
-    ```bash
-    python app.py
-    ```
-3.  Abra seu navegador e acesse o endereço que aparecer no terminal (ex: `http://127.0.0.1:8080`).
-
-**Login Padrão (na primeira execução):**
-* **Usuário:** `admin`
-* **Senha:** `senha_interessante`
-
-> **Importante:** Altere a senha do administrador imediatamente após o primeiro login!
+4.  **Git:** [Baixar Git](https://git-scm.com/downloads) (Para baixar o código).
 
 ---
 
-## Compilando um Novo Executável (`.exe`)
+### 🚨 Nota sobre Erros de Instalação (Visual C++)
+Se ao rodar `pip install` der um erro gigante vermelho mencionando "Microsoft Visual C++ 14.0 or greater is required":
+* Baixe o [Build Tools for Visual Studio](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+* Na instalação, marque apenas a caixa **"Desenvolvimento para Desktop com C++"**.
 
-Se você fez alterações no código e deseja gerar um novo arquivo `.exe` para distribuição.
+---
 
-1.  **Instalar o PyInstaller**
-    ```bash
-    pip install pyinstaller
-    ```
-2.  **Executar o Comando de Compilação (no Terminal)**
-Se você fez alterações no código e deseja gerar um novo arquivo `.exe` para distribuição, use o comando abaixo. Ele foi atualizado para incluir a pasta `migrations` e o módulo `logging.config`, que são essenciais para o funcionamento correto do executável.
+## ⚙️ Instalação e Configuração
 
-1.  **Garanta que o PyInstaller está instalado:** `pip install pyinstaller`.
-2.  **Execute o Comando de Compilação (no Terminal):**
-    ```bash
-    pyinstaller --console --onefile --name="SistemaDeControle" --add-data="templates;templates" --add-data="static;static" --add-data="migrations;migrations" --add-binary="binarios_pdf;binarios_pdf" --hidden-import "logging.config" app.py
-    ```
-3.  **Encontrar o Arquivo:** O novo executável (`SistemaDeControle.exe`) estará na pasta `dist`.
+Siga os passos abaixo no terminal (CMD, PowerShell ou Terminal do Linux):
+
+### 1. Clonar o Repositório
+```bash
+git clone [https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git](https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git)
+cd sistema-de-gerenciamento-controle
+2. Criar o Ambiente Virtual (.venv)
+Isso isola as bibliotecas do projeto para não conflitar com outras coisas no PC.
+
+Bash
+
+# Windows
+python -m venv .venv
+.venv\Scripts\activate
+
+# Linux/Mac
+python3 -m venv .venv
+source .venv/bin/activate
+3. Instalar as Dependências
+Bash
+
+pip install -r requirements.txt
+🗄️ Configuração do Banco de Dados
+O sistema utiliza PostgreSQL. Você deve criar um banco de dados vazio antes de rodar o sistema.
+
+Abra o pgAdmin (ou terminal do Postgres).
+
+Crie um banco de dados chamado: controle_almox.
+
+Configure a conexão no arquivo config.py (ou .env se estiver utilizando).
+
+🔧 Ajustando a String de Conexão (Local vs Remoto)
+No arquivo de configuração (config.py ou app.py), procure pela linha SQLALCHEMY_DATABASE_URI.
+
+Cenário A: Banco na Mesma Máquina (Localhost)
+
+Python
+
+# Formato: postgresql://USUARIO:SENHA@localhost:5432/NOME_DO_BANCO
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:suasenha@localhost:5432/controle_almox'
+Cenário B: Banco em Outra Máquina (Servidor) Se o sistema rodar no PC do funcionário, mas o banco estiver no Servidor (ex: IP 192.168.1.50):
+
+Python
+
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:suasenha@192.168.1.50:5432/controle_almox'
+Nota: Certifique-se que o arquivo pg_hba.conf do servidor permite conexões externas.
+
+🔐 Autenticação (SCRAM-SHA-256 vs MD5)
+O PostgreSQL mais novo usa scram-sha-256 por padrão. O driver psycopg2 já suporta isso.
+
+Se der erro de autenticação: Verifique se a senha está correta.
+
+Caso extremo: Se houver incompatibilidade de driver legado, altere o password_encryption no postgresql.conf para md5 e redefina a senha do usuário. Mas, na maioria dos casos atuais, não é necessário alterar nada, o sistema suporta o padrão moderno.
+
+🏗️ Inicializando o Banco (Migrações)
+Com o banco criado e configurado, rode os comandos para criar as tabelas automaticamente:
+
+Bash
+
+# Inicializa a pasta de migrações (se não existir)
+flask db init
+
+# Gera o script de migração
+flask db migrate -m "Inicialização do banco"
+
+# Aplica as tabelas no banco de dados
+flask db upgrade
+▶️ Executando o Sistema
+Com tudo configurado, inicie o servidor:
+
+Bash
+
+python app.py
+O sistema estará acessível em:
+
+Nesta máquina: http://127.0.0.1:8080
+
+Na rede local: http://SEU_IP_NA_REDE:8080 (Ex: https://www.google.com/search?q=http://192.168.0.15:8080)
+
+🔑 Acesso Inicial (Admin)
+O sistema deve criar um usuário administrador padrão na primeira execução (verifique o código app.py na seção cria_usuario_admin).
+
+Credenciais Padrão:
+
+Usuário: admin
+
+Senha: dmtt2026ti
+
+Importante: Após o primeiro acesso, recomenda-se criar usuários individuais para cada membro da equipe na aba "Usuários".
+
+🆘 Solução de Problemas Comuns
+1. Erro: "Role 'postgres' does not exist"
+
+Verifique se o usuário no SQLALCHEMY_DATABASE_URI é realmente postgres. Algumas instalações usam o nome do usuário do Windows.
+
+2. Erro: "Visual C++ Build Tools required" ao instalar requirements
+
+Algumas bibliotecas Python precisam de compiladores C++. Baixe o "Build Tools for Visual Studio" no site da Microsoft e instale a carga de trabalho "Desenvolvimento para Desktop com C++".
+
+3. CSS não carrega (Página Branca/Sem estilo)
+
+Tente limpar o cache do navegador com CTRL + F5.
+
+Verifique se o arquivo static/css/main.css não contém tags HTML dentro dele.
+
+4. Acesso negado pelo Firewall
+
+Se outras máquinas não conseguirem acessar o sistema, adicione uma regra de entrada no Firewall do Windows para a porta 8080 (TCP).
+
+Desenvolvido por André - 2026.
+
+---
