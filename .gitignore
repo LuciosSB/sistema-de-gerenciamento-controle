@@ -49,3 +49,6 @@ logs/
 *.njsproj
 *.sln
 *.sw?
+CONTEXTO_COMPLETO.txt
+
+gerar_contexto.py
