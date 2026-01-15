@@ -1,280 +1,133 @@
 {% extends "base.html" %}
 
-{% block title %}Listar Itens e Ferramentas{% endblock %}
+{% block title %}Controle de Estoque{% endblock %}
 
 {% block content %}
-    <nav>
-        <div class="container">
-            <ul class="nav-list">
-            {% if current_user.has_permission('dashboard') %}
-            <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
-            {% endif %}
-            {% if current_user.has_permission('gerenciar_solicitacoes') %}
-                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
-            {% endif %}
-            {% if current_user.has_permission('cadastrar_produto') %}
-                <li><a href="{{ url_for('cadastro_produto') }}">Cadastrar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('listar_produtos') %}
-                <li class="active"><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
-            {% endif %}
-            {% if current_user.has_permission('atualizar_produto') %}
-                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico') %}
-                <li><a href="{{ url_for('historico') }}">Histórico</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico_ativo') %}
-                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
-            {% endif %}
-            </ul>
-        </div>
-    </nav>
 
-    <div class="container">
-        <div class="main-content">
-            <div class="panel active" id="produtos-panel">
-                <div class="panel-header">
-                    <h2>Estoque de Itens e Ferramentas</h2>
-                    <div class="header-actions">
-                        <span id="produto-count" class="produto-count">{{ produtos|length }} item(ns) no total</span>
-                    </div>
-                </div>
-                <div class="panel-content">
-
-                    <div class="form-container" style="margin-bottom: 2rem; padding: 20px;">
-                        <div class="form-section" style="margin-bottom: 0;">
-                            <h3 class="section-title"><span class="section-icon">🔍</span> Buscar e Filtrar Itens</h3>
-                            <div class="form-group">
-                                <label for="searchInput" class="cadastro-label">Buscar por Nome ou Código:</label>
-                                <input type="text" id="searchInput" class="cadastro-input" placeholder="Digite para começar a buscar...">
-                            </div>
-                            <div class="radio-group-container" style="margin-top: 20px;">
-                                <label class="radio-group-label">Filtrar por Tipo:</label>
-                                <div id="tipoFilter" class="radio-options">
-                                    <label class="radio-label">
-                                        <input type="radio" name="tipo_item_filter" value="todos" checked>
-                                        <span class="radio-custom"></span>
-                                        <span class="radio-text">Todos os Tipos</span>
-                                    </label>
-                                    <label class="radio-label">
-                                        <input type="radio" name="tipo_item_filter" value="consumivel">
-                                        <span class="radio-custom"></span>
-                                        <span class="radio-text">Apenas de Consumo</span>
-                                    </label>
-                                    <label class="radio-label">
-                                        <input type="radio" name="tipo_item_filter" value="retornavel">
-                                        <span class="radio-custom"></span>
-                                        <span class="radio-text">Apenas Permanentes</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-container">
-                        {% if produtos %}
-                        <div class="table-controls">
-                            <label for="rowsPerPage">Mostrar</label>
-                            <select id="rowsPerPage">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                            <span>itens por página</span>
-                        </div>
-                        <div class="table-wrapper">
-                            <table class="produtos-table">
-                                <thead>
-                                    <tr>
-                                        <th class="col-id">ID</th>
-                                        <th class="col-codigo">Código</th>
-                                        <th class="col-nome">Nome do Item</th>
-                                        <th class="col-quantidade">Qtd.</th>
-                                        <th>Tipo</th>
-                                        <th class="col-acoes">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="produtos-tbody">
-                                    {% for produto in produtos %}
-                                    <tr class="produto-row">
-                                        <td class="produto-id">{{ produto.id }}</td>
-                                        <td class="produto-codigo">
-                                            {% if produto.codigo_barras %}{{ produto.codigo_barras }}{% else %}<span class="codigo-vazio">N/A</span>{% endif %}
-                                        </td>
-                                        <td class="produto-nome">{{ produto.nome }}</td>
-                                        <td class="produto-quantidade">
-                                            <div class="quantidade-badge
-                                                {% if produto.quantidade == 0 %}quantidade-zero
-                                                {% elif produto.quantidade <= 5 %}quantidade-baixa
-                                                {% else %}quantidade-alta{% endif %}">
-                                                {{ produto.quantidade }}
-                                            </div>
-                                        </td>
-                                        <td class="produto-tipo" data-tipo="{{ produto.tipo_item }}">
-                                            <div class="tipo-item-badge tipo-{{ produto.tipo_item }}">
-                                                {{ produto.tipo_item|capitalize }}
-                                            </div>
-                                        </td>
-                                        <td class="produto-acoes">
-                                            <a href="{{ url_for('atualizar_produto', produto_id=produto.id) }}" class="btn-acao btn-editar">✏️ Editar</a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            <div id="empty-search-result" class="empty-state" style="display: none; padding: 40px;">
-                                <div class="empty-icon">🤷</div>
-                                <h3>Nenhum item encontrado</h3>
-                                <p>Sua busca não correspondeu a nenhum item no estoque.</p>
-                            </div>
-                        </div>
-                        <div class="pagination-container">
-                            <span id="pagination-info"></span>
-                            <div id="pagination-controls"></div>
-                        </div>
-                        {% else %}
-                        <div class="empty-state">
-                            <div class="empty-icon">📦</div>
-                            <h3>Nenhum item cadastrado</h3>
-                            <p>Cadastre o primeiro item para começar a gerenciar seu estoque de manutenção.</p>
-                            <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">➕ Cadastrar Primeiro Item</a>
-                        </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="page-actions">
-                        <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">➕ Cadastrar Novo Item</a>
-                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">🏠 Painel Principal</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="header-content" style="margin-bottom: 20px;">
+    <div>
+        <h1>Controle de Estoque</h1>
+        <p style="color: var(--text-muted);">Gerenciamento de materiais e insumos.</p>
     </div>
 
+    <a href="{{ url_for('cadastro_produto') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Novo Produto
+    </a>
+</div>
+
+<div class="card" style="padding: 15px;">
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 1; min-width: 250px;">
+            <div style="position: relative;">
+                <input type="text" id="searchInput" placeholder="Buscar por nome, código ou tipo..." onkeyup="filtrarEstoque()">
+                <i class="fas fa-search" style="position: absolute; right: 15px; top: 12px; color: var(--text-muted);"></i>
+            </div>
+        </div>
+
+        <div style="min-width: 200px;">
+            <select id="stockFilter" onchange="filtrarEstoque()">
+                <option value="todos">Todos os Itens</option>
+                <option value="baixo">Estoque Baixo (< 5)</option>
+                <option value="ok">Estoque Normal</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="table-container">
+    <table id="tabelaProdutos">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome do Produto</th>
+                <th>Tipo</th>
+                <th style="text-align: center;">Quantidade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr class="produto-row" data-qtd="{{ produto.quantidade }}">
+                <td style="font-family: monospace; color: var(--accent-color);">{{ produto.codigo_barras }}</td>
+                <td>
+                    <div style="font-weight: 500;">{{ produto.nome }}</div>
+                </td>
+                <td>
+                    <span style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">
+                        {{ produto.tipo_item }}
+                    </span>
+                </td>
+                <td style="text-align: center;">
+                    {% if produto.quantidade < 5 %}
+                        <span class="status-badge status-rejeitada" style="min-width: 60px;">
+                            {{ produto.quantidade }}
+                        </span>
+                    {% else %}
+                        <span class="status-badge status-concluida" style="min-width: 60px;">
+                            {{ produto.quantidade }}
+                        </span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="table-actions">
+                        <a href="{{ url_for('atualizar_produto', produto_id=produto.id) }}" class="btn-icon" title="Editar Produto">
+                            <i class="fas fa-edit"></i>
+                        </a>
+
+                        <form action="{{ url_for('excluir_produto', produto_id=produto.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');" style="display:inline;">
+                            <button type="submit" class="btn-icon" style="color: var(--danger-border); border-color: var(--danger-border);" title="Excluir">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    Nenhum produto cadastrado no estoque.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const tipoFilterRadios = document.querySelectorAll('input[name="tipo_item_filter"]');
-    const tableBody = document.getElementById('produtos-tbody');
-    const allRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
-    const countSpan = document.getElementById('produto-count');
-    const emptySearchResult = document.getElementById('empty-search-result');
-    const rowsPerPageSelect = document.getElementById('rowsPerPage');
-    const paginationControls = document.getElementById('pagination-controls');
-    const paginationInfo = document.getElementById('pagination-info');
+    function filtrarEstoque() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const stockFilter = document.getElementById('stockFilter').value;
 
-    let currentPage = 1;
-    let filteredRows = [...allRows];
+        const table = document.getElementById('tabelaProdutos');
+        const tr = table.getElementsByTagName('tr');
 
-    function applyFilters() {
-        const searchText = searchInput.value.toLowerCase().trim();
-        const tipoFilter = document.querySelector('input[name="tipo_item_filter"]:checked').value;
+        for (let i = 1; i < tr.length; i++) {
+            let mostrar = true;
 
-        filteredRows = allRows.filter(row => {
-            const nome = row.querySelector('.produto-nome').textContent.toLowerCase();
-            const codigo = row.querySelector('.produto-codigo').textContent.toLowerCase();
-            const tipo = row.querySelector('.produto-tipo').getAttribute('data-tipo');
+            const tdCodigo = tr[i].getElementsByTagName('td')[0];
+            const tdNome = tr[i].getElementsByTagName('td')[1];
+            const tdTipo = tr[i].getElementsByTagName('td')[2];
+            const qtd = parseInt(tr[i].getAttribute('data-qtd'));
 
-            const textMatch = nome.includes(searchText) || codigo.includes(searchText);
-            const tipoMatch = (tipoFilter === 'todos') || (tipo === tipoFilter);
+            if (tdCodigo && tdNome) {
+                const textoCompleto = (tdCodigo.textContent + tdNome.textContent + tdTipo.textContent).toLowerCase();
 
-            return textMatch && tipoMatch;
-        });
+                if (filter && !textoCompleto.includes(filter)) {
+                    mostrar = false;
+                }
 
-        currentPage = 1;
-        updateTable();
-    }
+                if (stockFilter === 'baixo' && qtd >= 5) {
+                    mostrar = false;
+                }
+                if (stockFilter === 'ok' && qtd < 5) {
+                    mostrar = false;
+                }
 
-    function updateTable() {
-        const rowsPerPage = parseInt(rowsPerPageSelect.value, 10);
-        const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
-
-        // Esconde todas as linhas para depois mostrar apenas as da página atual
-        allRows.forEach(row => row.style.display = 'none');
-        
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const rowsToShow = filteredRows.slice(start, end);
-        
-        rowsToShow.forEach(row => row.style.display = '');
-
-        setupPagination(totalPages);
-        updateInfo(start, end);
-
-        if (filteredRows.length === 0 && allRows.length > 0) {
-            emptySearchResult.style.display = 'block';
-        } else {
-            emptySearchResult.style.display = 'none';
-        }
-    }
-
-    function setupPagination(totalPages) {
-        paginationControls.innerHTML = '';
-
-        if (totalPages <= 1) {
-            paginationInfo.textContent = '';
-            return;
-        }
-
-        // Botão Anterior
-        const prevButton = document.createElement('button');
-        prevButton.textContent = '« Anterior';
-        prevButton.disabled = currentPage === 1;
-        prevButton.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                updateTable();
+                tr[i].style.display = mostrar ? "" : "none";
             }
-        });
-        paginationControls.appendChild(prevButton);
-
-        // Botões de Página
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = i;
-            if (i === currentPage) {
-                pageButton.classList.add('active');
-            }
-            pageButton.addEventListener('click', () => {
-                currentPage = i;
-                updateTable();
-            });
-            paginationControls.appendChild(pageButton);
         }
-
-        // Botão Próximo
-        const nextButton = document.createElement('button');
-        nextButton.textContent = 'Próximo »';
-        nextButton.disabled = currentPage === totalPages;
-        nextButton.addEventListener('click', () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateTable();
-            }
-        });
-        paginationControls.appendChild(nextButton);
     }
-
-    function updateInfo(start, end) {
-        const totalFiltered = filteredRows.length;
-        const endOfPage = Math.min(end, totalFiltered);
-        if (totalFiltered > 0) {
-            paginationInfo.textContent = `Mostrando ${start + 1} a ${endOfPage} de ${totalFiltered} itens`;
-        } else {
-            paginationInfo.textContent = '';
-        }
-        countSpan.textContent = `${totalFiltered} item(ns) filtrado(s) de ${allRows.length} no total`;
-    }
-
-    // Adiciona os "listeners" de eventos
-    searchInput.addEventListener('input', applyFilters);
-    tipoFilterRadios.forEach(radio => radio.addEventListener('change', applyFilters));
-    rowsPerPageSelect.addEventListener('change', applyFilters);
-
-    // Inicializa a tabela
-    applyFilters();
-});
 </script>
 
 {% endblock %}

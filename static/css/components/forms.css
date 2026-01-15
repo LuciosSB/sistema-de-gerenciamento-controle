@@ -1,0 +1,42 @@
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    color: var(--text-main);
+    font-size: 1rem;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(254, 237, 0, 0.1);
+}
+
+::placeholder {
+    color: #555;
+}
+
+input[type="checkbox"] {
+    accent-color: var(--accent-color);
+    width: 18px;
+    height: 18px;
+}

@@ -105,7 +105,7 @@ class SaidaMaterial(db.Model):
     
     quantidade_saida = db.Column(db.Integer, nullable=False)
     data_saida = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    
+    status_retorno = db.Column(db.String(20), default='pendente')
     retornado = db.Column(db.Boolean, default=False, nullable=False)
     
     solicitacao = db.relationship('Solicitacao', backref=db.backref('materiais_usados', lazy=True, cascade="all, delete-orphan"))

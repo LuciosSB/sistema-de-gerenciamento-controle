@@ -1,100 +1,141 @@
 {% extends "base.html" %}
 
-{% block title %}Lista de Usuários{% endblock %}
+{% block title %}Gerenciar Usuários{% endblock %}
 
 {% block content %}
-    <nav>
-        <div class="container">
-            <ul class="nav-list">
-                <li><a href="{{ url_for('exibir_index') }}">Página Inicial</a></li>
-                <li><a href="{{ url_for('cadastro_usuario') }}">Cadastro de Usuários</a></li>
-                <li class="active"><a href="{{ url_for('lista_usuarios') }}">Lista de Usuários</a></li>
-                <li><a href="{{ url_for('supervisao') }}">Supervisão</a></li>
-            </ul>
+
+<div class="header-content" style="margin-bottom: 20px;">
+    <div>
+        <h1>Usuários do Sistema</h1>
+        <p style="color: var(--text-muted);">Controle de acesso e permissões.</p>
+    </div>
+
+    <a href="{{ url_for('cadastro_usuario') }}" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i> Novo Usuário
+    </a>
+</div>
+
+<div class="card" style="padding: 15px;">
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 1; min-width: 250px;">
+            <div style="position: relative;">
+                <input type="text" id="searchInput" placeholder="Buscar por nome ou tipo..." onkeyup="filtrarUsuarios()">
+                <i class="fas fa-search" style="position: absolute; right: 15px; top: 12px; color: var(--text-muted);"></i>
+            </div>
         </div>
-    </nav>
 
-    <div class="main-content">
-        <div class="panel active" id="usuarios-panel">
-            <div class="panel-header">
-                <h2>Lista de Usuários do Sistema</h2>
-                <div class="header-actions">
-                    <span class="usuario-count">{{ usuarios|length }} usuário(s) encontrado(s)</span>
-                </div>
-            </div>
-            <div class="panel-content">
-                <div class="table-container">
-                    {% if usuarios %}
-                    <div class="table-wrapper">
-                        <table class="usuarios-table">
-                            <thead>
-                                <tr>
-                                    <th class="col-id">ID</th>
-                                    <th class="col-nome">Nome de Usuário</th>
-                                    <th class="col-dados">CPF/Dados</th>
-                                    <th class="col-tipo">Tipo</th>
-                                    <th class="col-status">Status</th>
-                                    <th class="col-acoes">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for usuario in usuarios %}
-                                <tr class="usuario-row">
-                                    <td class="usuario-id">{{ usuario.id }}</td>
-                                    <td class="usuario-nome">{{ usuario.username }}</td>
-                                    <td class="usuario-dados">{{ usuario.dados }}</td>
-                                    <td class="usuario-tipo">
-                                        <div class="tipo-badge ...">
-                                        {% if usuario.tipo_usuario == 'admin' %}
-                                            👑 Administrador
-                                        {% elif usuario.tipo_usuario == 'manutencao' %} 
-                                            🔧 Manutenção 
-                                        {% elif usuario.tipo_usuario == 'usuario_gerenciador' %}
-                                            ⚡ Gerenciador
-                                        {% else %}
-                                            👤 Usuário Padrão
-                                        {% endif %}
-                                    </div>
-                                    </td>
-                                    <td class="usuario-status">
-                                        <div class="status-badge
-                                            {% if usuario.ativo %}status-ativo
-                                            {% else %}status-inativo{% endif %}">
-                                            {% if usuario.ativo %}
-                                                ✅ Ativo
-                                            {% else %}
-                                                ❌ Inativo
-                                            {% endif %}
-                                        </div>
-                                    </td>
-                                    <td class="usuario-acoes">
-                                        <a href="{{ url_for('atualizar_cadastro', usuario_id=usuario.id) }}" class="btn-acao btn-atualizar">
-                                            ✏️ Atualizar Cadastro
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="empty-state">
-                        <div class="empty-icon">👥</div>
-                        <h3>Nenhum usuário encontrado</h3>
-                        <p>Não há usuários cadastrados no sistema no momento.</p>
-                    </div>
-                    {% endif %}
-                </div>
-
-                <div class="page-actions">
-                    <a href="{{ url_for('exibir_index') }}" class="btn btn-secondary">
-                        🏠 Página Inicial
-                    </a>
-                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
-                        📊 Dashboard
-                    </a>
-                </div>
-            </div>
+        <div style="min-width: 200px;">
+            <select id="roleFilter" onchange="filtrarUsuarios()">
+                <option value="">Todos os Tipos</option>
+                <option value="admin">Administradores</option>
+                <option value="comum">Usuários Comuns</option>
+                <option value="manutencao">Manutenção</option>
+            </select>
         </div>
     </div>
+</div>
+
+<div class="table-container">
+    <table id="tabelaUsuarios">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome de Usuário</th>
+                <th>Permissão / Tipo</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>#{{ usuario.id }}</td>
+                <td>
+                    <div style="font-weight: 500; font-size: 1rem;">{{ usuario.username }}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">{{ usuario.dados }}</div>
+                </td>
+                <td>
+                    {% if usuario.tipo_usuario == 'admin' %}
+                        <span class="status-badge" style="background: var(--accent-color); color: #000; border: none;">
+                            <i class="fas fa-crown"></i> ADMIN
+                        </span>
+                    {% elif usuario.tipo_usuario == 'manutencao' %}
+                        <span class="status-badge" style="background: var(--info-bg); color: var(--info-text); border: 1px solid var(--info-border);">
+                            <i class="fas fa-tools"></i> MANUTENÇÃO
+                        </span>
+                    {% else %}
+                        <span class="status-badge" style="background: rgba(255,255,255,0.1); color: var(--text-muted); border: 1px solid var(--border-light);">
+                            <i class="fas fa-user"></i> USUÁRIO
+                        </span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if usuario.ativo %}
+                        <span style="color: var(--success-text); font-size: 0.9rem;"><i class="fas fa-check-circle"></i> Ativo</span>
+                    {% else %}
+                        <span style="color: var(--danger-text); font-size: 0.9rem;"><i class="fas fa-times-circle"></i> Inativo</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="table-actions">
+                        <a href="{{ url_for('atualizar_cadastro', usuario_id=usuario.id) }}" class="btn-icon" title="Editar Usuário">
+                            <i class="fas fa-user-edit"></i>
+                        </a>
+
+                        {% if usuario.id != current_user.id %}
+                        <form action="{{ url_for('excluir_usuario', usuario_id=usuario.id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir o usuário {{ usuario.username }}?');" style="display:inline;">
+                            <button type="submit" class="btn-icon" style="color: var(--danger-border); border-color: var(--danger-border);" title="Excluir">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    Nenhum usuário encontrado.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function filtrarUsuarios() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const roleFilter = document.getElementById('roleFilter').value.toLowerCase();
+
+        const table = document.getElementById('tabelaUsuarios');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            let mostrar = true;
+
+            const tdNome = tr[i].getElementsByTagName('td')[1]; // Coluna Nome
+            const tdTipo = tr[i].getElementsByTagName('td')[2]; // Coluna Tipo
+
+            if (tdNome && tdTipo) {
+                const textoNome = tdNome.textContent.toLowerCase();
+                const textoTipo = tdTipo.textContent.toLowerCase();
+
+                // Filtro de Texto
+                if (filter && !textoNome.includes(filter)) {
+                    mostrar = false;
+                }
+
+                // Filtro de Cargo
+                if (roleFilter && !textoTipo.includes(roleFilter)) {
+                    mostrar = false;
+                }
+
+                tr[i].style.display = mostrar ? "" : "none";
+            }
+        }
+    }
+</script>
+
 {% endblock %}

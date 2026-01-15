@@ -1,0 +1,181 @@
+/* Layout Principal */
+.dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* --- CARDS DE ESTATÍSTICAS (Topo) --- */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border-color: var(--accent-color);
+}
+
+.stat-info h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.stat-info p {
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    opacity: 0.9;
+}
+
+/* Cores Específicas dos Cards */
+.card-total .stat-icon {
+    background: rgba(33, 150, 243, 0.15);
+    color: #2196f3;
+}
+
+.card-warning .stat-icon {
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+}
+
+.card-danger .stat-icon {
+    background: rgba(255, 82, 82, 0.15);
+    color: #ff5252;
+}
+
+.card-success .stat-icon {
+    background: rgba(0, 230, 118, 0.15);
+    color: #00e676;
+}
+
+/* --- SEÇÃO DE BAIXO (Atividades e Alertas) --- */
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Esquerda maior que direita */
+    gap: 25px;
+}
+
+@media (max-width: 900px) {
+    .dashboard-content {
+        grid-template-columns: 1fr; /* Vira uma coluna só em telas menores */
+    }
+}
+
+.recent-activity {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.section-header h2 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--accent-color);
+}
+
+/* Lista de Atividades */
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.activity-details strong {
+    display: block;
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+.activity-details small {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* Alertas de Estoque Baixo (Tabela Pequena) */
+.low-stock-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.low-stock-table th {
+    text-align: left;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.low-stock-table td {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.9rem;
+}
+
+.qtd-badge {
+    background: rgba(255, 82, 82, 0.2);
+    color: #ff5252;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}

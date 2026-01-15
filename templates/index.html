@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/dashboard.css') }}">
+
+<div class="header-content" style="margin-bottom: 25px;">
+    <h1>Visão Geral</h1>
+    <p style="color: var(--text-muted);">Bem-vindo ao painel de controle, {{ current_user.username }}.</p>
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="stats-container">
+        <div class="stat-card card-total">
+            <div class="stat-info">
+                <h3>{{ total_produtos }}</h3>
+                <p>Produtos no Estoque</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-box"></i>
+            </div>
+        </div>
+
+        <div class="stat-card card-danger">
+            <div class="stat-info">
+                <h3>{{ produtos_baixo_estoque }}</h3>
+                <p>Itens com Estoque Baixo</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+        </div>
+
+        <div class="stat-card card-warning">
+            <div class="stat-info">
+                <h3>{{ solicitacoes_pendentes }}</h3>
+                <p>Chamados Pendentes</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+        </div>
+
+        <div class="stat-card card-success">
+            <div class="stat-info">
+                <h3>{{ solicitacoes_recentes|length }}</h3> <p>Movimentações Recentes</p>
+            </div>
+            <div class="stat-icon">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+
+        <div class="recent-activity">
+            <div class="section-header">
+                <h2>Últimas Solicitações</h2>
+                <a href="{{ url_for('lista_solicitacoes') }}" class="btn-sm" style="color: var(--accent-color);">Ver todas</a>
+            </div>
+
+            <ul class="activity-list">
+                {% for sol in solicitacoes_recentes %}
+                <li class="activity-item">
+                    <div class="activity-icon">
+                        {% if sol.status == 'pendente' %}
+                            <i class="fas fa-clock" style="color: #ffc107;"></i>
+                        {% elif sol.status == 'concluida' %}
+                            <i class="fas fa-check" style="color: #00e676;"></i>
+                        {% else %}
+                            <i class="fas fa-file-alt"></i>
+                        {% endif %}
+                    </div>
+                    <div class="activity-details">
+                        <strong>{{ sol.titulo }}</strong>
+                        <small>{{ sol.setor }} - {{ sol.data_solicitacao.strftime('%d/%m às %H:%M') }}</small>
+                    </div>
+                    <div style="margin-left: auto; align-self: center;">
+                        <span class="status-badge status-{{ sol.status }}">{{ sol.status|upper }}</span>
+                    </div>
+                </li>
+                {% else %}
+                <li style="padding: 20px; text-align: center; color: var(--text-muted);">
+                    Nenhuma solicitação recente.
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="recent-activity">
+            <div class="section-header">
+                <h2 style="color: #ff5252;">Estoque Crítico</h2>
+            </div>
+
+            <table class="low-stock-table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th style="text-align: right;">Restam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alerta in alertas_estoque %}
+                    <tr>
+                        <td>{{ alerta.nome }}</td>
+                        <td style="text-align: right;">
+                            <span class="qtd-badge">{{ alerta.quantidade }}</span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2" style="text-align: center; padding: 20px; color: var(--text-muted);">
+                            <i class="fas fa-check-circle" style="color: var(--success-text);"></i> Estoque saudável.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="{{ url_for('listar_produtos') }}" class="btn btn-sm btn-outline-primary" style="width: 100%; display: block;">
+                    Gerenciar Estoque
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

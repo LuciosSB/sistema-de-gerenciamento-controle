@@ -1,132 +1,60 @@
 {% extends "base.html" %}
 
-{% block title %}Atualizar Produto - {{ produto.nome }}{% endblock %}
+{% block title %}Editar Produto{% endblock %}
 
 {% block content %}
-<nav>
-    <div class="container">
-        <ul class="nav-list">
-            {% if current_user.has_permission('dashboard') %}
-            <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
-            {% endif %}
-            {% if current_user.has_permission('gerenciar_solicitacoes') %}
-                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
-            {% endif %}
-            {% if current_user.has_permission('cadastrar_produto') %}
-                <li><a href="{{ url_for('cadastro_produto') }}">Cadastrar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('listar_produtos') %}
-                <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
-            {% endif %}
-            {% if current_user.has_permission('atualizar_produto') %}
-                <li class="active"><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico') %}
-                <li><a href="{{ url_for('historico') }}">Histórico</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico_ativo') %}
-                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
 
-<div class="panel active" id="atualizar-panel">
-    <div class="panel-header">
-        <h2>Atualizar Produto</h2>
-        <div class="header-actions">
-            <span class="produto-count">ID: {{ produto.id }}</span>
+<div style="max-width: 600px; margin: 0 auto;">
+
+    <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
+        <a href="{{ url_for('listar_produtos') }}" class="btn-icon" style="width: 40px; height: 40px; justify-content: center;">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div>
+            <h1 style="margin: 0; font-size: 1.8rem;">Editar Produto</h1>
+            <p style="color: var(--text-muted); margin: 0;">{{ produto.nome }}</p>
         </div>
     </div>
-    <div class="panel-content">
 
-        <div class="form-container">
-            <form method="POST" action="{{ url_for('atualizar_produto', produto_id=produto.id) }}" class="atualizar-form">
-                
-                <div class="form-section">
-                    <h3 class="section-title">
-                        <span class="section-icon">📝</span>
-                        Editar Informações
-                    </h3>
-                    
-                    <div class="form-group">
-                        <label for="codigo_barras">Código de Barras:</label>
-                        <input type="text" id="codigo_barras" name="codigo_barras" value="{{ produto.codigo_barras or '' }}" placeholder="Digite o código de barras">
-                    </div>
+    <div class="card">
+        <form action="{{ url_for('atualizar_produto', produto_id=produto.id) }}" method="POST">
 
-                    <div class="form-group">
-                        <label for="nome">Nome do Produto: <span class="required-indicator">*</span></label>
-                        <input type="text" id="nome" name="nome" value="{{ produto.nome }}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="quantidade">Quantidade em Estoque: <span class="required-indicator">*</span></label>
-                        <input type="number" id="quantidade" name="quantidade" value="{{ produto.quantidade }}" required min="0">
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3 class="section-title">
-                        <span class="section-icon">🔄</span>
-                        Tipo de Item
-                    </h3>
-                    <div class="radio-group-container">
-                        <div class="radio-options">
-                            <label class="radio-label">
-                                <input type="radio" name="tipo_item" value="consumivel" {% if produto.tipo_item == 'consumivel' %}checked{% endif %}>
-                                <span class="radio-custom"></span>
-                                <span class="radio-text">Consumo</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="tipo_item" value="retornavel" {% if produto.tipo_item == 'retornavel' %}checked{% endif %}>
-                                <span class="radio-custom"></span>
-                                <span class="radio-text">Permanente</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">💾 Salvar Alterações</button>
-                    <a href="{{ url_for('selecionar_produto_atualizar') }}" class="btn btn-secondary">📋 Selecionar Outro</a>
-                </div>
-            </form>
-        </div>
-
-        <div class="info-section" style="margin-top: 30px;">
-            <div class="info-card">
-                <div class="info-header">
-                    <span class="info-icon">ℹ️</span>
-                    <h4>Informações Atuais</h4>
-                </div>
-                <div class="info-content">
-                    <div class="info-item">
-                        <span class="info-label">Código:</span>
-                        <span class="info-value">{{ produto.codigo_barras or 'N/A' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Nome:</span>
-                        <span class="info-value">{{ produto.nome }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Quantidade:</span>
-                        <span class="info-value quantidade-badge 
-                            {% if produto.quantidade == 0 %}quantidade-zero
-                            {% elif produto.quantidade <= 5 %}quantidade-baixa
-                            {% else %}quantidade-alta{% endif %}">
-                            {{ produto.quantidade }}
-                        </span>
-                    </div>
-                     <div class="info-item">
-                        <span class="info-label">Tipo:</span>
-                        <span class="info-value">
-                           <div class="tipo-item-badge tipo-{{ produto.tipo_item }}">
-                                {{ produto.tipo_item|capitalize }}
-                            </div>
-                        </span>
-                    </div>
+            <div class="form-group">
+                <label>Código de Barras</label>
+                <div style="position: relative;">
+                    <input type="text" name="codigo_barras" value="{{ produto.codigo_barras }}" required>
+                    <i class="fas fa-barcode" style="position: absolute; right: 15px; top: 15px; color: #666;"></i>
                 </div>
             </div>
-        </div>
 
-    </div> </div> {% endblock %}
+            <div class="form-group">
+                <label>Nome do Produto</label>
+                <input type="text" name="nome" value="{{ produto.nome }}" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Tipo de Item</label>
+                    <select name="tipo_item" class="form-control" style="width: 100%; padding: 12px; background: var(--primary-color); border: 1px solid var(--border-light); color: var(--text-main); border-radius: 8px;">
+                        <option value="consumo" {% if produto.tipo_item == 'consumo' %}selected{% endif %}>Consumo</option>
+                        <option value="permanente" {% if produto.tipo_item == 'permanente' %}selected{% endif %}>Permanente</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Quantidade Atual</label>
+                    <input type="number" name="quantidade" value="{{ produto.quantidade }}" required min="0">
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <a href="{{ url_for('listar_produtos') }}" class="btn btn-secondary" style="flex: 1; text-align: center;">Cancelar</a>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-sync-alt"></i> Atualizar Dados
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

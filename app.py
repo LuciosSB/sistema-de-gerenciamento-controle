@@ -113,13 +113,26 @@ app.jinja_env.filters['localtime'] = to_localtime
 
 # --- ROTAS DE AUTENTICAÇÃO E NAVEGAÇÃO ---
 @app.route('/')
+@login_required
 def index():
-    return redirect(url_for('login'))
+    solicitacoes_pendentes = 0
+    produtos_baixo_estoque = 0
+    total_produtos = 0
+
+    if current_user.tipo_usuario == 'admin':
+        solicitacoes_pendentes = Solicitacao.query.filter_by(status='pendente').count()
+        produtos_baixo_estoque = Produto.query.filter(Produto.quantidade < 5).count()
+        total_produtos = Produto.query.count()
+
+    return render_template('index.html',
+                         solicitacoes_pendentes=solicitacoes_pendentes,
+                         produtos_baixo_estoque=produtos_baixo_estoque,
+                         total_produtos=total_produtos)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('index'))
     
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
@@ -130,7 +143,7 @@ def login():
             login_user(usuario)
             flash(f'Bem-vindo, {usuario.username}!', 'success')
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('dashboard'))
+            return redirect(next_page) if next_page else redirect(url_for('index'))
         else:
             flash('Username ou senha incorretos, ou usuário inativo.', 'error')
     
@@ -142,11 +155,6 @@ def logout():
     logout_user()
     flash('Logout realizado com sucesso.', 'success')
     return redirect(url_for('index'))
-
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('dashboard.html')
 
 # --- ROTAS DE PRODUTOS ---
 @app.route('/cadastro', methods=['GET', 'POST'])
@@ -248,30 +256,121 @@ def atualizar_produto(produto_id):
             
     return render_template('atualizar.html', produto=produto)
 
+
+# --- COLE ISSO NO SEU APP.PY ---
+
+@app.route('/saida_produto', methods=['POST'])
+@login_required
+def saida_produto():
+    solicitacao_id = request.form.get('solicitacao_id')
+    produto_id = request.form.get('produto_id')
+    quantidade = int(request.form.get('quantidade'))
+
+    produto = Produto.query.get(produto_id)
+
+    if not produto:
+        flash('Produto não encontrado.', 'error')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+    if produto.quantidade < quantidade:
+        flash(f'Estoque insuficiente! Restam apenas {produto.quantidade} unidades.', 'error')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+    try:
+        produto.quantidade -= quantidade
+
+        nova_saida = SaidaMaterial(
+            solicitacao_id=solicitacao_id,
+            produto_id=produto_id,
+            usuario_id=current_user.id,
+            quantidade_saida=quantidade,
+            data_saida=datetime.utcnow()
+        )
+        db.session.add(nova_saida)
+
+        hist = HistoricoAcoes(
+            data_acao=datetime.utcnow(),
+            tipo_acao="Saída de Material",
+            detalhes=f"Registrou saída de {quantidade}x {produto.nome}",
+            solicitacao_id=solicitacao_id,
+            usuario_id=current_user.id,
+            produto_id=produto_id
+        )
+        db.session.add(hist)
+
+        db.session.commit()
+        flash(f'Saída de {quantidade}x {produto.nome} registrada com sucesso!', 'success')
+
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao registrar saída: {str(e)}', 'error')
+
+    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao_id))
+
+@app.route('/excluir_produto/<int:produto_id>', methods=['POST'])
+@login_required
+def excluir_produto(produto_id):
+    if current_user.tipo_usuario != 'admin':
+        flash('Acesso negado. Apenas administradores podem excluir itens.', 'error')
+        return redirect(url_for('listar_produtos'))
+    produto = Produto.query.get_or_404(produto_id)
+
+    try:
+        db.session.delete(produto)
+        db.session.commit()
+        flash(f'Produto "{produto.nome}" excluído com sucesso!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('Não é possível excluir este produto pois ele já faz parte de históricos de solicitações antigas.',
+              'error')
+
+    return redirect(url_for('listar_produtos'))
+
+
 @app.route('/portal_solicitacoes', methods=['GET', 'POST'])
 def portal_solicitacoes():
     if request.method == 'POST':
         try:
+            nome = request.form.get('nome_solicitante', '').strip()
+            setor = request.form.get('setor', '').strip()
+            titulo = request.form.get('titulo', '').strip()
+            categoria = request.form.get('categoria', 'Geral').strip()
+            descricao = request.form.get('descricao', '').strip()
+            urgencia = request.form.get('urgencia', 'baixa')  # Novo campo!
+
+            if not all([nome, setor, titulo, categoria]):
+                flash('Todos os campos obrigatórios devem ser preenchidos.', 'error')
+                return render_template('portal_solicitacoes.html')
+
             novo_chamado = Solicitacao(
-                nome_solicitante=request.form.get('nome_solicitante', '').strip(),
-                setor=request.form.get('setor', '').strip(),
-                titulo=request.form.get('titulo', '').strip(),
-                categoria=request.form.get('categoria', 'Geral').strip(),
-                descricao=request.form.get('descricao', '').strip(),
+                nome_solicitante=nome,
+                setor=setor,
+                titulo=titulo,
+                categoria=categoria,
+                descricao=descricao,
+                urgencia=urgencia,
                 status='pendente'
             )
-            
-            if not all([novo_chamado.nome_solicitante, novo_chamado.setor, novo_chamado.titulo, novo_chamado.categoria]):
-                 flash('Todos os campos obrigatórios devem ser preenchidos.', 'error')
-                 return render_template('portal_solicitacoes.html')
-
             db.session.add(novo_chamado)
             db.session.flush()
+            arquivos = request.files.getlist('anexos')
+            for file in arquivos:
+                if file and file.filename != '' and allowed_file(file.filename):
+                    original_filename = secure_filename(file.filename)
+                    unique_filename = f"{uuid.uuid4().hex}_{original_filename}"
+                    caminho_salvar = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(caminho_salvar)
+                    novo_anexo = Anexo(
+                        nome_arquivo=unique_filename,
+                        tipo_anexo='abertura',  # Tipo para identificar que veio da abertura
+                        solicitacao_id=novo_chamado.id
+                    )
+                    db.session.add(novo_anexo)
 
             autor_id = current_user.id if current_user.is_authenticated else 1
-            detalhes_acao = (f"Chamado criado pelo solicitante '{novo_chamado.nome_solicitante}' através do portal público."
-                           if not current_user.is_authenticated 
-                           else f'Chamado criado com o título "{novo_chamado.titulo}".')
+            detalhes_acao = (f"Chamado criado por '{nome}' via Portal."
+                             if not current_user.is_authenticated
+                             else f"Chamado criado pelo usuário interno '{current_user.username}'.")
 
             historico_criacao = HistoricoAcoes(
                 solicitacao_id=novo_chamado.id,
@@ -280,15 +379,20 @@ def portal_solicitacoes():
                 detalhes=detalhes_acao
             )
             db.session.add(historico_criacao)
-            
+
             db.session.commit()
-            flash(f'Chamado de manutenção aberto com sucesso! O ID do chamado é #{novo_chamado.id}, confira no Portal', 'success')
-            return redirect(url_for('portal_solicitacoes'))
+            flash(f'Chamado #{novo_chamado.id} aberto com sucesso! Acompanhe na lista.', 'success')
+
+            if current_user.is_authenticated:
+                return redirect(url_for('lista_solicitacoes'))
+            else:
+                return redirect(url_for('portal_solicitacoes'))
 
         except Exception as e:
             db.session.rollback()
-            flash(f'Erro ao abrir chamado: {e}', 'error')
-            
+            flash(f'Erro ao abrir chamado: {str(e)}', 'error')
+            print(f"ERRO: {str(e)}")
+
     return render_template('portal_solicitacoes.html')
 
 @app.route('/portal_arcondicionado', methods=['GET', 'POST'])
@@ -357,13 +461,42 @@ def gerenciar_solicitacoes():
     
     return render_template('gerenciar_solicitacoes.html', solicitacoes=solicitacoes_visiveis)
 
-@app.route('/gerenciar_solicitacoes/<int:solicitacao_id>')
+@app.route('/gerenciar_solicitacoes/<int:solicitacao_id>', methods=['GET', 'POST'])
 @login_required
-@permission_required('gerenciar_solicitacoes')
 def gerenciar_solicitacoes_detalhes(solicitacao_id):
     solicitacao = Solicitacao.query.get_or_404(solicitacao_id)
-    produtos_disponiveis = Produto.query.order_by(Produto.nome).all()
-    return render_template('gerenciar_solicitacoes_detalhes.html', solicitacao=solicitacao, produtos_disponiveis=produtos_disponiveis)
+    if request.method == 'POST':
+        novo_status = request.form.get('novo_status')
+        observacoes = request.form.get('observacoes')
+
+        if not observacoes:
+            flash('É obrigatório informar uma observação para mudar o status.', 'error')
+        else:
+            try:
+                status_antigo = solicitacao.status
+                solicitacao.status = novo_status
+                hist = HistoricoAcoes(
+                    data_acao=datetime.utcnow(),
+                    tipo_acao=f"Alteração de Status",
+                    detalhes=f"De '{status_antigo.upper()}' para '{novo_status.upper()}'. Motivo: {observacoes}",
+                    solicitacao_id=solicitacao.id,
+                    usuario_id=current_user.id
+                )
+                db.session.add(hist)
+
+                db.session.commit()
+                flash('Status da solicitação atualizado com sucesso!', 'success')
+
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Erro ao atualizar status: {str(e)}', 'error')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id))
+
+    produtos_disponiveis = Produto.query.filter(Produto.quantidade > 0).order_by(Produto.nome).all()
+
+    return render_template('gerenciar_solicitacoes_detalhes.html',
+                           solicitacao=solicitacao,
+                           produtos_disponiveis=produtos_disponiveis)
 
 @app.route('/atualizar_status_solicitacao/<int:solicitacao_id>', methods=['POST'])
 @login_required
@@ -865,41 +998,91 @@ def excluir_usuario(usuario_id):
         db.session.rollback() 
         flash(f'Erro ao excluir usuário: {e}', 'error') 
         
-    return redirect(url_for('lista_usuarios')) 
+    return redirect(url_for('lista_usuarios'))
+
 
 @app.route('/lista_solicitacoes')
 def lista_solicitacoes():
-    now = datetime.utcnow()
-    rejeitadas_excluidas_limite = now - timedelta(hours=2)
-    concluidas_limite = now - timedelta(hours=4)
-    solicitacoes_visiveis = Solicitacao.query.filter(
-        db.or_(
-            Solicitacao.status.in_(['pendente', 'aprovada', 'em_analise']),
-            db.and_(
-                Solicitacao.status.in_(['rejeitada', 'excluido']),
-                Solicitacao.data_atualizacao.isnot(None),
-                Solicitacao.data_atualizacao > rejeitadas_excluidas_limite
-            ),
-            db.and_(
-                Solicitacao.status == 'entregue',
-                Solicitacao.data_atualizacao.isnot(None),
-                Solicitacao.data_atualizacao > concluidas_limite
-            )
-        )
-    ).order_by(Solicitacao.data_solicitacao.desc()).all()
+    solicitacoes = Solicitacao.query.order_by(Solicitacao.data_solicitacao.desc()).limit(100).all()
 
-    return render_template('lista_solicitacoes.html', solicitacoes=solicitacoes_visiveis)
+    return render_template('lista_solicitacoes.html', solicitacoes=solicitacoes)
+
+
+@app.route('/processar_retorno_material/<int:saida_id>/<acao>', methods=['POST'])
+@login_required
+def processar_retorno_material(saida_id, acao):
+    if current_user.tipo_usuario == 'usuario_gerenciador':
+        flash('Acesso negado.', 'error')
+        return redirect(url_for('index'))
+
+    saida = SaidaMaterial.query.get_or_404(saida_id)
+    produto = Produto.query.get(saida.produto_id)
+    solicitacao = Solicitacao.query.get(saida.solicitacao_id)
+
+    if saida.status_retorno != 'pendente':
+        flash('Este item já foi processado anteriormente.', 'warning')
+        return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id))
+
+    try:
+        if acao == 'devolver':
+            produto.quantidade += saida.quantidade_saida
+            saida.status_retorno = 'devolvido'
+
+            # Histórico
+            hist = HistoricoAcoes(
+                data_acao=datetime.utcnow(),
+                tipo_acao="Devolução de Material",
+                detalhes=f"Item '{produto.nome}' (x{saida.quantidade_saida}) devolvido ao estoque.",
+                solicitacao_id=solicitacao.id,
+                usuario_id=current_user.id,
+                produto_id=produto.id
+            )
+            db.session.add(hist)
+            flash(f'{produto.nome} devolvido ao estoque com sucesso.', 'success')
+
+        elif acao == 'consumir':
+            saida.status_retorno = 'consumido'
+
+            hist = HistoricoAcoes(
+                data_acao=datetime.utcnow(),
+                tipo_acao="Baixa Definitiva",
+                detalhes=f"Item '{produto.nome}' (x{saida.quantidade_saida}) marcado como consumido/utilizado.",
+                solicitacao_id=solicitacao.id,
+                usuario_id=current_user.id,
+                produto_id=produto.id
+            )
+            db.session.add(hist)
+            flash(f'{produto.nome} marcado como consumido (não retornará).', 'info')
+
+        elif acao == 'perda':
+            saida.status_retorno = 'perdido'
+
+            hist = HistoricoAcoes(
+                data_acao=datetime.utcnow(),
+                tipo_acao="Perda de Material",
+                detalhes=f"Item '{produto.nome}' (x{saida.quantidade_saida}) registrado como PERDIDO/DANIFICADO.",
+                solicitacao_id=solicitacao.id,
+                usuario_id=current_user.id,
+                produto_id=produto.id
+            )
+            db.session.add(hist)
+            flash(f'{produto.nome} registrado como PERDA.', 'warning')
+
+        db.session.commit()
+
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao processar item: {str(e)}', 'error')
+
+    return redirect(url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id))
+
 
 @app.route('/historico')
 @login_required
 def historico():
-    if not current_user.has_permission('gerenciar_solicitacoes'):
-        flash('Você não tem permissão para acessar o histórico completo.', 'error')
-        return redirect(url_for('dashboard'))
+    todas_acoes = HistoricoAcoes.query.order_by(HistoricoAcoes.data_acao.desc()).limit(500).all()
 
-    todos_os_chamados = Solicitacao.query.order_by(Solicitacao.data_solicitacao.desc()).all()
-    
-    return render_template('historico.html', solicitacoes=todos_os_chamados)
+    return render_template('historico.html', historico=todas_acoes)
 
 @app.route('/historico/detalhes/<int:solicitacao_id>')
 @login_required
@@ -1020,6 +1203,24 @@ def gerar_relatorio_supervisao_pdf():
 
     pdf = pdfkit.from_string(rendered, False, configuration=pdfkit_config, options={'enable-local-file-access': True})
     return send_file(BytesIO(pdf), download_name=f'Relatorio_Supervisao_Itens.pdf', as_attachment=True)
+
+
+@app.route('/download_anexo/<int:anexo_id>')
+def download_anexo(anexo_id):
+    try:
+        anexo = Anexo.query.get_or_404(anexo_id)
+        caminho_arquivo = os.path.join(app.config['UPLOAD_FOLDER'], anexo.nome_arquivo)
+
+        if os.path.exists(caminho_arquivo):
+            return send_from_directory(app.config['UPLOAD_FOLDER'], anexo.nome_arquivo, as_attachment=True)
+        else:
+            flash('Arquivo físico não encontrado no servidor.', 'error')
+            return redirect(request.referrer or url_for('index'))
+
+    except Exception as e:
+        print(f"Erro no download: {e}")
+        flash('Erro ao tentar baixar o arquivo.', 'error')
+        return redirect(request.referrer or url_for('index'))
 
 @app.route('/exibir_index')
 def exibir_index():

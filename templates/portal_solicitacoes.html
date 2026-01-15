@@ -1,181 +1,78 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Chamados - Manutenção DMTT</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">DMTT - Portal de Chamados</div>
-                <div class="header-info">
-                    <span class="header-text">Sistema de Manutenção</span>
-                </div>
-            </div>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <div class="container">
-        <div class="portal-switcher-top">
-            <a href="{{ url_for('portal_arcondicionado') }}" class="btn-arcondicionado">❄️ Ir para Portal de Ar-Condicionado</a>
-        </div>
-            <div class="department-info">
-                <div class="department-icon">🔧</div>
-                <div class="department-text">
-                    <h2>Abertura de Chamado de Manutenção</h2>
-                    <p>Preencha o formulário abaixo para abrir um novo chamado. Campos com <span class="required-indicator">*</span> são obrigatórios.</p>
-                </div>
-            </div>
-        </div>
+{% block title %}Abrir Chamado{% endblock %}
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                    <span class="alert-icon">
-                        {% if category == 'success' %}✅
-                        {% elif category == 'error' %}❌
-                        {% else %}ℹ️
-                        {% endif %}
-                    </span>
-                    {{ message }}
-                </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+{% block content %}
 
-        <div class="solicitation-container">
-            <form id="solicitationForm" method="POST" action="{{ url_for('portal_solicitacoes') }}">
-                
-                <div class="form-section">
-                    <h3 class="section-title">
-                        <span class="section-icon">👤</span>
-                        Dados do Solicitante
-                    </h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="nome_solicitante">Seu Nome <span class="required-indicator">*</span></label>
-                            <input type="text" id="nome_solicitante" name="nome_solicitante" required 
-                                   placeholder="Digite seu nome completo">
-                        </div>
-                        <div class="form-group">
-                            <label for="setor">Seu Setor <span class="required-indicator">*</span></label>
-                            <input type="text" id="setor" name="setor" required 
-                                   placeholder="Digite o nome do seu setor">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3 class="section-title">
-                        <span class="section-icon">📋</span>
-                        Detalhes do Chamado
-                    </h3>
-                    <div class="form-group">
-                        <label for="titulo">Título do Problema <span class="required-indicator">*</span></label>
-                        <input type="text" id="titulo" name="titulo" required 
-                               placeholder="Ex: Tomada Solta, Lâmpada queimada, Mesa bambeando">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="categoria">Categoria <span class="required-indicator">*</span></label>
-                            <select id="categoria" name="categoria" class="form-select" required>
-                                <option value="">Selecione uma categoria</option>
-                                <option value="Rede">Rede (Internet, Cabos)</option>
-                                <option value="Elétrica">Elétrica (Tomadas, Iluminação)</option>
-                                <option value="Estrutural">Estrutural (Mobiliário, Portas)</option>
-                                <option value="Outros">Outros</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="urgencia">Urgência <span class="required-indicator">*</span></label>
-                            <select id="urgencia" name="urgencia" class="form-select" required>
-                                <option value="baixa">Baixa</option>
-                                <option value="media">Média</option>
-                                <option value="alta">Alta</option>
-                                <option value="critica">Crítica (Impede o trabalho)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3 class="section-title">
-                        <span class="section-icon">📝</span>
-                        Descrição Detalhada do Problema
-                    </h3>
-                    <div class="form-group">
-                        <label for="descricao">Descreva o que está acontecendo</label>
-                        <textarea id="descricao" name="descricao" rows="5" 
-                                  placeholder="Forneça detalhes que ajudem a equipe de manutenção a entender o problema. Ex: O computador faz um barulho estranho e a tela fica preta..."></textarea>
-                    </div>
-                </div>
-
-                <div class="form-actions-container">
-                    <button type="submit" class="btn btn-submit">
-                        <span class="btn-icon">📤</span>
-                        Abrir Chamado
-                    </button>
-                    {% if current_user.is_authenticated %}
-                    {# Se o usuário ESTÁ logado, leva para a página interna de gerenciamento #}
-                    <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn btn-view-requests">
-                        <span class="btn-icon">📊</span>
-                        Gerenciar Chamados
-                    </a>
-                {% else %}
-                    {# Se o usuário NÃO ESTÁ logado, leva para a nova página pública de acompanhamento #}
-                    <a href="{{ url_for('lista_solicitacoes') }}" class="btn btn-view-requests">
-                        <span class="btn-icon">📊</span>
-                        Acompanhar Chamado
-                    </a>
-                {% endif %}
-                    <a href="{{ url_for('exibir_login') }}" class="btn btn-back">
-                        <span class="btn-icon">🏠</span>
-                        Voltar ao Início
-                    </a>
-                </div>
-            </form>
-        </div>
+<div style="max-width: 800px; margin: 0 auto;">
+    
+    <div style="margin-bottom: 20px;">
+        <h1>Nova Solicitação</h1>
+        <p style="color: var(--text-muted);">Preencha os dados abaixo para abrir um chamado.</p>
     </div>
 
-    <script>
-        document.getElementById('solicitationForm').addEventListener('submit', function(e) {
-            const nomeSolicitante = document.getElementById('nome_solicitante').value.trim();
-            const setor = document.getElementById('setor').value.trim();
-            const titulo = document.getElementById('titulo').value.trim();
-            const categoria = document.getElementById('categoria').value;
-            const urgencia = document.getElementById('urgencia').value;
+    <div class="card">
+        <form action="{{ url_for('portal_solicitacoes') }}" method="POST" enctype="multipart/form-data">
 
-            if (!nomeSolicitante || !setor || !titulo || !categoria || !urgencia) {
-                e.preventDefault();
-                alert('Por favor, preencha todos os campos obrigatórios (*).');
-                return false;
-            }
+            <div class="form-group">
+                <label>Seu Nome Completo</label>
+                <input type="text" name="nome_solicitante" required placeholder="Ex: Maria Souza" autofocus>
+            </div>
 
-            if (!confirm('Deseja realmente abrir este chamado de manutenção?')) {
-                e.preventDefault();
-                return false;
-            }
-        });
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Título do Pedido</label>
+                    <input type="text" name="titulo" required placeholder="Ex: Lâmpada Queimada">
+                </div>
 
-        const textarea = document.getElementById('descricao');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = this.scrollHeight + 'px';
-        });
+                <div class="form-group">
+                    <label>Setor / Local</label>
+                    <input type="text" name="setor" required placeholder="Ex: Financeiro">
+                </div>
+            </div>
 
-        window.addEventListener('load', function() {
-            const elements = document.querySelectorAll('.form-section, .form-actions-container');
-            elements.forEach((element, index) => {
-                setTimeout(() => {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }, index * 150);
-            });
-        });
-    </script>
-</body>
-</html>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select name="categoria" class="form-control" style="width: 100%; padding: 12px; background: var(--primary-color); border: 1px solid var(--border-light); color: var(--text-main); border-radius: 8px;">
+                        <option value="Material de Escritorio">Material de Escritório</option>
+                        <option value="Limpeza">Limpeza / Copa</option>
+                        <option value="Manutencao Predial">Manutenção Predial</option>
+                        <option value="Equipamentos">Equipamentos / TI</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Nível de Urgência</label>
+                    <select name="urgencia" class="form-control" style="width: 100%; padding: 12px; background: var(--primary-color); border: 1px solid var(--border-light); color: var(--text-main); border-radius: 8px;">
+                        <option value="baixa">Baixa</option>
+                        <option value="media" selected>Média</option>
+                        <option value="alta">Alta</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Descrição Detalhada</label>
+                <textarea name="descricao" rows="5" required placeholder="Descreva o que você precisa..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Anexar Foto (Opcional)</label>
+                <div style="padding: 20px; border: 2px dashed var(--border-light); border-radius: 8px; text-align: center; background: rgba(255,255,255,0.02);">
+                    <input type="file" name="anexos" multiple style="color: var(--text-muted);">
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 15px;">
+                <a href="{{ url_for('lista_solicitacoes') }}" class="btn btn-secondary" style="flex: 1; text-align: center;">Cancelar</a>
+                <button type="submit" class="btn btn-primary" style="flex: 1;">
+                    <i class="fas fa-paper-plane"></i> Enviar Solicitação
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

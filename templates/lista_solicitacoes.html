@@ -1,183 +1,167 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhamento de Chamados - Manutenção DMTT</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">DMTT - Acompanhamento</div>
-                <div class="header-info">
-                    <span class="header-text">Status dos Chamados</span>
-                </div>
-            </div>
-        </div>
-    </header>
+{% extends "base.html" %}
 
-    <main class="container">
-        <div class="acompanhamento-container">
-            <div class="acompanhamento-header">
-                <span class="acompanhamento-icon">📊</span>
-                <h1>Chamados de Manutenção Recentes</h1>
-            </div>
+{% block title %}Mural de Solicitações{% endblock %}
 
-            <div class="search-container">
-                <div class="search-field">
-                    <label for="idSearchInput">Pesquisar por ID:</label>
-                    <input type="text" id="idSearchInput" placeholder="#123...">
-                </div>
-                <div class="search-field">
-                    <label for="dateSearchInput">Pesquisar por Data:</label>
-                    <input type="date" id="dateSearchInput">
-                </div>
-                <div class="search-actions">
-                    <button id="searchBtn" class="btn-search">🔎 Pesquisar</button>
-                    <button id="clearBtn" class="btn-clear">Limpar Filtros</button>
-                </div>
-            </div>
+{% block content %}
 
-            <div class="acompanhamento-lista">
-                {% if solicitacoes %}
-                    {% for solicitacao in solicitacoes %}
-                    <article class="chamado-card status-{{ solicitacao.status }}" data-id="{{ solicitacao.id }}" data-date="{{ solicitacao.data_solicitacao.strftime('%Y-%m-%d') }}">
-                        <div class="card-header">
-                            <h2 class="card-titulo">#{{ solicitacao.id }} - {{ solicitacao.titulo }}</h2>
-                            <span class="card-status">
-                                {% if solicitacao.status == 'aprovada' %}
-                                    Aprovada/Em Atendimento
-                                {% elif solicitacao.status == 'entregue' %}
-                                    Finalizada
-                                {% elif solicitacao.status == 'em_analise' %}
-                                    Em Análise
+<div class="header-content" style="margin-bottom: 20px;">
+    <div>
+        <h1>Mural de Solicitações</h1>
+        <p style="color: var(--text-muted);">Acompanhe em tempo real os chamados de todos os setores.</p>
+    </div>
+
+    <a href="{{ url_for('portal_solicitacoes') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Abrir Novo Chamado
+    </a>
+</div>
+
+<div class="card" style="padding: 15px;">
+    <input type="text" id="searchInput" placeholder="Buscar por título, setor ou nome..." onkeyup="filtrarLista()" style="width: 100%; padding: 10px; border-radius: 6px; background: var(--bg-body); border: 1px solid var(--border-light); color: var(--text-main);">
+</div>
+
+<div class="table-container">
+    <table id="tabelaGlobal" style="width: 100%; border-collapse: separate; border-spacing: 0;">
+        <thead>
+            <tr>
+                <th style="width: 50px;">ID</th>
+                <th style="width: 100px;">Data</th>
+                <th>Solicitante / Setor</th>
+                <th>Título</th>
+                <th style="width: 100px;">Status</th>
+                <th style="width: 50px;">Detalhes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitacao in solicitacoes %}
+            <tr style="background: rgba(255,255,255,0.02);">
+                <td><strong>#{{ solicitacao.id }}</strong></td>
+                <td style="font-size: 0.9rem; color: var(--text-muted);">{{ solicitacao.data_solicitacao.strftime('%d/%m %H:%M') }}</td>
+                <td>
+                    <div style="font-weight: 500; color: var(--accent-color);">{{ solicitacao.nome_solicitante }}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">{{ solicitacao.setor }}</div>
+                </td>
+                <td>
+                    <span style="font-weight: 500; color: var(--text-main);">{{ solicitacao.titulo }}</span>
+                    {% if solicitacao.anexos.count() > 0 %}
+                        <i class="fas fa-paperclip" style="font-size: 0.8rem; color: var(--text-muted); margin-left: 5px;" title="Possui anexos"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    <span class="status-badge
+                        {% if solicitacao.status == 'pendente' %}status-pendente
+                        {% elif solicitacao.status == 'aprovada' %}status-aprovada
+                        {% elif solicitacao.status == 'recusada' %}status-rejeitada
+                        {% elif solicitacao.status == 'concluida' %}status-concluida
+                        {% endif %}">
+                        {{ solicitacao.status|upper }}
+                    </span>
+                </td>
+                <td style="text-align: center;">
+                    <button class="btn-icon" onclick="toggleDetalhes('detalhe-{{ solicitacao.id }}')" title="Ver Fotos e Comentários">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </td>
+            </tr>
+
+            <tr id="detalhe-{{ solicitacao.id }}" style="display: none;">
+                <td colspan="6" style="padding: 0;">
+                    <div style="background: rgba(0,0,0,0.2); padding: 20px; border-left: 3px solid var(--accent-color);">
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+                            <div>
+                                <h4 style="color: var(--text-muted); margin-bottom: 10px; font-size: 0.9rem;">DESCRIÇÃO & ANEXOS</h4>
+                                <p style="color: var(--text-main); font-style: italic; margin-bottom: 15px;">"{{ solicitacao.descricao }}"</p>
+
+                                {% if solicitacao.anexos.count() > 0 %}
+                                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                        {% for anexo in solicitacao.anexos %}
+                                            <a href="{{ url_for('download_anexo', anexo_id=anexo.id) }}" target="_blank" style="text-decoration: none;">
+                                                <div style="width: 80px; height: 80px; background: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-light); overflow: hidden;">
+                                                    <i class="fas fa-image" style="font-size: 1.5rem; color: var(--text-muted);"></i>
+                                                    </div>
+                                                <div style="font-size: 0.7rem; text-align: center; color: var(--text-muted); margin-top: 5px; max-width: 80px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                                    {{ anexo.nome_arquivo }}
+                                                </div>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
                                 {% else %}
-                                    {{ solicitacao.status|replace('_', ' ')|capitalize }}
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">Sem anexos.</span>
                                 {% endif %}
-                                </span>
+                            </div>
+
+                            <div>
+                                <h4 style="color: var(--text-muted); margin-bottom: 10px; font-size: 0.9rem;">HISTÓRICO RECENTE</h4>
+                                <ul style="list-style: none; padding: 0;">
+                                    {% for acao in (solicitacao.historico | list)[-3:] %} <li style="margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                                                <strong style="color: var(--accent-color);">{{ acao.tipo_acao }}</strong>
+                                                <span style="color: var(--text-muted);">{{ acao.data_acao.strftime('%d/%m %H:%M') }}</span>
+                                            </div>
+                                            <div style="font-size: 0.85rem; color: var(--text-main);">{{ acao.detalhes }}</div>
+                                        </li>
+                                    {% else %}
+                                        <li style="font-size: 0.8rem; color: var(--text-muted);">Nenhuma movimentação ainda.</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p><strong>Solicitante:</strong> {{ solicitacao.nome_solicitante }}</p>
-                            <p><strong>Setor:</strong> {{ solicitacao.setor }}</p>
-                            <p><strong>Abertura:</strong> {{ solicitacao.data_solicitacao|localtime }}</p>
-                        </div>
-                        
-                        {% if solicitacao.anexos.first() %}
-                        <div class="public-gallery">
-                            {% for anexo in solicitacao.anexos.filter_by(tipo_anexo='antes').all() %}
-                                <div class="public-gallery-item">
-                                    <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank" title="Ver imagem ampliada">
-                                        <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" loading="lazy" alt="Anexo do chamado">
-                                        <span class="anexo-label">{{ anexo.tipo_anexo|capitalize }}</span>
-                                    </a>
-                                </div>
-                            {% endfor %}
 
-                            {% for anexo in solicitacao.anexos.filter_by(tipo_anexo='depois').all() %}
-                                <div class="public-gallery-item">
-                                    <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank" title="Ver imagem ampliada">
-                                        <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" loading="lazy" alt="Anexo do chamado">
-                                        <span class="anexo-label">{{ anexo.tipo_anexo|capitalize }}</span>
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-
-                        <div class="card-extra-details">
-                            {% set ultimo_comentario = solicitacao.get_ultimo_comentario() %}
-
-                            {% if solicitacao.status == 'entregue' %}
-                                <p><strong>Concluído por:</strong>
-                                    <span class="detail-value">
-                                    {% if ultimo_comentario %}{{ ultimo_comentario.usuario.username|title }}{% else %}Equipe de Manutenção{% endif %}
-                                    </span>
-                                </p>
-                                <p><strong>Último Comentário:</strong>
-                                    <span class="detail-value">
-                                    {% if ultimo_comentario %}{{ ultimo_comentario.texto }}{% else %}Nenhum comentário adicionado.{% endif %}
-                                    </span>
-                                </p>
-                            
-                            {% elif solicitacao.status == 'aprovada' %}
-                                <p><strong>Aprovado por:</strong>
-                                    <span class="detail-value">
-                                    {% if ultimo_comentario %}{{ ultimo_comentario.usuario.username|title }}{% else %}Equipe de Manutenção{% endif %}
-                                    </span>
-                                </p>
-                                <p><strong>Último Comentário:</strong>
-                                    <span class="detail-value">
-                                    {% if ultimo_comentario %}{{ ultimo_comentario.texto }}{% else %}Nenhum comentário adicionado.{% endif %}
-                                    </span>
-                                </p>
-
-                            {% elif solicitacao.status == 'rejeitada' %}
-                                <p><strong>Recusado por:</strong> <span class="detail-value">Equipe de Manutenção</span></p>
-                                <p><strong>Motivo:</strong> <span class="detail-value">{{ solicitacao.motivo_rejeicao or 'Não especificado.' }}</span></p>
-                            
-                            {% elif solicitacao.status == 'excluido' %}
-                                <p class="detail-value-special">Esta solicitação foi removida. Para mais detalhes, contate a equipe de manutenção.</p>
-
-                            {% endif %}
-                        </div>
-                    </article>
-                    {% endfor %}
-                {% else %}
-                    <div class="chamado-card-empty">
-                        <p>Nenhum chamado encontrado no momento.</p>
                     </div>
-                {% endif %}
-            </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    Nenhuma solicitação registrada no sistema.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-            <div class="acompanhamento-actions">
-                <a href="{{ url_for('exibir_login') }}" class="btn btn-back">
-                    <span class="btn-icon">🏠</span>
-                    Voltar ao Início
-                </a>
-            </div>
-        </div>
-    </main>
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Pega a referência dos elementos do formulário e dos cards
-            const idInput = document.getElementById('idSearchInput');
-            const dateInput = document.getElementById('dateSearchInput');
-            const searchBtn = document.getElementById('searchBtn');
-            const clearBtn = document.getElementById('clearBtn');
-            const chamadoCards = document.querySelectorAll('.chamado-card');
+    // Função para mostrar/esconder os detalhes
+    function toggleDetalhes(idElemento) {
+        const elemento = document.getElementById(idElemento);
+        if (elemento.style.display === "none") {
+            elemento.style.display = "table-row";
+        } else {
+            elemento.style.display = "none";
+        }
+    }
 
-            function performSearch() {
-                const idQuery = idInput.value.trim();
-                const dateQuery = dateInput.value;
+    // Filtro da tabela
+    function filtrarLista() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('tabelaGlobal');
+        const tr = table.getElementsByTagName('tr');
 
-                // Passa por cada card de chamado
-                chamadoCards.forEach(card => {
-                    const cardId = card.getAttribute('data-id');
-                    const cardDate = card.getAttribute('data-date');
+        // Loop começa em 1 para pular o cabeçalho
+        // E incrementa de 2 em 2 porque cada item tem 2 linhas (Resumo + Detalhes)
+        for (let i = 1; i < tr.length; i += 2) {
+            const linhaResumo = tr[i];
+            const linhaDetalhe = tr[i+1]; // A linha oculta logo abaixo
 
-                    // Verifica se o card corresponde aos filtros
-                    const idMatch = idQuery === '' || cardId.includes(idQuery);
-                    const dateMatch = dateQuery === '' || cardDate === dateQuery;
+            const tdSolicitante = linhaResumo.getElementsByTagName('td')[2];
+            const tdTitulo = linhaResumo.getElementsByTagName('td')[3];
 
-                    // Mostra ou esconde o card
-                    if (idMatch && dateMatch) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+            if (tdSolicitante && tdTitulo) {
+                const texto = (tdSolicitante.textContent + tdTitulo.textContent).toLowerCase();
+
+                if (texto.includes(filter)) {
+                    linhaResumo.style.display = "";
+                    // Não forçamos a linha de detalhe a aparecer, ela obedece o clique
+                } else {
+                    linhaResumo.style.display = "none";
+                    linhaDetalhe.style.display = "none"; // Esconde o detalhe também se filtrar
+                }
             }
+        }
+    }
+</script>
 
-            // Adiciona os eventos aos botões
-            searchBtn.addEventListener('click', performSearch);
-            clearBtn.addEventListener('click', function() {
-                idInput.value = '';
-                dateInput.value = '';
-                performSearch(); // Roda a pesquisa novamente para mostrar todos
-            });
-        });
-    </script>
-</body>
-</html>
+{% endblock %}

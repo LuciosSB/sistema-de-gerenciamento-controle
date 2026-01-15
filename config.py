@@ -5,7 +5,7 @@ class Config:
     SECRET_KEY = '1234'
 
     #SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:geticdmtt2025@10.108.129.85:5432/controle_almox'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:1234@10.108.128.137:5432/controle_almox?client_encoding=utf8'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:1234@10.108.129.109:5433/controle_almox?client_encoding=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Caminho para o executável wkhtmltopdf.

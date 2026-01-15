@@ -1,454 +1,239 @@
 {% extends "base.html" %}
 
-{% block title %}Detalhes do Chamado #{{ solicitacao.id }}{% endblock %}
+{% block title %}Detalhes da Solicitação #{{ solicitacao.id }}{% endblock %}
 
 {% block content %}
-    <nav>
-        <div class="container">
-            <ul class="nav-list">
-            {% if current_user.has_permission('dashboard') %}
-            <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
-            {% endif %}
-            {% if current_user.has_permission('gerenciar_solicitacoes') %}
-                <li class="active"><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
-            {% endif %}
-            {% if current_user.has_permission('cadastrar_produto') %}
-                <li><a href="{{ url_for('cadastro_produto') }}">Cadastrar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('listar_produtos') %}
-                <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
-            {% endif %}
-            {% if current_user.has_permission('atualizar_produto') %}
-                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico') %}
-                <li><a href="{{ url_for('historico') }}">Histórico</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico_ativo') %}
-                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
-            {% endif %}
-            </ul>
-        </div>
-    </nav>
 
-    <div class="main-content">
-        <div class="panel active" id="detalhes-panel">
-            <div class="panel-header">
-                <h2>Central de Trabalho - Chamado #{{ solicitacao.id }}</h2>
-                <div class="header-actions">
-                    <div class="status-badge 
-                        {% if solicitacao.status == 'pendente' %}status-pendente
-                        {% elif solicitacao.status == 'em_analise' %}status-em-analise
-                        {% elif solicitacao.status == 'aprovada' %}status-aprovada
-                        {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
-                        {% elif solicitacao.status == 'entregue' %}status-entregue
-                        {% elif solicitacao.status == 'excluido' %}status-excluido
-                        {% endif %}">
-                        
-                        {% if solicitacao.status == 'aprovada' %}✅ Aprovada/Em Atendimento
-                        {% elif solicitacao.status == 'entregue' %}📦 Finalizada
-                        {% elif solicitacao.status == 'pendente' %}🔄 Pendente
-                        {% elif solicitacao.status == 'em_analise' %}🔎 Em Análise
-                        {% elif solicitacao.status == 'rejeitada' %}❌ Rejeitada
-                        {% else %}{{ solicitacao.status|capitalize }}{% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel-content">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                        <div class="flash-message {{ category }}">
-                            <div class="flash-text">{{ message }}</div>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-
-                <div class="detalhes-container">
-                    <div class="detalhes-section">
-                        <h3 class="section-title"><span class="section-icon">📋</span> Detalhes do Chamado</h3>
-                        <div class="detalhes-grid">
-                            <div class="detalhe-item detalhe-full"><label class="detalhe-label">Título:</label><span class="detalhe-valor titulo-principal">{{ solicitacao.titulo }}</span></div>
-                            <div class="detalhe-item"><label class="detalhe-label">Categoria:</label><span class="detalhe-valor">{{ solicitacao.categoria }}</span></div>
-                            
-                            <div class="detalhe-item">
-                                <label class="detalhe-label">Patrimônio do Ativo:</label>
-                                <span class="detalhe-valor">
-                                    {% if solicitacao.patrimonio_ativo %}
-                                        {{ solicitacao.patrimonio_ativo }}
-                                    {% else %}
-                                        <em style="color: #6c757d;">Nenhum patrimônio associado</em>
-                                    {% endif %}
-                                </span>
-                            </div>
-                            <div class="detalhe-item"><label class="detalhe-label">Urgência:</label><div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">{{ solicitacao.urgencia|capitalize }}</div></div>
-                        </div>
-                        {% if solicitacao.status in ['pendente', 'em_analise', 'aprovada'] and current_user.tipo_usuario in ['manutencao', 'admin'] %}
-                        <form method="POST" action="{{ url_for('definir_urgencia', solicitacao_id=solicitacao.id) }}" style="margin-top: 1.5rem; border-top: 1px solid #eee; padding-top: 1rem; display: flex; align-items: center; gap: 15px;">
-                            <div class="form-group" style="margin-bottom: 0; flex-grow: 1;">
-                                <label for="nova_urgencia" class="detalhe-label">Definir/Alterar Nível de Urgência:</label>
-                                <select id="nova_urgencia" name="nova_urgencia" class="setor-select">
-                                    <option value="baixa" {% if solicitacao.urgencia == 'baixa' %}selected{% endif %}>Baixa</option>
-                                    <option value="media" {% if solicitacao.urgencia == 'media' %}selected{% endif %}>Média</option>
-                                    <option value="alta" {% if solicitacao.urgencia == 'alta' %}selected{% endif %}>Alta</option>
-                                    <option value="critica" {% if solicitacao.urgencia == 'critica' %}selected{% endif %}>Crítica</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="align-self: flex-end;">Salvar Urgência</button>
-                        </form>
-                        {% endif %}
-                    </div>
-                    <div class="detalhes-section">
-                        <h3 class="section-title"><span class="section-icon">👤</span> Dados do Solicitante</h3>
-                        <div class="detalhes-grid">
-                            <div class="detalhe-item"><label class="detalhe-label">Nome:</label><span class="detalhe-valor">{{ solicitacao.nome_solicitante }}</span></div>
-                            <div class="detalhe-item"><label class="detalhe-label">Setor:</label><span class="detalhe-valor">{{ solicitacao.setor }}</span></div>
-                            <div class="detalhe-item"><label class="detalhe-label">Data/Hora da Abertura:</label><span class="detalhe-valor">{{ solicitacao.data_solicitacao|localtime }}</span></div>
-                        </div>
-                    </div>
-                    <div class="detalhes-section">
-                        <h3 class="section-title"><span class="section-icon">📝</span> Descrição do Problema</h3>
-                        <div class="descricao-container"><p class="descricao-texto">{{ solicitacao.descricao or 'Nenhuma descrição detalhada foi fornecida.' }}</p></div>
-                    </div>
-                </div>
-
-                {% if solicitacao.status == 'pendente' %}
-                <div class="acoes-container">
-                    <h3 class="section-title"><span class="section-icon">⚙️</span> Ações Iniciais</h3>
-                    <div class="acoes-buttons">
-                        <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}">
-                            <input type="hidden" name="status" value="em_analise">
-                            <button type="submit" class="btn btn-primary">🔎 Colocar em Análise</button>
-                        </form>
-                    </div>
-                </div>
-
-                {% elif solicitacao.status == 'em_analise' %}
-                <div class="acoes-container">
-                    <h3 class="section-title"><span class="section-icon">⚙️</span> Ações de Atendimento</h3>
-                    <div class="acoes-buttons">
-                        {% if current_user.tipo_usuario in ['manutencao', 'admin'] %}
-                        <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Confirmar APROVAÇÃO deste chamado?')">
-                            <input type="hidden" name="status" value="aprovada">
-                            <button type="submit" class="btn btn-atender">✅ Aprovar Chamado</button>
-                        </form>
-                        {% endif %}
-                        <button type="button" class="btn btn-rejeitar" onclick="toggleRejeitarForm()">❌ Rejeitar Chamado</button>
-                    </div>
-                    <div id="rejeitarFormContainer" class="rejeitar-form-container" style="display:none;">
-                        <h4>Motivo da Rejeição (será visível para o solicitante)</h4>
-                        <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}">
-                            <input type="hidden" name="status" value="rejeitada">
-                            <textarea name="motivo_rejeicao" rows="4" placeholder="Descreva por que este chamado está sendo rejeitado..." required></textarea>
-                            <div class="rejeitar-form-actions">
-                                <button type="submit" class="btn btn-danger">Confirmar Rejeição</button>
-                                <button type="button" class="btn btn-secondary" onclick="toggleRejeitarForm()">Cancelar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                {% elif solicitacao.status == 'aprovada' %}
-                <div class="comments-section">
-                    <h3 class="section-title"><span class="section-icon">💬</span> Comentários da Equipe Técnica</h3>
-                    <div class="comment-list">
-                        {% if solicitacao.comentarios.all() %}
-                            {% for comentario in solicitacao.comentarios.order_by('data_criacao') %}
-                            <div class="comment-item">
-                                <div class="comment-author-avatar">{{ comentario.usuario.username[0]|upper }}</div>
-                                <div class="comment-content">
-                                    <div class="comment-header">
-                                        <span class="comment-author">{{ comentario.usuario.username|title }}</span>
-                                        <span class="comment-date">{{ comentario.data_criacao|localtime }}</span>
-                                    </div>
-                                    <div class="comment-text">{{ comentario.texto }}</div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="no-comments">Nenhum comentário técnico adicionado ainda.</p>
-                        {% endif %}
-                    </div>
-                    <div class="comment-form-container">
-                        <form method="POST" action="{{ url_for('adicionar_comentario', solicitacao_id=solicitacao.id) }}" class="comment-form">
-                            <textarea name="texto_comentario" class="comment-textarea" placeholder="Adicionar um novo comentário técnico..." rows="4" required></textarea>
-                            <button type="submit" class="btn btn-primary">Adicionar Comentário</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="detalhes-section">
-                    <h3 class="section-title"><span class="section-icon">📦</span> Saída de Materiais</h3>
-                    <div class="table-container" style="margin-bottom: 2rem;">
-                        <h4>Itens já retirados para este chamado:</h4>
-                        {% if solicitacao.materiais_usados %}
-                        <table class="solicitacoes-table">
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Qtd. Solicitada</th>
-                                    <th>Qtd. Fornecida</th>
-                                    <th>Data</th>
-                                    <th class="col-acoes">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for saida in solicitacao.materiais_usados %}
-                                <tr>
-                                    <td>{{ saida.produto.nome }}</td>
-                                    <td>{{ saida.quantidade_solicitada }}</td>
-                                    <td>{{ saida.quantidade_saida }}</td>
-                                    <td>{{ saida.data_saida|localtime }}</td>
-                                    <td class="col-acoes">
-                                        {% if not saida.retornado %}
-                                        <form method="POST" action="{{ url_for('remover_item_solicitacao', solicitacao_id=solicitacao.id, saida_id=saida.id) }}" onsubmit="return confirm('Tem certeza que deseja REMOVER este item do chamado e DEVOLVER ao estoque?')">
-                                            <button type="submit" class="btn-remover-item-tabela" title="Remover Item">🗑️</button>
-                                        </form>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% else %}
-                        <p class="empty-list-message">Nenhum material foi retirado.</p>
-                        {% endif %}
-                    </div>
-
-                    <div class="add-item-form-section">
-                        <h4>Adicionar novos itens à requisição:</h4>
-                        <form method="POST" action="{{ url_for('adicionar_item_solicitacao', solicitacao_id=solicitacao.id) }}">
-                            <div id="itens-container">
-                                <div class="item-row">
-                                    <div class="form-group" style="flex-grow: 2;">
-                                        <label for="produto_id[]">Produto:</label>
-                                        <select name="produto_id[]" class="setor-select" required>
-                                            <option value="">Selecione um produto...</option>
-                                            {% for produto in produtos_disponiveis %}
-                                                <option value="{{ produto.id }}">{{ produto.nome }} (Estoque: {{ produto.quantidade }})</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="quantidade_solicitada[]">Qtd. Solicitada:</label>
-                                        <input type="number" name="quantidade_solicitada[]" class="cadastro-input" min="1" placeholder="Ex: 5">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="quantidade_saida[]">Qtd. Fornecida:</label>
-                                        <input type="number" name="quantidade_saida[]" class="cadastro-input" min="1" required placeholder="Ex: 5">
-                                    </div>
-                                    <button type="button" class="btn btn-remove-item" onclick="removerItem(this)" style="display: none;">🗑️</button>
-                                </div>
-                            </div>
-                            <div class="add-item-actions">
-                                <button type="button" id="add-item-btn" class="btn btn-add-row">➕ Adicionar outro item</button>
-                            </div>
-                            <div class="form-actions" style="justify-content: flex-end; border-top: none; padding-top: 1rem;">
-                                <button type="submit" class="btn btn-primary">Adicionar Itens ao Chamado</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="acoes-buttons" style="margin-top: 2rem; border-top: 1px solid #eee; padding-top: 2rem; justify-content: space-between;">
-                        <a href="{{ url_for('gerar_requisicao_pdf', solicitacao_id=solicitacao.id) }}" class="btn btn-tertiary">📄 Gerar PDF de Requisição</a>
-                        <form method="POST" action="{{ url_for('atualizar_status_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('Marcar este chamado como CONCLUÍDO?')">
-                            <input type="hidden" name="status" value="entregue">
-                            <button type="submit" class="btn btn-entregar">📦 Marcar como Concluído</button>
-                        </form>
-                    </div>
-                </div>
-
-                {% elif solicitacao.status == 'rejeitada' %}
-                <div class="detalhes-section">
-                    <h3 class="section-title reject-title"><span class="section-icon">❌</span> Chamado Rejeitado</h3>
-                    <div class="rejeicao-motivo-box">
-                        <strong>Motivo da Rejeição:</strong>
-                        <p>{{ solicitacao.motivo_rejeicao }}</p>
-                    </div>
-                </div>
-
-                {% elif solicitacao.status == 'entregue' %}
-                <div class="detalhes-section">
-                    <h3 class="section-title"><span class="section-icon">✅</span> Chamado Concluído</h3>
-                    <p>Este chamado foi finalizado. Use o formulário abaixo para registrar a devolução de itens que retornaram ao estoque.</p>
-
-                    <form method="POST" action="{{ url_for('confirmar_devolucao_itens', solicitacao_id=solicitacao.id) }}" class="devolucao-form">
-                        <h4 class="devolucao-header">Controle de Devolução de Itens</h4>
-                        <p class="devolucao-instructions">
-                            Para cada item, informe a quantidade que está retornando ao estoque. Itens do tipo "Consumo" com quantidade 0 serão baixados permanentemente. Itens "Permanente" devem ter a quantidade de retorno especificada.
-                        </p>
-
-                        {% if solicitacao.materiais_usados %}
-                        <div class="table-container">
-                            <table class="solicitacoes-table">
-                                <thead>
-                                    <tr>
-                                        <th>Item</th>
-                                        <th>Qtd. Fornecida</th>
-                                        <th>Tipo</th>
-                                        <th class="col-devolver">Qtd. Devolvida</th>
-                                        <th>Status da Devolução</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for saida in solicitacao.materiais_usados %}
-                                    <tr class="{% if saida.retornado %}item-devolvido{% endif %}">
-                                        <td>{{ saida.produto.nome }}</td>
-                                        <td>{{ saida.quantidade_saida }}</td>
-                                        <td>
-                                            <div class="tipo-item-badge tipo-{{ saida.produto.tipo_item }}">
-                                                {{ saida.produto.tipo_item|capitalize }}
-                                            </div>
-                                        </td>
-                                        <td class="col-input-devolucao">
-                                            {% if not saida.retornado %}
-                                                <input type="number" name="quantidade_retornada_{{ saida.id }}"
-                                                       class="devolucao-input"
-                                                       value="{% if saida.produto.tipo_item == 'permanente' %}{{ saida.quantidade_saida }}{% else %}0{% endif %}"
-                                                       min="0" max="{{ saida.quantidade_saida }}">
-                                            {% else %}
-                                                -
-                                            {% endif %}
-                                        </td>
-                                        <td class="col-status-devolucao">
-                                            {% if saida.retornado %}
-                                                <span class="status-devolucao status-retornado">✔ Retornado</span>
-                                            {% else %}
-                                                <span class="status-devolucao status-pendente">Pendente</span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="form-actions devolucao-actions">
-                            <button type="submit" class="btn btn-primary">
-                                🔁 Confirmar Devoluções e Fechar Chamado
-                            </button>
-                        </div>
-                        {% else %}
-                        <p class="empty-list-message">Nenhum material foi utilizado neste chamado.</p>
-                        {% endif %}
-                    </form>
-                </div>
-                {% endif %}
-
-                {% if solicitacao.status in ['em_analise', 'aprovada', 'entregue'] %}
-                <div class="anexos-container">
-                    <h3 class="section-title"><span class="section-icon">🖼️</span> Anexos e Evidências</h3>
-                    <div class="anexos-grid">
-                
-                        <div class="anexo-coluna">
-                            <h4>Fotos do Antes</h4>
-                            <div class="anexo-gallery">
-                                {% set fotos_antes = solicitacao.anexos.filter_by(tipo_anexo='antes').all() %}
-                                {% if fotos_antes %}
-                                    {% for anexo in fotos_antes %}
-                                        <div class="anexo-item">
-                                        <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank">
-                                            <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" alt="Foto do {{ anexo.tipo_anexo }}">
-                                        </a>
-                                        <form method="POST" action="{{ url_for('excluir_anexo', anexo_id=anexo.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir esta foto permanentemente?')">
-                                            <button type="submit" class="btn-delete-foto" title="Excluir Foto">❌</button>
-                                        </form>
-                                    </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <p class="no-anexos">Nenhuma foto do "antes" foi enviada.</p>
-                                {% endif %}
-                            </div>
-                
-                            {% if current_user.tipo_usuario in ['manutencao', 'admin'] and solicitacao.status != 'entregue' %}
-                            <form class="anexo-form" method="POST" action="{{ url_for('upload_foto', solicitacao_id=solicitacao.id) }}" enctype="multipart/form-data">
-                                <input type="hidden" name="tipo_anexo" value="antes">
-                                <div class="form-group">
-                                    <label for="foto_antes">Adicionar Foto do "Antes":</label>
-                                    <input type="file" name="foto" id="foto_antes" class="anexo-input" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-sm">Enviar Foto</button>
-                            </form>
-                            {% endif %}
-                        </div>
-                
-                        <div class="anexo-coluna">
-                            <h4>Fotos do Depois</h4>
-                            <div class="anexo-gallery">
-                                {% set fotos_depois = solicitacao.anexos.filter_by(tipo_anexo='depois').all() %}
-                                {% if fotos_depois %}
-                                    {% for anexo in fotos_depois %}
-                                    <div class="anexo-item">
-                                        <a href="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" target="_blank">
-                                            <img src="{{ url_for('uploaded_file', filename=anexo.nome_arquivo) }}" alt="Foto do {{ anexo.tipo_anexo }}">
-                                        </a>
-                                        <form method="POST" action="{{ url_for('excluir_anexo', anexo_id=anexo.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir esta foto permanentemente?')">
-                                            <button type="submit" class="btn-delete-foto" title="Excluir Foto">❌</button>
-                                        </form>
-                                    </div>
-                                {% endfor %}
-                                {% else %}
-                                    <p class="no-anexos">Nenhuma foto do "depois" foi enviada.</p>
-                                {% endif %}
-                            </div>
-                
-                            {% if current_user.tipo_usuario in ['manutencao', 'admin'] and solicitacao.status != 'entregue' %}
-                            <form class="anexo-form" method="POST" action="{{ url_for('upload_foto', solicitacao_id=solicitacao.id) }}" enctype="multipart/form-data">
-                                <input type="hidden" name="tipo_anexo" value="depois">
-                                <div class="form-group">
-                                    <label for="foto_depois">Adicionar Foto do "Depois":</label>
-                                    <input type="file" name="foto" id="foto_depois" class="anexo-input" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-sm">Enviar Foto</button>
-                            </form>
-                            {% endif %}
-                        </div>
-                
-                    </div>
-                </div>
-                {% endif %}
-
-                <div class="page-actions">
-                    <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn btn-secondary">⬅️ Voltar para Lista</a>
-                    {% if solicitacao.status != 'excluido' %}
-                    <form method="POST" action="{{ url_for('excluir_solicitacao', solicitacao_id=solicitacao.id) }}" onsubmit="return confirm('ATENÇÃO: Deseja mover este chamado para a lixeira?')">
-                        <button type="submit" class="btn btn-danger">🗑️ Mover para Lixeira</button>
-                    </form>
-                    {% endif %}
-                </div>
-            </div>
+<div class="header-content" style="margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="{{ url_for('gerenciar_solicitacoes') }}" class="btn-icon" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div>
+            <h1 style="margin: 0;">Solicitação #{{ solicitacao.id }}</h1>
+            <p style="color: var(--text-muted); margin: 0;">Gerenciamento de Detalhes</p>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addItemBtn = document.getElementById('add-item-btn');
-            if(addItemBtn) {
-                addItemBtn.addEventListener('click', function() {
-                    const container = document.getElementById('itens-container');
-                    const novoItemRow = container.querySelector('.item-row').cloneNode(true);
-                    novoItemRow.querySelector('select[name="produto_id[]"]').value = '';
-                    novoItemRow.querySelector('input[name="quantidade_solicitada[]"]').value = '';
-                    novoItemRow.querySelector('input[name="quantidade_saida[]"]').value = '';
-                    const removeBtn = novoItemRow.querySelector('.btn-remove-item');
-                    removeBtn.style.display = 'flex';
-                    container.appendChild(novoItemRow);
-                });
-            }
-        });
+    <span class="status-badge
+        {% if solicitacao.status == 'pendente' %}status-pendente
+        {% elif solicitacao.status == 'aprovada' %}status-aprovada
+        {% elif solicitacao.status == 'recusada' %}status-rejeitada
+        {% elif solicitacao.status == 'concluida' %}status-concluida
+        {% endif %}" style="font-size: 1rem; padding: 10px 20px;">
+        {{ solicitacao.status|upper }}
+    </span>
+</div>
 
-        function removerItem(button) {
-            const itemRow = button.closest('.item-row');
-            if (document.querySelectorAll('.item-row').length > 1) {
-                itemRow.remove();
-            }
-        }
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
 
-        function toggleRejeitarForm() {
-            var formContainer = document.getElementById('rejeitarFormContainer');
-            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
-        }
-    </script>
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-file-alt"></i> Informações do Chamado</h3>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label>Solicitante</label>
+                    <input type="text" value="{{ solicitacao.nome_solicitante }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Setor</label>
+                    <input type="text" value="{{ solicitacao.setor }}" disabled>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" value="{{ solicitacao.titulo }}" disabled>
+            </div>
+
+            <div class="form-group">
+                <label>Urgência</label>
+                <input type="text" value="{{ solicitacao.urgencia|upper }}" disabled
+                    style="color: {% if solicitacao.urgencia == 'alta' %}var(--danger-text){% else %}var(--text-main){% endif %}; font-weight: bold;">
+            </div>
+
+            <div class="form-group">
+                <label>Descrição Completa</label>
+                <textarea rows="4" disabled>{{ solicitacao.descricao }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Data de Abertura</label>
+                <input type="text" value="{{ solicitacao.data_solicitacao.strftime('%d/%m/%Y às %H:%M') }}" disabled>
+            </div>
+        </div>
+
+        {% if solicitacao.anexos.count() > 0 %}
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-paperclip"></i> Anexos Enviados</h3>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                {% for anexo in solicitacao.anexos %}
+                    <a href="{{ url_for('download_anexo', anexo_id=anexo.id) }}" class="btn btn-secondary btn-sm" target="_blank" style="text-decoration: none;">
+                        <i class="fas fa-file-download"></i> {{ anexo.nome_arquivo }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-boxes"></i> Materiais Utilizados & Conferência</h3>
+            </div>
+
+            {% if solicitacao.materiais_usados %}
+                <div class="table-container" style="box-shadow: none; border: none; padding: 0;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--accent-color); color: var(--accent-color);">
+                                <th style="text-align: left; padding: 10px;">Produto</th>
+                                <th style="text-align: center; padding: 10px;">Qtd</th>
+                                <th style="text-align: center; padding: 10px;">Situação</th>
+                                <th style="text-align: right; padding: 10px;">Ação / Conferência</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for saida in solicitacao.materiais_usados %}
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td style="padding: 12px; color: var(--text-main);">
+                                    {{ saida.produto.nome }}
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">{{ saida.produto.tipo_item|upper }}</div>
+                                </td>
+                                <td style="text-align: center; color: var(--text-main); font-weight: bold;">{{ saida.quantidade_saida }}</td>
+
+                                <td style="text-align: center;">
+                                    {% if saida.status_retorno == 'pendente' %}
+                                        <span class="status-badge" style="background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border);">PENDENTE</span>
+                                    {% elif saida.status_retorno == 'devolvido' %}
+                                        <span class="status-badge" style="background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border);">DEVOLVIDO</span>
+                                    {% elif saida.status_retorno == 'consumido' %}
+                                        <span class="status-badge" style="background: var(--info-bg); color: var(--info-text); border: 1px solid var(--info-border);">CONSUMIDO</span>
+                                    {% elif saida.status_retorno == 'perdido' %}
+                                        <span class="status-badge" style="background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border);">PERDIDO</span>
+                                    {% endif %}
+                                </td>
+
+                                <td style="text-align: right;">
+                                    {% if saida.status_retorno == 'pendente' %}
+                                        <div style="display: flex; gap: 5px; justify-content: flex-end;">
+
+                                            <form action="{{ url_for('processar_retorno_material', saida_id=saida.id, acao='devolver') }}" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-success" title="Item voltou para o estoque">
+                                                    <i class="fas fa-undo"></i> Devolver
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ url_for('processar_retorno_material', saida_id=saida.id, acao='consumir') }}" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-info" title="Item foi gasto/usado">
+                                                    <i class="fas fa-check"></i> Usado
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ url_for('processar_retorno_material', saida_id=saida.id, acao='perda') }}" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Item perdido ou quebrado">
+                                                    <i class="fas fa-times"></i> Perda
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% else %}
+                                        <span style="font-size: 0.8rem; color: var(--text-muted);">Processado</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p style="padding: 20px; color: var(--text-muted); font-style: italic;">Nenhum material vinculado a este chamado.</p>
+            {% endif %}
+
+            {% if produtos_disponiveis %}
+            <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; border: 1px solid var(--border-light); margin-top: 15px;">
+                <h4 style="margin-bottom: 10px; color: var(--accent-color);">Adicionar Material ao Chamado</h4>
+
+                <form action="{{ url_for('saida_produto') }}" method="POST" style="display: flex; gap: 10px; align-items: flex-end;">
+                    <input type="hidden" name="solicitacao_id" value="{{ solicitacao.id }}">
+                    <input type="hidden" name="destino" value="{{ solicitacao.setor }}">
+
+                    <div style="flex: 2;">
+                        <label style="font-size: 0.8rem;">Produto</label>
+                        <select name="produto_id" class="form-control" required style="width: 100%; padding: 10px; border-radius: 6px; background: var(--primary-color); color: var(--text-main); border: 1px solid var(--border-light);">
+                            {% for produto in produtos_disponiveis %}
+                                <option value="{{ produto.id }}">{{ produto.nome }} (Estoque: {{ produto.quantidade }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.8rem;">Qtd</label>
+                        <input type="number" name="quantidade" min="1" value="1" required style="padding: 10px;">
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary" title="Registrar Saída">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div>
+        <div class="card" style="border-top: 3px solid var(--accent-color);">
+            <div class="card-header">
+                <h3>Gestão do Chamado</h3>
+            </div>
+
+            <form action="{{ url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=solicitacao.id) }}" method="POST">
+                <div class="form-group">
+                    <label>Alterar Status</label>
+                    <select name="novo_status" style="width: 100%; padding: 12px; border-radius: 6px; background: var(--primary-color); color: var(--text-main); border: 1px solid var(--border-light);">
+                        <option value="pendente" {% if solicitacao.status == 'pendente' %}selected{% endif %}>Pendente</option>
+                        <option value="aprovada" {% if solicitacao.status == 'aprovada' %}selected{% endif %}>Em Andamento / Aprovada</option>
+                        <option value="concluida" {% if solicitacao.status == 'concluida' %}selected{% endif %}>Concluir</option>
+                        <option value="recusada" {% if solicitacao.status == 'recusada' %}selected{% endif %}>Recusada</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Observação / Resposta</label>
+                    <textarea name="observacoes" rows="3" placeholder="Motivo da alteração..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Histórico</h3>
+            </div>
+            <ul style="list-style: none; padding: 0; max-height: 400px; overflow-y: auto;">
+                {% for acao in solicitacao.historico %}
+                <li style="padding: 12px 0; border-bottom: 1px solid var(--border-light);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <strong style="color: var(--accent-color); font-size: 0.9rem;">{{ acao.tipo_acao }}</strong>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">{{ acao.data_acao.strftime('%d/%m %H:%M') }}</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--text-main);">{{ acao.detalhes }}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+                        <i class="fas fa-user"></i> {{ acao.usuario.username }}
+                    </div>
+                </li>
+                {% else %}
+                <li style="text-align: center; padding: 20px; color: var(--text-muted);">Sem histórico.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

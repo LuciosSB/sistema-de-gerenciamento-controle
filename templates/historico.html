@@ -1,118 +1,98 @@
 {% extends "base.html" %}
 
-{% block title %}Histórico de Chamados{% endblock %}
+{% block title %}Log de Atividades{% endblock %}
 
 {% block content %}
-    <nav>
-        <div class="container">
-            <ul class="nav-list">
-            {% if current_user.has_permission('dashboard') %}
-            <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
-            {% endif %}
-            {% if current_user.has_permission('gerenciar_solicitacoes') %}
-                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
-            {% endif %}
-            {% if current_user.has_permission('cadastrar_produto') %}
-                <li><a href="{{ url_for('cadastro_produto') }}">Cadastrar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('listar_produtos') %}
-                <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
-            {% endif %}
-            {% if current_user.has_permission('atualizar_produto') %}
-                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico') %}
-                <li class="active"><a href="{{ url_for('historico') }}">Histórico</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico_ativo') %}
-                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
-            {% endif %}
-            </ul>
+
+<div class="header-content" style="margin-bottom: 20px;">
+    <div>
+        <h1>Histórico de Atividades</h1>
+        <p style="color: var(--text-muted);">Registro completo de ações e auditoria do sistema.</p>
+    </div>
+</div>
+
+<div class="card" style="padding: 15px;">
+    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 250px;">
+            <input type="text" id="searchHist" placeholder="Buscar por usuário ou detalhes..." onkeyup="filtrarHistorico()" style="width: 100%; padding: 10px; border-radius: 6px; background: var(--bg-body); border: 1px solid var(--border-light); color: var(--text-main);">
         </div>
-    </nav>
-
-    <div class="main-content">
-        <div class="panel active" id="historico-panel">
-            <div class="panel-header">
-                <h2>Histórico Completo de Chamados</h2>
-                <div class="header-actions">
-                    <span class="solicitacao-count">{{ solicitacoes|length }} registro(s) no total</span>
-                </div>
-            </div>
-            <div class="panel-content">
-                <div class="table-container">
-                    {% if solicitacoes %}
-                    <div class="table-wrapper">
-                        <table class="solicitacoes-table">
-                            <thead>
-                                <tr>
-                                    <th class="col-numero">ID</th>
-                                    <th class="col-titulo">Título do Chamado</th>
-                                    <th class="col-solicitante">Solicitante</th>
-                                    <th class="col-setor">Setor</th>
-                                    <th class="col-urgencia">Urgência</th>
-                                    <th class="col-horario">Data/Hora</th>
-                                    <th class="col-status">Status</th>
-                                    <th class="col-acoes">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for solicitacao in solicitacoes %}
-                                <tr class="solicitacao-row {% if solicitacao.status == 'excluido' %}solicitacao-excluida{% endif %}">
-                                    <td class="solicitacao-numero">#{{ solicitacao.id }}</td>
-                                    <td class="solicitacao-titulo">{{ solicitacao.titulo }}</td>
-                                    <td class="solicitacao-nome">{{ solicitacao.nome_solicitante }}</td>
-                                    <td class="solicitacao-setor">{{ solicitacao.setor }}</td>
-                                    <td class="solicitacao-urgencia">
-                                        <div class="urgencia-badge urgencia-{{ solicitacao.urgencia|lower }}">
-                                            {{ solicitacao.urgencia|capitalize }}
-                                        </div>
-                                    </td>
-                                    <td class="solicitacao-horario">{{ solicitacao.data_solicitacao|localtime }}</td>
-                                    <td class="solicitacao-status">
-                                        <div class="status-badge 
-                                        {% if solicitacao.status == 'pendente' %}status-pendente
-                                        {% elif solicitacao.status == 'em_analise' %}status-em-analise  {% elif solicitacao.status == 'aprovada' %}status-aprovada
-                                        {% elif solicitacao.status == 'rejeitada' %}status-rejeitada
-                                        {% elif solicitacao.status == 'entregue' %}status-entregue
-                                        {% elif solicitacao.status == 'excluido' %}status-excluido
-                                        {% endif %}">
-
-                                        {# LÓGICA DE TEXTO ATUALIZADA #}
-                                        {% if solicitacao.status == 'aprovada' %}
-                                            ✅ Aprovada/Em Atendimento
-                                        {% elif solicitacao.status == 'entregue' %}
-                                            📦 Finalizada
-                                        {% elif solicitacao.status == 'pendente' %}
-                                            🔄 Pendente
-                                        {% elif solicitacao.status == 'em_analise' %} 
-                                            🔎 Em Análise
-                                        {% elif solicitacao.status == 'rejeitada' %}
-                                            ❌ Rejeitada
-                                        {% else %}
-                                            {{ solicitacao.status|capitalize }}
-                                        {% endif %}
-                                    </div>
-                                    </td>
-                                    <td class="solicitacao-acoes">
-                                        <a href="{{ url_for('historico_detalhes', solicitacao_id=solicitacao.id) }}" class="btn-acao btn-visualizar">
-                                        👁️ Detalhes
-                                    </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="empty-state">
-                        <div class="empty-icon">📂</div>
-                        <h3>Nenhum chamado no histórico</h3>
-                        <p>Ainda não há nenhum registro de chamado de manutenção no sistema.</p>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
+        <div>
+            <span style="color: var(--text-muted); font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i> Mostrando as últimas ações
+            </span>
         </div>
     </div>
+</div>
+
+<div class="card">
+    <div class="timeline-container" style="max-height: 600px; overflow-y: auto; padding-right: 10px;">
+        <ul style="list-style: none; padding: 0;" id="listaHistorico">
+            {% for acao in historico %}
+            <li class="timeline-item" style="display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); padding-bottom: 15px;">
+
+                <div style="min-width: 50px; display: flex; flex-direction: column; align-items: center;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); color: var(--accent-color); font-size: 1.2rem;">
+                        {% if 'criado' in acao.tipo_acao|lower or 'nova' in acao.tipo_acao|lower %}
+                            <i class="fas fa-plus"></i>
+                        {% elif 'status' in acao.tipo_acao|lower %}
+                            <i class="fas fa-sync-alt"></i>
+                        {% elif 'saída' in acao.tipo_acao|lower or 'material' in acao.tipo_acao|lower %}
+                            <i class="fas fa-box-open"></i>
+                        {% elif 'login' in acao.tipo_acao|lower %}
+                            <i class="fas fa-sign-in-alt"></i>
+                        {% else %}
+                            <i class="fas fa-history"></i>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <strong style="font-size: 1.1rem; color: var(--text-main);">{{ acao.tipo_acao }}</strong>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">
+                            <i class="far fa-clock"></i> {{ acao.data_acao.strftime('%d/%m/%Y às %H:%M') }}
+                        </span>
+                    </div>
+
+                    <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem;">
+                        {{ acao.detalhes }}
+                    </p>
+
+                    {% if acao.solicitacao_id %}
+                    <div style="margin-top: 8px;">
+                        <a href="{{ url_for('gerenciar_solicitacoes_detalhes', solicitacao_id=acao.solicitacao_id) }}" style="color: var(--accent-color); text-decoration: none; font-size: 0.85rem;">
+                            Ver Chamado #{{ acao.solicitacao_id }} <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <div style="margin-top: 5px; font-size: 0.8rem; color: #666;">
+                        Usuário: <strong>{{ acao.usuario.username }}</strong>
+                    </div>
+                </div>
+            </li>
+            {% else %}
+            <li style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <i class="fas fa-wind" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                Nenhum registro no histórico ainda.
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    function filtrarHistorico() {
+        const input = document.getElementById('searchHist');
+        const filter = input.value.toLowerCase();
+        const ul = document.getElementById('listaHistorico');
+        const li = ul.getElementsByTagName('li');
+
+        for (let i = 0; i < li.length; i++) {
+            const texto = li[i].textContent.toLowerCase();
+            li[i].style.display = texto.includes(filter) ? "flex" : "none";
+        }
+    }
+</script>
+
 {% endblock %}

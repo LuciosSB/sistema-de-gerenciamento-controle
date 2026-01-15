@@ -1,103 +1,60 @@
 {% extends "base.html" %}
 
-{% block title %}Cadastro de Item{% endblock %}
+{% block title %}Novo Produto{% endblock %}
 
 {% block content %}
-    <nav>
-        <div class="container">
-            <ul class="nav-list">
-            {% if current_user.has_permission('dashboard') %}
-            <li><a href="{{ url_for('dashboard') }}">Página Inicial</a></li>
-            {% endif %}
-            {% if current_user.has_permission('gerenciar_solicitacoes') %}
-                <li><a href="{{ url_for('gerenciar_solicitacoes') }}">Gerenciar Chamados</a></li>
-            {% endif %}
-            {% if current_user.has_permission('cadastrar_produto') %}
-                <li class="active"><a href="{{ url_for('cadastro_produto') }}">Cadastrar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('listar_produtos') %}
-                <li><a href="{{ url_for('listar_produtos') }}">Listar Itens</a></li>
-            {% endif %}
-            {% if current_user.has_permission('atualizar_produto') %}
-                <li><a href="{{ url_for('selecionar_produto_atualizar') }}">Atualizar Item</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico') %}
-                <li><a href="{{ url_for('historico') }}">Histórico</a></li>
-            {% endif %}
-            {% if current_user.has_permission('historico_ativo') %}
-                <li><a href="{{ url_for('historico_ativo') }}">Histórico de Ativo</a></li>
-            {% endif %}
-            </ul>
+
+<div style="max-width: 600px; margin: 0 auto;">
+
+    <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 15px;">
+        <a href="{{ url_for('listar_produtos') }}" class="btn-icon" style="width: 40px; height: 40px; justify-content: center;">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 style="margin: 0; font-size: 1.8rem;">Cadastrar Produto</h1>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Dados do Item</h3>
         </div>
-    </nav>
 
-    <div class="container">
-        <div class="main-content">
-            <div class="panel active" id="cadastro-panel">
-                <div class="panel-header">
-                    <h2>Cadastro de Novo Item</h2>
-                    <div class="header-actions">
-                        <span class="produto-count">Novo Cadastro</span>
-                    </div>
-                </div>
-                <div class="panel-content">
-                     {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                            {% for category, message in messages %}
-                            <div class="flash-message {{ category }}">
-                                <div class="flash-text">{{ message }}</div>
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
+        <form action="{{ url_for('cadastro_produto') }}" method="POST">
 
-                    <div class="form-container">
-                        <form method="POST" action="{{ url_for('cadastro_produto') }}" class="cadastro-form">
-                            <div class="form-section">
-                                <h3 class="section-title"><span class="section-icon">📦</span>Informações do Item</h3>
-                                <div class="form-group">
-                                    <label for="nome" class="cadastro-label"><span class="label-icon">🏷️</span>Nome do Item/Ferramenta<span class="required-indicator">*</span></label>
-                                    <input type="text" id="nome" name="nome" class="cadastro-input" placeholder="Ex: Furadeira de Impacto, Rolo de Fita Isolante" required>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="codigo_barras" class="cadastro-label"><span class="label-icon">📊</span>Código de Barras / Patrimônio</label>
-                                        <input type="text" id="codigo_barras" name="codigo_barras" class="cadastro-input" placeholder="Digite o código (opcional)">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="quantidade" class="cadastro-label"><span class="label-icon">🔢</span>Quantidade Inicial<span class="required-indicator">*</span></label>
-                                        <input type="number" id="quantidade" name="quantidade" class="cadastro-input" placeholder="Digite a quantidade em estoque" min="0" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-section">
-                                <h3 class="section-title"><span class="section-icon">🔄</span>Tipo de Item</h3>
-                                <div class="radio-group-container">
-                                    <div class="radio-options">
-                                        <label class="radio-label">
-                                            <input type="radio" name="tipo_item" value="consumivel" checked>
-                                            <span class="radio-custom"></span>
-                                            <span class="radio-text">Consumo (Peças, fitas, parafusos)</span>
-                                        </label>
-                                        <label class="radio-label">
-                                            <input type="radio" name="tipo_item" value="retornavel">
-                                            <span class="radio-custom"></span>
-                                            <span class="radio-text">Permanente (Ferramentas, equipamentos)</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">📝 Cadastrar Item</button>
-                                <a href="{{ url_for('listar_produtos') }}" class="btn btn-tertiary">📋 Ver Itens Cadastrados</a>
-                                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">🏠 Painel Principal</a>
-                            </div>
-                        </form>
-                    </div>
+            <div class="form-group">
+                <label>Código de Barras / Patrimônio</label>
+                <div style="position: relative;">
+                    <input type="text" name="codigo_barras" required placeholder="Ex: 789..." autofocus>
+                    <i class="fas fa-barcode" style="position: absolute; right: 15px; top: 15px; color: #666;"></i>
                 </div>
             </div>
-        </div>
+
+            <div class="form-group">
+                <label>Nome do Produto</label>
+                <input type="text" name="nome" required placeholder="Ex: Cabo de Rede CAT6">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Tipo de Item</label>
+                    <select name="tipo_item" class="form-control" style="width: 100%; padding: 12px; background: var(--primary-color); border: 1px solid var(--border-light); color: var(--text-main); border-radius: 8px;">
+                        <option value="consumo">Consumo (Gasto)</option>
+                        <option value="permanente">Permanente (Ativo)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Quantidade Inicial</label>
+                    <input type="number" name="quantidade" required min="0" value="0">
+                </div>
+            </div>
+
+            <div style="margin-top: 10px;">
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-save"></i> Salvar Produto
+                </button>
+            </div>
+        </form>
     </div>
+</div>
+
 {% endblock %}
